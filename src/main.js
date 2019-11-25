@@ -7,9 +7,10 @@ import 'iview/dist/styles/iview.css';
 import echarts from 'echarts'
 // import './less/normalize.css'
 // import './less/base.less'
-// import china from 'echarts/map/json/china.json'
+// import Modal from './Modal';
+import china from 'echarts/map/json/china.json'
 
-// echarts.registerMap('china', china)
+echarts.registerMap('china', china)
 Vue.prototype.$echarts = echarts
 
 Vue.use(VueRouter);

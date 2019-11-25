@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="loginbox">
-      <Form ref="formDate" class="formlogin" :model="formDate" :rules="ruleInline" inline :label-width="120">
+      <Form ref="formDate" class="formlogin" :model="formDate" :rules="ruleInline" inline :label-width="80">
         <FormItem label="手机号" type="number" prop="mobile" class="labelCss">
             <i-input v-model="formDate.mobile" placeholder="可用于登录和找回密码">
                 <i-select :model.sync="select1" slot="prepend" style="width: 80px;height: 32px;">
@@ -21,7 +21,7 @@
           <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formDate.mobile)">获取短信验证码</i-button>
         </FormItem>
         <FormItem class="loginbtn">
-          <Button @click="handleSubmit('formDate')">注册</Button>
+          <Button @click="handleSubmit('formDate')"><span style="margin-left: 45px;">注册</span></Button>
         </FormItem>
       </Form>
     </div>

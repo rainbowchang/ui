@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import login from '@/components/login/login'
 import register from "@/components/login/register"
 import index from "@/components/view/index"
+import map from "@/components/homepage/map"
 Vue.use(Router)
 
 export default new Router({
@@ -19,5 +20,9 @@ export default new Router({
         path: '/index',
         name: 'index',
         component: index,
+    }, {
+        path: '/map',
+        name: 'map',
+        component: map,
     }]
 })
