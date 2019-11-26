@@ -1,4 +1,5 @@
 <template>
+<!-- 登录 -->
   <div class="wrapper">
     <div class="loginbox">
       <div class="imgbox"></div>
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import {ceshi} from '@/apis/api' //引入需要调的接口，api.js里面const的名称，多个可写成import {ceshi1,ceshi2,ceshi3} from '@/apis/api'
 export default {
   data() {
     return {
@@ -61,6 +63,16 @@ export default {
   },
   methods: {
     handleSubmit(name) {
+      this.$router.push("index")
+      // 接口测试 params参数 then=>res回调成功 catch=>未成功err
+      let params={
+        data:1
+      }
+      ceshi(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
       this.$refs[name].validate(valid => {
         if (valid) {
           this.$Message.success("Success!");
