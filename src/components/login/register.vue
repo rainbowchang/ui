@@ -9,8 +9,8 @@
                 </i-select>
             </i-input>
         </FormItem>
-        <FormItem label="用户名" prop="userName" class="labelCss">
-          <i-input type="text" v-model="formDate.userName" placeholder="请设置用户名"></i-input>
+        <FormItem label="用户名" prop="username" class="labelCss">
+          <i-input type="text" v-model="formDate.username" placeholder="请设置用户名"></i-input>
         </FormItem>
         <FormItem label="密码" prop="password" class="labelCss">
           <i-input type="password" v-model="formDate.password" placeholder="请设置登录密码"></i-input>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import restRuler from "@/apis/restUtils"
 export default {
   data() {
     return {
@@ -38,12 +39,12 @@ export default {
       single: false,
       formDate: {
         mobile: '',
-        userName: '',
+        username: '',
         password: '',
         sessionCode: ''
       },
       ruleInline: {
-        userName: [
+        username: [
           {
             required: true,
             message: "请输入用户名",
@@ -103,13 +104,11 @@ export default {
         // console.log(mobile)
     },
     // 注册
-    handleSubmit(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
-        }
+    handleSubmit() {
+      var router = this.$router;
+      var param = this.formDate;
+      restRuler.post("/user/register",param,function(){
+          router.push({ path: "/login" })
       });
     },
     register(){
