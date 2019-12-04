@@ -4,8 +4,8 @@
     <div class="longcircle">
       <div class="bcimg arrowimg">
         <div class="hello" @click="showModal">欢迎使用</div>
-        <div class="spread">机床分布</div>
-        <div class="equip">设备平台</div>
+        <div class="spread" @click="mapform">机床分布</div>
+        <div class="equip" @click="equips">设备平台</div>
       </div>
     </div>
     <!-- 弹框 -->
@@ -64,6 +64,12 @@ export default {
     cancel () {
         this.$Message.info('点击了取消');
     },
+    mapform(){
+      this.$router.push("map")
+    },
+    equips(){
+      this.$router.push("meua")
+    }
   }
 };
 </script>

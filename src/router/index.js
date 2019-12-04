@@ -4,8 +4,22 @@ import login from '@/components/login/login'
 import register from "@/components/login/register"
 import index from "@/components/view/index"
 import map from "@/components/homepage/map"
-Vue.use(Router)
+import meua from "@/components/meualist/meua"
+import equipstatus from "@/components/meualist/equipstatus"
+import warning from "@/components/meualist/warning"
+import information from "@/components/meualist/information"
+import debug from "@/components/meualist/debug"
+import management from "@/components/meualist/management"
+import history from "@/components/meualist/history"
+import faraway from "@/components/meualist/faraway"
+import main from "@/components/homepage/main"
 
+
+Vue.use(Router)
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err);
+}
 export default new Router({
     mode: 'history',
     routes: [{
@@ -24,5 +38,35 @@ export default new Router({
         path: '/map',
         name: 'map',
         component: map,
+    }, {
+        path: '/main',
+        name: 'main',
+        component: main,
+    }, {
+        path: '/meua',
+        name: 'meua',
+        component: meua,
+        children: [{
+            path: '/equipstatus',
+            component: equipstatus
+        }, {
+            path: '/warning',
+            component: warning
+        }, {
+            path: '/information',
+            component: information
+        }, {
+            path: '/debugging',
+            component: debug
+        }, {
+            path: '/management',
+            component: management
+        }, {
+            path: '/history',
+            component: history
+        }, {
+            path: '/faraway',
+            component: faraway
+        }]
     }]
 })
