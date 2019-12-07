@@ -509,9 +509,12 @@ h2 {
   height: 5%;
   min-height: 80px;
   width: 98%;
-  border-bottom: 2px solid #28b2f0;
   margin: 0 auto;
   position: relative;
+  background-image: url("../../assets/imgs/toptitle.png");
+  background-size: 100% 95%;
+  background-repeat: no-repeat;
+  margin-top: 8px;
 }
 .titletip > .cpname {
   position: absolute;

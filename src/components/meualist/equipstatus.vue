@@ -14,7 +14,7 @@
           :model="data"
           default-tree-node-name="new node"
           default-leaf-node-name="new leaf"
-          v-bind:default-expanded="true"
+          v-bind:default-expanded="false"
         >
           <!-- <span class="icon" slot="addTreeNode">新增</span> -->
           <!-- <span class="icon" slot="addLeafNode">新增文件</span> -->
@@ -45,8 +45,8 @@ export default {
   },
   data() {
     return {
-      factory:false,
-      statustable:true,
+      factory: false,
+      statustable: true,
       dateChoose: "", //table选择开始结束时间
       currentPage: 1, //分页当前页数,
       treeParam: {},
@@ -56,20 +56,22 @@ export default {
           name: "按客户分类",
           id: 1,
           pid: 0,
-          dragDisabled: true,
-          addLeafNodeDisabled: true, // 是否显示editNode按钮
+          addLeafNodeDisabled: true,
+          dragDisabled: true, // 是否可拖动
           children: [
             {
               name: "重要客户",
               id: 2,
               isLeaf: false,
               addLeafNodeDisabled: true,
+              dragDisabled: true,
               pid: 3,
               children: [
                 {
                   name: "客户1",
                   id: 4,
                   isLeaf: false,
+                  dragDisabled: true,
                   addLeafNodeDisabled: true,
                   pid: 5,
                   children: [
@@ -77,6 +79,7 @@ export default {
                       name: "南京工厂",
                       id: 6,
                       isLeaf: false,
+                      dragDisabled: true,
                       addLeafNodeDisabled: true,
                       pid: 7,
                       children: [
@@ -84,6 +87,7 @@ export default {
                           name: "车间1",
                           id: 8,
                           isLeaf: false,
+                          dragDisabled: true,
                           addLeafNodeDisabled: true,
                           pid: 9,
                           children: [
@@ -99,6 +103,7 @@ export default {
                                   id: 12,
                                   isLeaf: false,
                                   addLeafNodeDisabled: true,
+                                  dragDisabled: true,
                                   pid: 13
                                 },
                                 {
@@ -106,21 +111,8 @@ export default {
                                   id: 14,
                                   isLeaf: false,
                                   addLeafNodeDisabled: true,
+                                  dragDisabled: true,
                                   pid: 15
-                                },
-                                {
-                                  name: "机床3",
-                                  id: 16,
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  pid: 17
-                                },
-                                {
-                                  name: "机床4",
-                                  id: 18,
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  pid: 19
                                 }
                               ]
                             },
@@ -129,6 +121,7 @@ export default {
                               id: 20,
                               isLeaf: false,
                               addLeafNodeDisabled: true,
+                              dragDisabled: true,
                               pid: 21
                             }
                           ]
@@ -138,6 +131,7 @@ export default {
                           id: 22,
                           isLeaf: false,
                           addLeafNodeDisabled: true,
+                          dragDisabled: true,
                           pid: 23
                         }
                       ]
@@ -147,6 +141,7 @@ export default {
                       id: 24,
                       isLeaf: false,
                       addLeafNodeDisabled: true,
+                      dragDisabled: true,
                       pid: 25
                     }
                   ]
@@ -156,6 +151,7 @@ export default {
                   id: 26,
                   isLeaf: false,
                   addLeafNodeDisabled: true,
+                  dragDisabled: true,
                   pid: 27
                 }
               ]
@@ -165,6 +161,7 @@ export default {
               id: 28,
               isLeaf: false,
               addLeafNodeDisabled: true,
+              dragDisabled: true,
               pid: 29
             }
           ]
@@ -181,6 +178,7 @@ export default {
               id: 32,
               isLeaf: false,
               addLeafNodeDisabled: true,
+              dragDisabled: true,
               pid: 33,
               children: [
                 {
@@ -188,6 +186,7 @@ export default {
                   id: 34,
                   isLeaf: false,
                   addLeafNodeDisabled: true,
+                  dragDisabled: true,
                   pid: 35,
                   children: [
                     {
@@ -195,6 +194,7 @@ export default {
                       id: 36,
                       isLeaf: false,
                       addLeafNodeDisabled: true,
+                      dragDisabled: true,
                       pid: 37,
                       children: [
                         {
@@ -202,6 +202,7 @@ export default {
                           id: 38,
                           isLeaf: false,
                           addLeafNodeDisabled: true,
+                          dragDisabled: true,
                           pid: 39,
                           children: [
                             {
@@ -209,6 +210,7 @@ export default {
                               id: 40,
                               isLeaf: false,
                               addLeafNodeDisabled: true,
+                              dragDisabled: true,
                               pid: 41,
                               children: [
                                 {
@@ -216,6 +218,7 @@ export default {
                                   id: 42,
                                   isLeaf: false,
                                   addLeafNodeDisabled: true,
+                                  dragDisabled: true,
                                   pid: 43
                                 },
                                 {
@@ -223,6 +226,7 @@ export default {
                                   id: 44,
                                   isLeaf: false,
                                   addLeafNodeDisabled: true,
+                                  dragDisabled: true,
                                   pid: 45
                                 },
                                 {
@@ -230,6 +234,7 @@ export default {
                                   id: 46,
                                   isLeaf: false,
                                   addLeafNodeDisabled: true,
+                                  dragDisabled: true,
                                   pid: 47
                                 }
                               ]
@@ -239,6 +244,7 @@ export default {
                               id: 48,
                               isLeaf: false,
                               addLeafNodeDisabled: true,
+                              dragDisabled: true,
                               pid: 49
                             },
                             {
@@ -246,6 +252,7 @@ export default {
                               id: 50,
                               isLeaf: false,
                               addLeafNodeDisabled: true,
+                              dragDisabled: true,
                               pid: 51
                             }
                           ]
@@ -255,6 +262,7 @@ export default {
                           id: 52,
                           isLeaf: false,
                           addLeafNodeDisabled: true,
+                          dragDisabled: true,
                           pid: 53
                         },
                         {
@@ -262,6 +270,7 @@ export default {
                           id: 54,
                           isLeaf: false,
                           addLeafNodeDisabled: true,
+                          dragDisabled: true,
                           pid: 55
                         }
                       ]
@@ -271,6 +280,7 @@ export default {
                       id: 56,
                       isLeaf: false,
                       addLeafNodeDisabled: true,
+                      dragDisabled: true,
                       pid: 57
                     },
                     {
@@ -278,6 +288,7 @@ export default {
                       id: 58,
                       isLeaf: false,
                       addLeafNodeDisabled: true,
+                      dragDisabled: true,
                       pid: 59
                     }
                   ]
@@ -287,6 +298,7 @@ export default {
                   id: 60,
                   isLeaf: false,
                   addLeafNodeDisabled: true,
+                  dragDisabled: true,
                   pid: 61
                 },
                 {
@@ -294,6 +306,7 @@ export default {
                   id: 62,
                   isLeaf: false,
                   addLeafNodeDisabled: true,
+                  dragDisabled: true,
                   pid: 63
                 }
               ]
@@ -303,6 +316,7 @@ export default {
               id: 64,
               isLeaf: false,
               addLeafNodeDisabled: true,
+              dragDisabled: true,
               pid: 65
             },
             {
@@ -310,6 +324,7 @@ export default {
               id: 66,
               isLeaf: false,
               addLeafNodeDisabled: true,
+              dragDisabled: true,
               pid: 67
             }
           ]
