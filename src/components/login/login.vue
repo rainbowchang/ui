@@ -4,8 +4,8 @@
     <div class="loginbox">
       <div class="imgbox"></div>
       <Form ref="formInline" class="formlogin" :model="formInline" :rules="ruleInline" inline>
-        <FormItem prop="user">
-          <i-input type="text" v-model="formInline.user" placeholder="用户名">
+        <FormItem prop="username">
+          <i-input type="text" v-model="formInline.username" placeholder="用户名">
             <Icon type="ios-person-outline" slot="prepend"></Icon>
           </i-input>
         </FormItem>
@@ -28,17 +28,17 @@
 </template>
 
 <script>
-import {ceshi} from '@/apis/api' //引入需要调的接口，api.js里面const的名称，多个可写成import {ceshi1,ceshi2,ceshi3} from '@/apis/api'
+import {post} from "@/apis/restUtils"
 export default {
   data() {
     return {
       single: false,
       formInline: {
-        user: "",
+        username: "",
         password: ""
       },
       ruleInline: {
-        user: [
+        username: [
           {
             required: true,
             message: "请输入用户名",
@@ -63,26 +63,21 @@ export default {
   },
   methods: {
     handleSubmit(name) {
-      this.$router.push("index")
-      // 接口测试 params参数 then=>res回调成功 catch=>未成功err
-      let params={
-        data:1
-      }
-      ceshi(params).then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
+      var router = this.$router;
+      var parameter = this.formInline;  
       this.$refs[name].validate(valid => {
-        if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
-        }
+          post("/user/login",parameter,reponse => {
+            if (valid && reponse.data.status == "success") {
+            this.$Message.success("登陆成功!");
+            router.push({ path: "/index" });  
+          } else {
+            this.$Message.error("用户名或密码错误!");
+          }
+        });
       });
     },
     register(){
-        this.$router.push("register")
+      this.$router.push("register")
     }
   }
 };

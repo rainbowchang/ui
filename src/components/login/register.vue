@@ -9,8 +9,8 @@
                 </i-select>
             </i-input>
         </FormItem>
-        <FormItem label="用户名" prop="userName" class="labelCss">
-          <i-input type="text" v-model="formDate.userName" placeholder="请设置用户名"></i-input>
+        <FormItem label="用户名" prop="username" class="labelCss">
+          <i-input type="text" v-model="formDate.username" placeholder="请设置用户名"></i-input>
         </FormItem>
         <FormItem label="密码" prop="password" class="labelCss">
           <i-input type="password" v-model="formDate.password" placeholder="请设置登录密码"></i-input>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import {post} from "@/apis/restUtils"
 export default {
   data() {
     return {
@@ -38,12 +39,12 @@ export default {
       single: false,
       formDate: {
         mobile: '',
-        userName: '',
+        username: '',
         password: '',
         sessionCode: ''
       },
       ruleInline: {
-        userName: [
+        username: [
           {
             required: true,
             message: "请输入用户名",
@@ -104,12 +105,17 @@ export default {
     },
     // 注册
     handleSubmit(name) {
+      var router = this.$router;
+      var param = this.formDate;
       this.$refs[name].validate(valid => {
-        if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
-        }
+        post("/user/register",param,reponse => {
+          if (valid && reponse.data.status == "success") {
+            this.$Message.success("注册成功，请登录!");
+            router.push({ path: "/login" })
+          } else {
+            this.$Message.error("注册失败，用户名已存在，请重新注册!");
+          }
+        });
       });
     },
     register(){
