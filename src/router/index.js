@@ -13,7 +13,7 @@ import management from "@/components/meualist/management"
 import history from "@/components/meualist/history"
 import faraway from "@/components/meualist/faraway"
 import main from "@/components/homepage/main"
-
+import statusinfo from "@/components/departs/statusinfo"
 
 Vue.use(Router)
 const originalPush = Router.prototype.push;
@@ -67,6 +67,9 @@ export default new Router({
         }, {
             path: '/faraway',
             component: faraway
+        }, {
+            path: 'statusinfo',
+            component: statusinfo
         }]
     }]
 })

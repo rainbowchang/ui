@@ -8,8 +8,10 @@ import echarts from 'echarts'
 // import './less/normalize.css'
 // import './less/base.less'
 // import Modal from './Modal';
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import china from 'echarts/map/json/china.json'
-
+Vue.use(ElementUI)
 echarts.registerMap('china', china)
 Vue.prototype.$echarts = echarts
 

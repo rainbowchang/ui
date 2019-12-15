@@ -20,17 +20,23 @@
           @on-selection-change="selectTip"
           :max-height="540"
         ></Table>
-        <Button type="primary" icon="ios-search" class="searchbtn">按时间序列查询</Button>
+        <Button type="primary" icon="ios-search" class="searchbtn" @click="tostatusInfo">按时间序列查询</Button>
         <!-- page-sizes分页数组，page-size分页当前一页的条数，total总条数 -->
         <Page style="position:absolute;bottom:1em;" :total="100" show-elevator show-sizer />
       </div>
+      <Modal v-model="statusinfoshow" fullscreen footer-hide>
+        <statusinfo :statusinfo="{selections,statusinfoshow}" @modelshow="modelshow"></statusinfo>
+      </Modal>
     </div>
   </div>
 </template>
 <script>
+import statusinfo from "../departs/statusinfo";
 export default {
+  components: { statusinfo },
   data() {
     return {
+      statusinfoshow: false, //详情弹窗是否展示
       dateChoose: "", //table选择开始结束时间
       currentPage: 1, //分页当前页数,
       title: [
@@ -156,7 +162,57 @@ export default {
           warning: "..."
         }
       ],
-      selections: [] //操作中选中的所选项数组
+      selections: [], //操作中选中的所选项数组
+      headlist: [
+        {
+          id: 1,
+          area: "西南办事处",
+          total: 100,
+          firstNum: 20,
+          secondNum: 30,
+          thridNum: 10
+        },
+        {
+          id: 1,
+          area: "西北办事处",
+          total: 70,
+          firstNum: 40,
+          secondNum: 20,
+          thridNum: 15
+        },
+        {
+          id: 1,
+          area: "华东办事处",
+          total: 80,
+          firstNum: 50,
+          secondNum: 10,
+          thridNum: 10
+        },
+        {
+          id: 1,
+          area: "华北办事处",
+          total: 90,
+          firstNum: 30,
+          secondNum: 15,
+          thridNum: 20
+        },
+        {
+          id: 1,
+          area: "东北办事处",
+          total: 80,
+          firstNum: 30,
+          secondNum: 15,
+          thridNum: 20
+        },
+        {
+          id: 1,
+          area: "华南办事处",
+          total: 60,
+          firstNum: 30,
+          secondNum: 15,
+          thridNum: 20
+        }
+      ]
     };
   },
   methods: {
@@ -166,7 +222,10 @@ export default {
         filename: "The original data"
       });
     },
-     //   分页
+    modelshow(val) {
+      this.statusinfoshow = val;
+    },
+    //   分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -176,8 +235,13 @@ export default {
     // 选择要查看详细信息的列
     selectTip(selection) {
       this.selections = selection;
+      // 已选择的当前信息（数组）
+      console.log(selection);
     },
-
+    // 列表跳转详细信息页面
+    tostatusInfo() {
+      this.statusinfoshow = true;
+    }
   }
 };
 </script>

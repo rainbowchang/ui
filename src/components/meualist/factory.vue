@@ -181,6 +181,7 @@ export default {
     // 选择要查看详细信息的列
     selectTip(selection) {
       this.selections = selection;
+      console.log(selection)
     },
 
   }
