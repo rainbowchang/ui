@@ -38,6 +38,9 @@ import { VueTreeList, Tree, TreeNode } from "vue-tree-list";
 import statustable from "./statustable";
 import factory from "./factory";
 import {get} from "@/apis/restUtils";
+
+const customerModel = () => import("./customerInfoModal.vue");
+
 export default {
   components: {
     VueTreeList,
@@ -346,6 +349,28 @@ export default {
     // 添加节点	树节点
     onAddNode(params) {
       console.log(params, "onAddNode");
+      this.$Modal.confirm({
+          title: '客户列表',
+          render: (h) => {
+            return h(customerModel, {
+              ref: 'customerModel',
+              on:{
+                showInfo:(name) =>{
+                  alert(" parent: " + name);
+                  // change nodename
+                }
+              }
+            })
+          },
+          width: 600,
+          closable: false,
+          okText: "确定",
+          cancelText: "取消",
+          loading: true,
+          onOk() {
+            
+          }
+        });
     },
     // tree节点点击事件
     onClick(params) {
@@ -386,7 +411,6 @@ export default {
         });
       });  
     },
-
     addNode() {
       var node = new TreeNode({ name: "new node", isLeaf: false });
       if (!this.data.children) this.data.children = [];

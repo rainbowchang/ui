@@ -14,8 +14,10 @@ import history from "@/components/meualist/history"
 import faraway from "@/components/meualist/faraway"
 import main from "@/components/homepage/main"
 import statusinfo from "@/components/departs/statusinfo"
+import addwarehouse from "@/components/dialog/addwarehouse"
 
 Vue.use(Router)
+
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err);
@@ -71,5 +73,9 @@ export default new Router({
             path: 'statusinfo',
             component: statusinfo
         }]
+    },
+    {
+      path: '/addwarehouse',
+      component: addwarehouse  
     }]
 })
