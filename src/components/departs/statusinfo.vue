@@ -274,7 +274,12 @@ export default {
             name: "百分比",
             type: "bar",
             barWidth: "30%",
-            data: [10, 52, 20, 34, 39, 30, 22, 68]
+            data: [10, 52, 20, 34, 39, 30, 22, 68],
+            itemStyle: {
+              normal: {
+                color: "#009a44"
+              }
+            }
           }
         ]
       };
@@ -307,7 +312,7 @@ export default {
               normal: {
                 show: false,
                 position: "center"
-              },
+              }
             },
             labelLine: {
               normal: {
@@ -375,7 +380,12 @@ export default {
             name: "百分比",
             type: "bar",
             barWidth: "30%",
-            data: [10, 52, 20, 34, 39, 30, 22, 68]
+            data: [10, 52, 20, 34, 39, 30, 22, 68],
+            itemStyle: {
+              normal: {
+                color: "#009a44"
+              }
+            }
           }
         ]
       };
@@ -408,7 +418,7 @@ export default {
               normal: {
                 show: false,
                 position: "center"
-              },
+              }
             },
             labelLine: {
               normal: {
@@ -445,7 +455,7 @@ export default {
 <style scoped>
 .wrapper {
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
   min-width: 1240px;
   min-height: 860px;
   border-radius: 3px;
@@ -453,6 +463,10 @@ export default {
   margin: 1% auto;
   position: relative;
   overflow: hidden;
+  overflow-y: scroll;
+}
+.wrapper::-webkit-scrollbar {
+    display: none;
 }
 .chartsshow {
   width: 100%;
