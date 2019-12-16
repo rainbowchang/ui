@@ -447,7 +447,7 @@ export default {
   width: 100%;
   /* height: 100%; */
   min-width: 1240px;
-  /* min-height: 860px; */
+  min-height: 860px;
   border-radius: 3px;
   background-color: white;
   margin: 1% auto;

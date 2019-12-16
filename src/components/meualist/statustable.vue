@@ -163,56 +163,7 @@ export default {
         }
       ],
       selections: [], //操作中选中的所选项数组
-      headlist: [
-        {
-          id: 1,
-          area: "西南办事处",
-          total: 100,
-          firstNum: 20,
-          secondNum: 30,
-          thridNum: 10
-        },
-        {
-          id: 1,
-          area: "西北办事处",
-          total: 70,
-          firstNum: 40,
-          secondNum: 20,
-          thridNum: 15
-        },
-        {
-          id: 1,
-          area: "华东办事处",
-          total: 80,
-          firstNum: 50,
-          secondNum: 10,
-          thridNum: 10
-        },
-        {
-          id: 1,
-          area: "华北办事处",
-          total: 90,
-          firstNum: 30,
-          secondNum: 15,
-          thridNum: 20
-        },
-        {
-          id: 1,
-          area: "东北办事处",
-          total: 80,
-          firstNum: 30,
-          secondNum: 15,
-          thridNum: 20
-        },
-        {
-          id: 1,
-          area: "华南办事处",
-          total: 60,
-          firstNum: 30,
-          secondNum: 15,
-          thridNum: 20
-        }
-      ]
+
     };
   },
   methods: {
