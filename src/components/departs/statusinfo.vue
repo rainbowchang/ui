@@ -15,9 +15,14 @@
       </div>
     </div>
     <div class="currentdata">
-      <span class="forwards" @click="preDay(currentdate)">前一天</span>
-      <span class="date">{{currentdate}}</span>
-      <span class="back" @click="nextDay(currentdate)">后一天</span>
+      <DatePicker
+        @on-change="changedate"
+        @on-ok="suredata"
+        type="date"
+        confirm
+        placeholder="请选择日期"
+        style="width: 200px"
+      ></DatePicker>
     </div>
     <div class="content">
       <Tabs value="name1">
@@ -145,7 +150,7 @@ export default {
   data() {
     return {
       dateChoose: "",
-      currentdate: "2018-12-16",
+      currentdate: "",
       currentPage: 1, //分页当前页数,
       statuslist: [
         {
@@ -183,48 +188,14 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    // 前一天后天点击事件
-    preDay(str) {
-      this.currentdate = this.GetPrevDay(str);
+    //去人日期
+    suredata() {
+      console.log("当前确认的日期", this.currentdate);
     },
-    nextDay(str) {
-      this.currentdate = this.getNextDay(str);
-    },
-    // 前一天方法封装
-    GetPrevDay(str) {
-      var year = str.substring(0, 4);
-      var month = str.substring(5, 7);
-      var day = str.substring(8, 10);
-      var today = new Date(year, month - 1, day);
-      var yesterday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24;
-      var yesterday = new Date();
-      yesterday.setTime(yesterday_milliseconds);
-      var strYear = yesterday.getFullYear();
-      var strDay = yesterday.getDate();
-      var strMonth = yesterday.getMonth() + 1;
-      if (strMonth < 10) {
-        strMonth = "0" + strMonth;
-      }
-      if (strDay < 10) {
-        strDay = "0" + strDay;
-      }
-      return strYear + "-" + strMonth + "-" + strDay;
-    },
-    // 后一天方法封装
-    getNextDay(str) {
-      str = new Date(str);
-      str = +str + 1000 * 60 * 60 * 24;
-      str = new Date(str);
-      var y = str.getFullYear();
-      var m = str.getMonth() + 1;
-      var d = str.getDate();
-      if (m < 10) {
-        m = "0" + m;
-      }
-      if (d < 10) {
-        d = "0" + d;
-      }
-      return y + "-" + m + "-" + d;
+    //日期改变
+    changedate(e) {
+      console.log(e);
+      this.currentdate = e;
     },
     getBottom() {
       // 基于准备好的dom，初始化echarts实例
@@ -466,7 +437,7 @@ export default {
   overflow-y: scroll;
 }
 .wrapper::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 .chartsshow {
   width: 100%;

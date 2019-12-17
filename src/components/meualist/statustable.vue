@@ -24,7 +24,7 @@
         <!-- page-sizes分页数组，page-size分页当前一页的条数，total总条数 -->
         <Page style="position:absolute;bottom:1em;" :total="100" show-elevator show-sizer />
       </div>
-      <Modal v-model="statusinfoshow" :class="statusstyle" fullscreen footer-hide>
+      <Modal v-model="statusinfoshow" class="statusstyle" fullscreen footer-hide>
         <statusinfo :statusinfo="{selections,statusinfoshow}" @modelshow="modelshow"></statusinfo>
       </Modal>
     </div>
