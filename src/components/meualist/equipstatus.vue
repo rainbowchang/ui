@@ -380,35 +380,8 @@ export default {
       // }
       this.treeParam = params;
       get("/organization/customer/getFirstCustomer", reponse => {
-        var content = this.$refs.statustable.content;
-        reponse.data.forEach(element => {
-          var machine = element.machineBean;
-          var machineStatus = element.machineStatus;
-          var contentElement = {};
-          contentElement.name = machine.description;
-          contentElement.model = machine.model;
-          contentElement.serial = machine.sn;
-          contentElement.CNC = machine.plcType;
-          contentElement.productionDate = machine.dateOfProduction
-          contentElement.warning = "";
-          machineStatus.alarms.forEach(element =>{
-            contentElement.warning =  contentElement.warning + "告警码: " + element + " ";
-        });
-        contentElement.status = "unknown";
-        if(contentElement.warning != ""){
-          contentElement.status = "故障";  
-        }else{
-          switch(machineStatus.WorkState){
-            case 0:
-              contentElement.status = "加工";
-              break;
-            case 1:
-              contentElement.status = "停机";
-              break;
-          }
-        }   
-        content.push(contentElement); 
-        });
+        this.$refs.statustable.content = reponse.data;
+        console.log(this.$refs.statustable.content)
       });  
     },
     addNode() {
