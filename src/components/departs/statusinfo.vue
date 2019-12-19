@@ -4,14 +4,14 @@
       <el-button type="primary" icon="el-icon-arrow-left" @click="back">上一层</el-button>
       <span>时间作业状态</span>
       <div>
-        <el-date-picker
+        <!-- <el-date-picker
           :style="{width:'240px'}"
           v-model="dateChoose"
           type="daterange"
           range-separator="——"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-        ></el-date-picker>
+        ></el-date-picker>-->
       </div>
     </div>
     <div class="currentdata">
@@ -94,7 +94,7 @@
                   </div>
                   <div>
                     <span>加工占比</span>
-                    <i-circle :percent="50" :size="80">
+                    <i-circle :percent="50" stroke-color="#089642" :size="80">
                       <span class="demo-Circle-inner" style="font-size:16px">50%</span>
                     </i-circle>
                   </div>
@@ -112,14 +112,14 @@
           <div id="myChartBottom" :style="{width: '100%', height: '100%'}"></div>
         </div>
         <div class="pieshow">
-          <el-date-picker
-            :style="{width:'240px'}"
-            v-model="dateChoose"
+          <DatePicker
             type="daterange"
-            range-separator="——"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          ></el-date-picker>
+            :style="{width:'240px'}"
+            placement="bottom-end"
+            placeholder="请选择开始日期——结束日期"
+            style="width: 200px"
+            @on-change="cahngedate1"
+          ></DatePicker>
           <div id="myChart2" :style="{width: '100%', height: '100%'}"></div>
         </div>
       </div>
@@ -129,14 +129,14 @@
           <div id="myChartBottom3" :style="{width: '100%', height: '100%'}"></div>
         </div>
         <div class="pieshow">
-          <el-date-picker
-            :style="{width:'240px'}"
-            v-model="dateChoose"
+          <DatePicker
             type="daterange"
-            range-separator="——"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          ></el-date-picker>
+            :style="{width:'240px'}"
+            placement="bottom-end"
+            placeholder="请选择开始日期——结束日期"
+            style="width: 200px"
+            @on-change="cahngedate2"
+          ></DatePicker>
           <div id="myChart3" :style="{width: '100%', height: '100%'}"></div>
         </div>
       </div>
@@ -149,7 +149,8 @@ export default {
   props: ["statusinfo"],
   data() {
     return {
-      dateChoose: "",
+      dateChoose2: "",
+      dateChoose1: "",
       currentdate: "",
       currentPage: 1, //分页当前页数,
       statuslist: [
@@ -194,8 +195,15 @@ export default {
     },
     //日期改变
     changedate(e) {
-      console.log(e);
       this.currentdate = e;
+    },
+    cahngedate1(e) {
+      this.dateChoose1=e
+      console.log("第一个pie状图上方时间选择", this.dateChoose1);
+    },
+    cahngedate2(e) {
+      this.dateChoose2=e
+      console.log("第二个pie状图上方时间选择", this.dateChoose2);
     },
     getBottom() {
       // 基于准备好的dom，初始化echarts实例
@@ -295,7 +303,8 @@ export default {
               { value: 310, name: "故障" },
               { value: 234, name: "停机" },
               { value: 135, name: "未连接" }
-            ]
+            ],
+            color: ["#089642", "#fb0200", "#fffc02", "#808080"]
           }
         ]
       };
@@ -401,7 +410,8 @@ export default {
               { value: 310, name: "故障" },
               { value: 234, name: "停机" },
               { value: 135, name: "未连接" }
-            ]
+            ],
+            color: ["#089642", "#fb0200", "#fffc02", "#808080"]
           }
         ]
       };
@@ -615,7 +625,7 @@ export default {
 .currentdata {
   display: flex;
   flex-direction: row;
-  width: 210px;
+  width: 240px;
   justify-content: space-between;
   margin: 0 auto;
   position: absolute;
@@ -623,7 +633,7 @@ export default {
   left: 0;
   right: 0;
   margin: auto;
-  transform: translateX(-6em);
+  transform: translateX(6em);
 }
 .currentdata > span {
   cursor: pointer;
