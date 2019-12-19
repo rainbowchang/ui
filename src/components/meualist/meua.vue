@@ -130,7 +130,7 @@ span {
 .wrapper {
   width: 100vw;
   height: 100vh;
-  min-height: 768px;
+  /* min-height: 768px; */
   min-width: 1024px;
   padding-bottom: 3em;
   background-color: #eff4f7;

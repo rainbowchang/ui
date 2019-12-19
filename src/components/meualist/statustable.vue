@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapperd">
     <!-- 右侧table及各个功能 -->
     <div class="tableinfo">
       <div class="search">
@@ -162,8 +162,7 @@ export default {
           warning: "..."
         }
       ],
-      selections: [], //操作中选中的所选项数组
-
+      selections: [] //操作中选中的所选项数组
     };
   },
   methods: {
@@ -197,15 +196,15 @@ export default {
 };
 </script>
 <style scoped>
-.wrapper {
+.wrapperd {
   width: 100%;
-  height: 95%;
+  height: 100%;
   margin: 1% auto;
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  overflow: auto;
+  overflow: hidden;
 }
 .wrapper > div {
   height: 100%;
@@ -216,8 +215,8 @@ export default {
   width: 16%;
   padding-top: 2em;
 }
-.statusstyle{
-  min-height: 860px;
+.statusstyle {
+  /* min-height: 860px; */
 }
 .tableinfo {
   width: 100%;

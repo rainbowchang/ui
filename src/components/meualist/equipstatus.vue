@@ -431,7 +431,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  overflow: auto;
+  overflow: hidden;
 }
 .wrapper > div {
   height: 100%;
