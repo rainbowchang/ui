@@ -61,22 +61,22 @@
                       <div>24:00</div>
                     </div>
                   </div>
-                  <div class="colorline">
+                  <div class="colorline"> 
                     <div>
                       <div class="process"></div>
-                      <span>加工：{{time}}</span>
+                      <span>加工：{{item.timeWork}}</span>
                     </div>
                     <div>
                       <div class="breakdown"></div>
-                      <span>故障：10时25分10秒</span>
+                      <span>故障：{{item.timeAlarm}}</span>
                     </div>
                     <div>
                       <div class="stop"></div>
-                      <span>停机：0秒</span>
+                      <span>停机：{{item.timeShutdown}}</span>
                     </div>
                     <div>
                       <div class="interrupt"></div>
-                      <span>未连接</span>
+                      <span>未连接：{{item.timeStop}}</span>
                     </div>
                   </div>
                 </div>
@@ -85,13 +85,13 @@
                   <div>
                     <span>故障占比</span>
                     <i-circle :percent="70" stroke-color="#ff5500" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">80%</span>
+                      <span class="demo-Circle-inner" style="font-size:16px">{{item.alarmPercent}}</span>
                     </i-circle>
                   </div>
                   <div>
                     <span>加工占比</span>
                     <i-circle :percent="50" stroke-color="#089642" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">50%</span>
+                      <span class="demo-Circle-inner" style="font-size:16px">{{item.workPercent}}</span>
                     </i-circle>
                   </div>
                 </div>
@@ -102,10 +102,10 @@
       </Tabs>
     </div>
     <div class="chartsshow">
-      <div>
-        <div class="listleft">ZHUGANGZHI-1</div>
+      <div v-for="(value,index) in metalist" :key="index">
+        <div class="listleft">{{value.name}}</div>
         <div class="headBottom">
-          <div id="myChartBottom" :style="{width: '100%', height: '100%'}"></div>
+          <div :id="value.bottom" :style="{width: '100%', height: '100%'}"></div>
         </div>
         <div class="pieshow">
           <DatePicker
@@ -114,26 +114,9 @@
             placement="bottom-end"
             placeholder="请选择开始日期——结束日期"
             style="width: 200px;margin-bottom:1em;"
-            @on-change="cahngedate1"
+            @on-change="value.func"
           ></DatePicker>
-          <div id="myChart2" :style="{width: '100%', height: '100%'}"></div>
-        </div>
-      </div>
-      <div>
-        <div class="listleft">ZHUGANGZHI-1</div>
-        <div class="headBottom">
-          <div id="myChartBottom3" :style="{width: '100%', height: '100%'}"></div>
-        </div>
-        <div class="pieshow">
-          <DatePicker
-            type="daterange"
-            :style="{width:'240px'}"
-            placement="bottom-end"
-            placeholder="请选择开始日期——结束日期"
-            style="width: 200px;margin-bottom:1em;"
-            @on-change="cahngedate2"
-          ></DatePicker>
-          <div id="myChart3" :style="{width: '100%', height: '100%'}"></div>
+          <div :id="value.chart" :style="{width: '100%', height: '100%'}"></div>
         </div>
       </div>
     </div>
@@ -141,26 +124,35 @@
 </template>
 
 <script>
+import {post} from "@/apis/restUtils"
 export default {
   props: ["statusinfo"],
   data() {
     return {
-      time: "20秒",
-      dateChoose2: "",
-      dateChoose1: "",
-      currentdate: "",
+      dateChoose2: "2018-10-3",
+      dateChoose1: ["2018-10-2","2018-10-3"],
+      currentdate: "2018-10-2",
       currentPage: 1, //分页当前页数,
+      selections: [],
       statuslist: [
         {
+          timeWork: "",
+          timeAlarm: "",
+          timeShutdown: "",
+          timeStop: "",
           list: [
             { percent: "18%", status: 1 },
             { percent: "12%", status: 2 },
             { percent: "34%", status: 3 },
             { percent: "36%", status: 5 }
           ],
-          name: "ZHUGANGZHI-1"
+          name: "ZHUGANGZHI-1",
         },
         {
+          timeWork: "",
+          timeAlarm: "",
+          timeShutdown: "",
+          timeStop: "",
           list: [
             { percent: "10%", status: 2 },
             { percent: "28%", status: 3 },
@@ -170,6 +162,10 @@ export default {
           name: "ZHUGANGZHI-2"
         },
         {
+          timeWork: "",
+          timeAlarm: "",
+          timeShutdown: "",
+          timeStop: "",
           list: [
             { percent: "10%", status: 2 },
             { percent: "28%", status: 3 },
@@ -178,7 +174,19 @@ export default {
           ],
           name: "ZHUGANGZHI-3"
         }
-      ] //状态数组status状态，percent百分比
+      ], //状态数组status状态，percent百分比
+      metalist: [
+        {
+          chart: "myChart2",
+          bottom: "bottom-sn-1",
+          name: "ZHUGANGZHI-1"
+        },
+        {
+          chart: "myChart3",
+          bottom: "myChartBottom3",
+          name: "ZHUGANGZHI-2"
+        }
+      ]
     };
   },
   methods: {
@@ -196,23 +204,32 @@ export default {
     //去人日期
     suredata() {
       console.log("当前确认的日期", this.currentdate);
+      this.statuslist = [];
+      for(var i = 0; i < this.selections.length; i++){
+        post("/organization/customer/getOneDayStatus", {"serial":this.selections[i].serial,"date":this.currentdate}, 
+          reponse => {
+            this.statuslist.push(reponse.data);
+            console.log(this.statuslist);
+        });
+      }  
     },
     //日期改变
     changedate(e) {
-      this.currentdate = e;
+      console.log("第一个pie状图上方时间选择", e);
     },
     cahngedate1(e) {
       this.dateChoose1 = e;
-      console.log("第一个pie状图上方时间选择", this.dateChoose1);
     },
     cahngedate2(e) {
       this.dateChoose2 = e;
       console.log("第二个pie状图上方时间选择", this.dateChoose2);
     },
-    getBottom() {
+    getBottom(dateData, workData, bottom) {
       // 基于准备好的dom，初始化echarts实例
+      console.log(this.metalist);
+      console.log(bottom);
       let myChart = this.$echarts.init(
-        document.getElementById("myChartBottom")
+        document.getElementById(bottom)
       );
       let option = {
         color: ["#3398DB"],
@@ -232,23 +249,7 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: [
-              "2019-10-01",
-              "2019-10-02",
-              "2019-10-03",
-              "2019-10-04",
-              "2019-10-05",
-              "2019-10-06",
-              "2019-10-07",
-              "2019-10-08",
-              "2019-10-09",
-              "2019-10-10",
-              "2019-10-11",
-              "2019-10-12",
-              "2019-10-13",
-              "2019-10-14",
-              "2019-10-15"
-            ],
+            data: dateData,
             axisTick: {
               alignWithLabel: true
             },
@@ -268,7 +269,7 @@ export default {
             name: "百分比",
             type: "bar",
             barWidth: "30%",
-            data: [10, 52, 20, 34, 39, 30, 22, 68, 32, 15, 59, 64, 21, 54, 89],
+            data: workData,
             itemStyle: {
               normal: {
                 color: "#009a44"
@@ -281,9 +282,10 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getpie() {
+    getpie(pieData, chart) {
       // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById("myChart2"));
+      console.log(this.metalist);
+      let myChart = this.$echarts.init(document.getElementById(chart));
       let option = {
         tooltip: {
           trigger: "item",
@@ -313,12 +315,7 @@ export default {
                 show: true
               }
             },
-            data: [
-              { value: 335, name: "加工" },
-              { value: 310, name: "故障" },
-              { value: 234, name: "停机" },
-              { value: 135, name: "未连接" }
-            ],
+            data: pieData,
             color: ["#089642", "#fb0200", "#fffc02", "#808080"]
           }
         ]
@@ -450,10 +447,42 @@ export default {
     statusinfo(val) {
       console.log("表格选中的行信息", val.selections);
       if (val.statusinfoshow) {
-        this.getBottom();
-        this.getpie();
-        this.getBottom2();
-        this.getpie2();
+        // this.getBottom();
+        // this.getpie();
+        // this.getBottom2();
+        // this.getpie2();
+        this.selections = val.selections;
+        this.statuslist = [];
+        this.metalist = [];
+        for(var i = 0; i < this.selections.length; i++){
+          var s = this.selections[i].serial;
+          var getBottom = this.getBottom;
+          var getPie = this.getpie
+          this.metalist.push({"name":this.selections[i].serial,"bottom":"bottom-"+this.selections[i].serial,"chart":"chart-"+this.selections[i].serial,
+            "func":function(e){
+              post("/organization/customer/getPeriodStatus",
+                {"serial":s,"startDate":e[0],"endDate":e[1]},
+                reponse => {
+                  console.log(this);
+                  getBottom(reponse.data.dateData, reponse.data.workData, reponse.data.meta.bottom);
+                  getPie(reponse.data.pieData, reponse.data.meta.chart);
+              });
+            }})
+        }
+        for(var j = 0; j < this.selections.length; j++){   
+          post("/organization/customer/getOneDayStatus", 
+            {"serial":this.selections[j].serial,"date":this.currentdate}, 
+            reponse => {
+              this.statuslist.push(reponse.data);
+              console.log(this.statuslist);
+          });
+          post("/organization/customer/getPeriodStatus",
+            {"serial":this.selections[j].serial,"startDate":this.dateChoose1[0],"endDate":this.dateChoose1[1]},
+            reponse => {
+              this.getBottom(reponse.data.dateData, reponse.data.workData, reponse.data.meta.bottom);
+              this.getpie(reponse.data.pieData, reponse.data.meta.chart);
+          });
+        }
       }
     }
   }
