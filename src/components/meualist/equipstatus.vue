@@ -83,6 +83,7 @@ export default {
                   dragDisabled: true,
                   addLeafNodeDisabled: true,
                   pid: 5,
+                  value: "customer",
                   children: [
                     {
                       name: "南京工厂",
@@ -233,6 +234,7 @@ export default {
                                 {
                                   name: "机床2",
                                   id: 44,
+                                  value: "sn-0001",
                                   isLeaf: false,
                                   addLeafNodeDisabled: true,
                                   dragDisabled: true,
@@ -354,15 +356,55 @@ export default {
     // 添加节点	树节点
     onAddNode(params) {
       console.log(params, "onAddNode");
+      var treePath = this.getTreePath(params);
+      console.log("treePath:"  + treePath + " parent:" + params.parent + " grad:" + params.parent.parent);
+      if(params.parent != null && params.parent.parent != null
+        && params.parent.parent.name == "root"){
+        this.customerModelView(params);  
+      }
+      if(params.isLeaf){
+        this.plcModalView(params);
+      }
+    },
+    // tree节点点击事件
+    onClick(params) {
+      this.treeParam = params;
+      var nodepath = this.getTreePath(params);
+      var nodeContent = {nodePath:nodepath, key: params.value, value:params.name, type: params.type};
+      console.info(nodeContent);
+      this.statustable = false
+      this.showDetail= true
+      this.detailinfo=params
+      this.treeParam = params;
+      get("/organization/customer/getFirstCustomer", reponse => {
+        this.$refs.statustable.content = reponse.data;
+        console.log(this.$refs.statustable.content)
+      });  
+    },
+    getTreePath(node, path){
+      if(path == null){
+        path = "";
+      }
+      var name = node.name;
+      if(node.parent === null){
+        return path;
+      }
+      path = "/" + name + path;
+      return this.getTreePath(node.parent, path);
+    },
+    plcModalView(params){
       this.$Modal.confirm({
-          title: '客户列表',
+          title: 'plc列表',
           render: (h) => {
             return h(customerModel, {
               ref: 'customerModel',
               on:{
-                showInfo:(name) =>{
-                  alert(" parent: " + name);
-                  // change nodename
+                showInfo:(name, sn) =>{
+                  params.name = name;
+                  params.key = sn;
+                  params.value = name;
+                  params.type = "LEAF";
+                  console.info(" changed type:" + params.type);
                 }
               }
             })
@@ -373,31 +415,42 @@ export default {
           cancelText: "取消",
           loading: true,
           onOk() {
-            
+            this.$Modal.remove();
           }
         });
     },
-    // tree节点点击事件
-    onClick(params) {
-      console.log(params, "onClick");
-      // if(params.name.substring(0,2)=="机床"){
 
-      // }
-      this.statustable = false
-      this.showDetail= true
-      this.detailinfo=params
-      this.treeParam = params;
-      get("/organization/customer/getFirstCustomer", reponse => {
-        this.$refs.statustable.content = reponse.data;
-        console.log(this.$refs.statustable.content)
-      });  
+    customerModelView(params){
+        this.$Modal.confirm({
+          title: '客户列表',
+          render: (h) => {
+            return h(customerModel, {
+              ref: 'customerModel',
+              on:{
+                showInfo:(name) =>{
+                  params.name = name;
+                  params.key = name;
+                  params.type = "COMPOSITE";
+                  console.info(" changed type:" + params.type);
+                }
+              }
+            })
+          },
+          width: 600,
+          closable: false,
+          okText: "确定",
+          cancelText: "取消",
+          loading: true,
+          onOk() {
+            this.$Modal.remove();
+          }
+        });
     },
     addNode() {
       var node = new TreeNode({ name: "new node", isLeaf: false });
       if (!this.data.children) this.data.children = [];
       this.data.addChildren(node);
     },
-
     getNewTree() {
       var vm = this;
       function _dfs(oldNode) {
