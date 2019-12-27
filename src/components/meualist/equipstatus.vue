@@ -39,7 +39,7 @@ import { VueTreeList, Tree, TreeNode } from "vue-tree-list";
 import statustable from "./statustable";
 import factory from "./factory";
 import detailChart from "./detailChart";
-import {get} from "@/apis/restUtils";
+import {post} from "@/apis/restUtils";
 
 const customerModel = () => import("./customerInfoModal.vue");
 
@@ -343,6 +343,9 @@ export default {
       ])
     };
   },
+  mounted: function () {
+     console.log("reload..");
+  },
   methods: {
     // 删除节点	树节点
     onDel(node) {
@@ -355,12 +358,9 @@ export default {
     },
     // 添加节点	树节点
     onAddNode(params) {
-      console.log(params, "onAddNode");
-      var treePath = this.getTreePath(params);
-      console.log("treePath:"  + treePath + " parent:" + params.parent + " grad:" + params.parent.parent);
       if(params.parent != null && params.parent.parent != null
-        && params.parent.parent.name == "root"){
-        this.customerModelView(params);  
+                                && params.parent.parent.name == "root"){
+         this.customerModelView(params);  
       }
       if(params.isLeaf){
         this.plcModalView(params);
@@ -376,10 +376,17 @@ export default {
       this.showDetail= true
       this.detailinfo=params
       this.treeParam = params;
-      get("/organization/customer/getFirstCustomer", reponse => {
-        this.$refs.statustable.content = reponse.data;
-        console.log(this.$refs.statustable.content)
-      });  
+      if(!params.isLeaf){
+          this.sendNodeContent("/organization/node/trigger", params, reponse => {
+            this.$refs.statustable.content = reponse.data;
+            console.log(this.$refs.statustable.content)
+          });
+          return;
+      }
+      this.sendNodeContent("/organization/leafNode/trigger", params, response =>{
+            console.log(response.data);
+      });
+      return;
     },
     getTreePath(node, path){
       if(path == null){
@@ -404,7 +411,9 @@ export default {
                   params.key = sn;
                   params.value = name;
                   params.type = "LEAF";
-                  console.info(" changed type:" + params.type);
+                  this.sendNodeContent("/organization/addNode", params, response =>{
+                    console.log(response.data);
+                  });
                 }
               }
             })
@@ -431,7 +440,9 @@ export default {
                   params.name = name;
                   params.key = name;
                   params.type = "COMPOSITE";
-                  console.info(" changed type:" + params.type);
+                  this.sendNodeContent("/organization/addNode", params, response =>{
+                    console.log(response.data);
+                  });
                 }
               }
             })
@@ -446,6 +457,17 @@ export default {
           }
         });
     },
+
+    sendNodeContent(path, params, consumer){
+       var treePath = this.getTreePath(params);
+       if(params.parent != null){
+         var parentPath = this.getTreePath(params.parent);
+       }
+       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: params.value, value:params.name, type: params.type};
+       console.log(" changed type:" + params.type);
+       post(path, nodeContent,consumer);
+    },
+
     addNode() {
       var node = new TreeNode({ name: "new node", isLeaf: false });
       if (!this.data.children) this.data.children = [];
