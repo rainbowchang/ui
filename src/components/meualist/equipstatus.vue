@@ -42,6 +42,7 @@ import detailChart from "./detailChart";
 import {post} from "@/apis/restUtils";
 
 const customerModel = () => import("./customerInfoModal.vue");
+const plcInfoModal = () => import("./plcInfoModal.vue");
 
 export default {
   components: {
@@ -353,17 +354,17 @@ export default {
       node.remove();
     },
     // 更换名字	{'id'，'oldName'，'newName'}
-    onChangeName(params) {
-      console.log(params, "onChangeName");
+    onChangeName(nodeInfo) {
+      console.log(nodeInfo, "onChangeName");
     },
     // 添加节点	树节点
-    onAddNode(params) {
-      if(params.parent != null && params.parent.parent != null
-                                && params.parent.parent.name == "root"){
-         this.customerModelView(params);  
+    onAddNode(nodeInfo) {
+      if(nodeInfo.parent != null && nodeInfo.parent.parent != null
+                                && nodeInfo.parent.parent.name == "root"){
+         this.customerModelView(nodeInfo);  
       }
-      if(params.isLeaf){
-        this.plcModalView(params);
+      if(nodeInfo.isLeaf){
+        this.plcModalView(nodeInfo);
       }
     },
     // tree节点点击事件
@@ -383,35 +384,47 @@ export default {
           });
           return;
       }
-      this.sendNodeContent("/organization/leafNode/trigger", params, response =>{
+      this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
             console.log(response.data);
       });
       return;
     },
-    getTreePath(node, path){
+    getTreePath(nodeInfo, path){
       if(path == null){
         path = "";
       }
-      var name = node.name;
-      if(node.parent === null){
+      var name = nodeInfo.name;
+      if(nodeInfo.parent === null){
         return path;
       }
       path = "/" + name + path;
-      return this.getTreePath(node.parent, path);
+      return this.getTreePath(nodeInfo.parent, path);
     },
-    plcModalView(params){
+    getCustomerNode(nodeInfo){
+      if(nodeInfo == null || nodeInfo.parent === null){
+        return null;
+      }
+      if(nodeInfo.type === "CUSTOMER"){
+        return nodeInfo;
+      }
+      return this.getCustomerNameNode(nodeInfo.parent);
+    },
+    plcModalView(nodeInfo){
       this.$Modal.confirm({
           title: 'plc列表',
           render: (h) => {
-            return h(customerModel, {
-              ref: 'customerModel',
+            return h(plcInfoModal, {
+              ref: 'plcInfoModal',
+              props: {
+                customerNode: this.getCustomerNode(nodeInfo)
+              },
               on:{
                 showInfo:(name, sn) =>{
-                  params.name = name;
-                  params.key = sn;
-                  params.value = name;
-                  params.type = "LEAF";
-                  this.sendNodeContent("/organization/addNode", params, response =>{
+                  nodeInfo.name = name;
+                  nodeInfo.key = sn;
+                  nodeInfo.value = name;
+                  nodeInfo.type = "LEAF";
+                  this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
                     console.log(response.data);
                   });
                 }
@@ -429,18 +442,21 @@ export default {
         });
     },
 
-    customerModelView(params){
+    customerModelView(nodeInfo){
         this.$Modal.confirm({
           title: '客户列表',
           render: (h) => {
             return h(customerModel, {
               ref: 'customerModel',
+              props: {
+                placeContent: 'Please enter your name...'
+              },
               on:{
                 showInfo:(name) =>{
-                  params.name = name;
-                  params.key = name;
-                  params.type = "COMPOSITE";
-                  this.sendNodeContent("/organization/addNode", params, response =>{
+                  nodeInfo.name = name;
+                  nodeInfo.key = name;
+                  nodeInfo.type = "COMPOSITE";
+                  this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
                     console.log(response.data);
                   });
                 }
@@ -457,14 +473,13 @@ export default {
           }
         });
     },
-
-    sendNodeContent(path, params, consumer){
-       var treePath = this.getTreePath(params);
-       if(params.parent != null){
-         var parentPath = this.getTreePath(params.parent);
+    sendNodeContent(path, nodeInfo, consumer){
+       var treePath = this.getTreePath(nodeInfo);
+       if(nodeInfo.parent != null){
+         var parentPath = this.getTreePath(nodeInfo.parent);
        }
-       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: params.value, value:params.name, type: params.type};
-       console.log(" changed type:" + params.type);
+       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.value, value:nodeInfo.name, type: nodeInfo.type};
+       console.log(" changed type:" + nodeInfo.type);
        post(path, nodeContent,consumer);
     },
 

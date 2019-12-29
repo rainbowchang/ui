@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1 align="center">客户列表</h1>
+    <h1 align="center">Plc列表</h1>
     <div>
-        <span>客户列表选择：</span>
+        <span>plc列表选择：</span>
         <i-select :model.sync="plc" style="width:200px" @on-change = "selectCallback">
             <i-option v-for="item in plcList" :key = "item.value" :value="item.label">{{ item.label }}</i-option>
         </i-select>
@@ -14,7 +14,7 @@
 </template>
 <script>
   export default {
-    name: "customerInfos",
+    name: "plcInfos",
     data() {
        return {
             plcList: [
@@ -32,14 +32,13 @@
                 }
             ],
             plc: '',
-            inputValue: ""
+            inputValue: "xiaoyu"
         }
     },
-    props: ['placeContent'],
     mounted: function(){
          this.getRemotePlcs();
     },
-    methods: {  
+    methods: {	
      selectCallback(value){
         this.plc = value;
         this.$emit('showInfo', value);
@@ -50,11 +49,13 @@
         this.$emit('showInfo', value);
      },
      getRemotePlcs(){
-        alert(" place holder:" + this.placeContent);
-        alert("get remote customers");
+        console.log("get remote customers");
      }
     }
   }
 </script>
 <style scoped>
 </style>
+
+
+
