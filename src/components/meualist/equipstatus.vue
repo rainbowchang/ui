@@ -359,13 +359,7 @@ export default {
     },
     // 添加节点	树节点
     onAddNode(nodeInfo) {
-      if(nodeInfo.parent != null && nodeInfo.parent.parent != null
-                                && nodeInfo.parent.parent.name == "root"){
-         this.customerModelView(nodeInfo);  
-      }
-      if(nodeInfo.isLeaf){
-        this.plcModalView(nodeInfo);
-      }
+      this.customerModelView(nodeInfo); 
     },
     // tree节点点击事件
     onClick(params) {
@@ -401,13 +395,13 @@ export default {
       return this.getTreePath(nodeInfo.parent, path);
     },
     getCustomerNode(nodeInfo){
-      if(nodeInfo == null || nodeInfo.parent === null){
+      if(nodeInfo == null || nodeInfo == undefined){
         return null;
       }
       if(nodeInfo.type === "CUSTOMER"){
         return nodeInfo;
       }
-      return this.getCustomerNameNode(nodeInfo.parent);
+      return this.getCustomerNode(nodeInfo.parent);
     },
     plcModalView(nodeInfo){
       this.$Modal.confirm({
@@ -449,13 +443,19 @@ export default {
             return h(customerModel, {
               ref: 'customerModel',
               props: {
-                placeContent: 'Please enter your name...'
+                customerNode: this.getCustomerNode(nodeInfo)
               },
               on:{
-                showInfo:(name) =>{
-                  nodeInfo.name = name;
-                  nodeInfo.key = name;
-                  nodeInfo.type = "COMPOSITE";
+                showInfo:(key, value, type) =>{
+                  nodeInfo.name = value;
+                  nodeInfo.key = key;
+                  nodeInfo.value = value;
+                  nodeInfo.type = type;
+                  nodeInfo.dragDisabled = true;
+                  nodeInfo.addLeafNodeDisabled = true;
+                  if(type === "LEAF"){
+                    nodeInfo.isLeaf = true;
+                  }
                   this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
                     console.log(response.data);
                   });

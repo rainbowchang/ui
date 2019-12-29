@@ -3,8 +3,8 @@
     <h1 align="center">客户列表</h1>
 
     <div>
-        <span>新建节点内容：</span>
-        <i-select :model.sync="type" style="width:200px" @on-change = "nodeTypeSelectCallback">
+        <span>节点信息：</span>
+        <i-select :model.sync="nodeType" style="width:200px" @on-change = "nodeTypeSelectCallback">
             <i-option value="customer">客户信息</i-option>
             <i-option value = "plc">机器信息</i-option>
             <i-option value = "other">自定义</i-option>
@@ -27,7 +27,7 @@
     <br>
     <div>
         <span>别名：</span>
-        <i-input :value.sync="inputValue" placeholder="请输入..." style="width: 300px" @on-blur = "inputCallback"></i-input>
+        <i-input :value.sync="inputAlias" placeholder="请输入..." style="width: 300px" @on-blur = "inputCallback"></i-input>
     </div>
   </div>
 </template>
@@ -68,9 +68,10 @@
             ],
             customerName: '',
             plcSn: '',
-            inputValue: "",
+            inputAlias: "",
             customerVisible: false,
-            plcVisible: false
+            plcVisible: false,
+            nodeType: "COMPOSITE"
         }
     },
     props: ['customerNode'],
@@ -79,21 +80,51 @@
     },
     methods: {  
      nodeTypeSelectCallback(value){
-        alert("value is :" + value);
+        switch(value){
+            case "customer":
+              this.customerVisible = true;
+              this.plcVisible = false;
+              this.getRemoteCustomers();
+              return "CUSTOMER";
+            case "plc":
+              this.customerVisible = false;
+              this.plcVisible = true;
+              this.getRemotePlcs();
+              return "LEAF";
+            case "other":
+              return "COMPOSITE";
+            default:
+               break;
+        }
+        return "";
      },
      customerSelectCallback(value){
-        this.plc = value;
-        this.$emit('showInfo', value);
+        this.customerName = value;
+        this.nodeType = "CUSTOMER";
+        this.$emit('showInfo', value, this.inputAlias, "CUSTOMER");
      },
      plcSelectCallback(value){
-        this.plc = value;
-        this.$emit('showInfo', value);
+        this.plcSn = value;
+        this.nodeType = "LEAF";
+        this.$emit('showInfo', value,this.inputAlias, "LEAF");
      },
-    
-     inputCallback(value){
-        alert("inut plc:" + this.plc);  
-        this.inputValue = value;
-        this.$emit('showInfo', value);
+     inputCallback(alias){
+        this.inputAlias = alias;
+        switch(this.nodeType){
+          case "CUSTOMER":
+             alert(" node is :" + this.customerName + " alias:" + alias + " type:" +  this.nodeType);
+             this.$emit('showInfo', this.customerName, alias, this.nodeType);
+             break;
+          case "LEAF":
+             this.$emit('showInfo', this.plcSn, alias, this.nodeType);
+             break;
+          case "COMPOSITE":
+             this.$emit('showInfo', alias, alias, this.nodeType);
+            break;
+          default:
+             break;
+        }
+     
      },
      getRemoteCustomers(){
         get("/customer/getAll", response=>{
@@ -102,7 +133,7 @@
      },
      getRemotePlcs(){
         alert(" place holder:" + this.customerNode);
-        post("/agent/view/plcsByCustomer", {"name:":customerNode.name}, response=>{
+        post("/agent/view/plcsByCustomer", {"name:":this.customerNode.name}, response=>{
             console.log(response.data);
         });
      }
