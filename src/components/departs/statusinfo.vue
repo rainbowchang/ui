@@ -129,9 +129,9 @@ export default {
   props: ["statusinfo"],
   data() {
     return {
-      dateChoose2: "2018-10-3",
-      dateChoose1: ["2018-10-2","2018-10-3"],
-      currentdate: "2018-10-2",
+      dateChoose2: "",
+      dateChoose1: "",
+      currentdate: "",
       currentPage: 1, //分页当前页数,
       selections: [],
       statuslist: [
@@ -177,11 +177,13 @@ export default {
       ], //状态数组status状态，percent百分比
       metalist: [
         {
+          func: function(){},
           chart: "myChart2",
           bottom: "bottom-sn-1",
           name: "ZHUGANGZHI-1"
         },
         {
+          func: function(){},
           chart: "myChart3",
           bottom: "myChartBottom3",
           name: "ZHUGANGZHI-2"
@@ -216,6 +218,7 @@ export default {
     //日期改变
     changedate(e) {
       console.log("第一个pie状图上方时间选择", e);
+      this.currentdate = e;
     },
     cahngedate1(e) {
       this.dateChoose1 = e;
@@ -454,33 +457,44 @@ export default {
         this.selections = val.selections;
         this.statuslist = [];
         this.metalist = [];
-        for(var i = 0; i < this.selections.length; i++){
-          var s = this.selections[i].serial;
-          var getBottom = this.getBottom;
-          var getPie = this.getpie
-          this.metalist.push({"name":this.selections[i].serial,"bottom":"bottom-"+this.selections[i].serial,"chart":"chart-"+this.selections[i].serial,
+
+        for(let i = 0; i < this.selections.length; i++){
+          let serial = this.selections[i].serial;
+          let getBottom = this.getBottom;
+          let getPie = this.getpie
+          this.metalist.push({"name":serial,"bottom":"bottom-"+serial,"chart":"chart-"+serial,
             "func":function(e){
               post("/organization/customer/getPeriodStatus",
-                {"serial":s,"startDate":e[0],"endDate":e[1]},
+                {"serial":serial,"startDate":e[0],"endDate":e[1]},
                 reponse => {
-                  console.log(this);
-                  getBottom(reponse.data.dateData, reponse.data.workData, reponse.data.meta.bottom);
-                  getPie(reponse.data.pieData, reponse.data.meta.chart);
+                  getBottom(reponse.data.dateData, reponse.data.workData, "bottom-"+serial);
+                  getPie(reponse.data.pieData, "chart-"+serial);
               });
             }})
         }
-        for(var j = 0; j < this.selections.length; j++){   
+        
+        for(let i = 0; i < this.selections.length; i++){  
+          let serial = this.selections[i].serial; 
+          console.log("serial1",serial)
+          console.log("seriallist1",this.selections)
           post("/organization/customer/getOneDayStatus", 
-            {"serial":this.selections[j].serial,"date":this.currentdate}, 
+            {"serial":serial,"date":this.currentdate}, 
             reponse => {
+              console.log("serial1", serial);
               this.statuslist.push(reponse.data);
-              console.log(this.statuslist);
           });
+        }
+
+        for(let i = 0; i < this.selections.length; i++){
+          let serial = this.selections[i].serial;
+          console.log("serial",serial)
+          console.log("seriallist",this.selections)
           post("/organization/customer/getPeriodStatus",
-            {"serial":this.selections[j].serial,"startDate":this.dateChoose1[0],"endDate":this.dateChoose1[1]},
+            {"serial":serial,"startDate":"","endDate":""},
             reponse => {
-              this.getBottom(reponse.data.dateData, reponse.data.workData, reponse.data.meta.bottom);
-              this.getpie(reponse.data.pieData, reponse.data.meta.chart);
+              console.log("serial", serial);
+              this.getBottom(reponse.data.dateData, reponse.data.workData, "bottom-"+serial);
+              this.getpie(reponse.data.pieData, "chart-"+serial);
           });
         }
       }
