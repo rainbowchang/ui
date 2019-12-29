@@ -207,11 +207,10 @@ export default {
     suredata() {
       console.log("当前确认的日期", this.currentdate);
       this.statuslist = [];
-      for(var i = 0; i < this.selections.length; i++){
+      for(let i = 0; i < this.selections.length; i++){
         post("/organization/customer/getOneDayStatus", {"serial":this.selections[i].serial,"date":this.currentdate}, 
           reponse => {
-            this.statuslist.push(reponse.data);
-            console.log(this.statuslist);
+            this.statuslist.splice(i,0,reponse.data);
         });
       }  
     },
@@ -229,8 +228,6 @@ export default {
     },
     getBottom(dateData, workData, bottom) {
       // 基于准备好的dom，初始化echarts实例
-      console.log(this.metalist);
-      console.log(bottom);
       let myChart = this.$echarts.init(
         document.getElementById(bottom)
       );
@@ -287,7 +284,6 @@ export default {
     },
     getpie(pieData, chart) {
       // 基于准备好的dom，初始化echarts实例
-      console.log(this.metalist);
       let myChart = this.$echarts.init(document.getElementById(chart));
       let option = {
         tooltip: {
@@ -455,11 +451,10 @@ export default {
         // this.getBottom2();
         // this.getpie2();
         this.selections = val.selections;
-        this.statuslist = [];
         this.metalist = [];
 
-        for(let i = 0; i < this.selections.length; i++){
-          let serial = this.selections[i].serial;
+        for(let selection of this.selections){
+          let serial = selection.serial;
           let getBottom = this.getBottom;
           let getPie = this.getpie
           this.metalist.push({"name":serial,"bottom":"bottom-"+serial,"chart":"chart-"+serial,
@@ -472,27 +467,22 @@ export default {
               });
             }})
         }
-        
+
+        this.statuslist = [];
         for(let i = 0; i < this.selections.length; i++){  
           let serial = this.selections[i].serial; 
-          console.log("serial1",serial)
-          console.log("seriallist1",this.selections)
           post("/organization/customer/getOneDayStatus", 
-            {"serial":serial,"date":this.currentdate}, 
+            {"serial":serial,"date":""}, 
             reponse => {
-              console.log("serial1", serial);
-              this.statuslist.push(reponse.data);
+              this.statuslist.splice(i,0,reponse.data);
           });
         }
 
-        for(let i = 0; i < this.selections.length; i++){
-          let serial = this.selections[i].serial;
-          console.log("serial",serial)
-          console.log("seriallist",this.selections)
+        for(let selection of this.selections){
+          let serial = selection.serial;
           post("/organization/customer/getPeriodStatus",
             {"serial":serial,"startDate":"","endDate":""},
             reponse => {
-              console.log("serial", serial);
               this.getBottom(reponse.data.dateData, reponse.data.workData, "bottom-"+serial);
               this.getpie(reponse.data.pieData, "chart-"+serial);
           });
