@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 align="center">客户列表</h1>
+    <h1 align="center">添加信息</h1>
 
     <div>
         <span>节点信息：</span>
@@ -26,7 +26,7 @@
     </div>
     <br>
     <div>
-        <span>别名：</span>
+        <span>节点名称：</span>
      <!--    <i-input :value.sync="inputAlias" placeholder="请输入..." style="width: 300px" @on-change = "inputCallback"></i-input> -->
          <Input v-model="inputAlias" placeholder="Enter something..." style="width: 300px" @on-blur = "inputCallback"/>
     </div>

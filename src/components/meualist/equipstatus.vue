@@ -387,11 +387,11 @@ export default {
       if(path == null){
         path = "";
       }
-      var name = nodeInfo.name;
+      var key = nodeInfo.key;
       if(nodeInfo.parent === null){
         return path;
       }
-      path = "/" + name + path;
+      path = "/" + key + path;
       return this.getTreePath(nodeInfo.parent, path);
     },
     getCustomerNode(nodeInfo){
