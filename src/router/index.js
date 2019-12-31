@@ -6,6 +6,8 @@ import index from "@/components/view/index"
 import map from "@/components/homepage/map"
 import meua from "@/components/meualist/meua"
 import equipstatus from "@/components/meualist/equipstatus"
+import detailChart from "@/components/meualist/detailChart"
+import ruleLine from "@/components/meualist/ruleLine"
 import warning from "@/components/meualist/warning"
 import information from "@/components/meualist/information"
 import debug from "@/components/meualist/debug"
@@ -51,6 +53,12 @@ export default new Router({
         children: [{
             path: '/equipstatus',
             component: equipstatus
+        }, {
+            path: '/detailChart',
+            component: detailChart
+        }, {
+            path: '/ruleLine',
+            component: ruleLine
         }, {
             path: '/warning',
             component: warning
