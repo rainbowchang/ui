@@ -4,7 +4,7 @@
 
     <div>
         <span>节点信息：</span>
-        <i-select v-model="nodeType" style="width:200px" @on-change = "nodeTypeSelectCallback">
+        <i-select v-model="nodeContent" style="width:200px" @on-change = "nodeTypeSelectCallback">
             <i-option value="customer">客户信息</i-option>
             <i-option value = "plc">机器信息</i-option>
             <i-option value = "other">自定义</i-option>
@@ -72,7 +72,7 @@
             inputAlias: "",
             customerVisible: false,
             plcVisible: false,
-            nodeType: "COMPOSITE"
+            nodeContent: "other"
         }
     },
     props: ['customerNode'],
@@ -86,42 +86,47 @@
               this.customerVisible = true;
               this.plcVisible = false;
               this.getRemoteCustomers();
-              return "CUSTOMER";
+              return;
             case "plc":
               this.customerVisible = false;
               this.plcVisible = true;
               this.getRemotePlcs();
-              return "LEAF";
+              return;
             case "other":
-              return "COMPOSITE";
+              this.customerVisible = false;
+              this.plcVisible = false;
+              return;
             default:
                break;
         }
         return "";
      },
      customerSelectCallback(value){
-        // this.customerName = value;
-        this.nodeType = "CUSTOMER";
-        this.$emit('showInfo', value, this.inputAlias, "CUSTOMER");
+        var key = value;
+        var name = value;
+        if(this.inputAlias != ""){
+            name = this.inputAlias;
+        }
+        this.$emit('showInfo', key, name, "CUSTOMER");
      },
      plcSelectCallback(value){
-        // this.plcSn = value;
-        this.nodeType = "LEAF";
-        this.$emit('showInfo', value,this.inputAlias, "LEAF");
+        var key = value;
+        var name = value;
+        if(this.inputAlias != ""){
+            name = this.inputAlias;
+        }
+        this.$emit('showInfo', key, name, "LEAF");
      },
-     inputCallback(alias){
-        // this.inputAlias = alias;
-        alert(" alias:" + JSON.stringify(this.inputAlias) + " plcsn:" + this.plcSn
-           + " customer:" + this.customerName);
-        switch(this.nodeType){
-          case "CUSTOMER":
-             this.$emit('showInfo', this.customerName, alias, this.nodeType);
+     inputCallback(){
+        switch(this.nodeContent){
+          case "customer":
+             this.$emit('showInfo', this.customerName, this.inputAlias, "CUSTOMER");
              break;
-          case "LEAF":
-             this.$emit('showInfo', this.plcSn, alias, this.nodeType);
+          case "plc":
+             this.$emit('showInfo', this.plcSn, this.inputAlias, "LEAF");
              break;
-          case "COMPOSITE":
-             this.$emit('showInfo', alias, alias, this.nodeType);
+          case "other":
+             this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
             break;
           default:
              break;
@@ -134,8 +139,8 @@
         });
      },
      getRemotePlcs(){
-        alert(" place holder:" + this.customerNode);
-        post("/agent/view/plcsByCustomer", {"name:":this.customerNode.name}, response=>{
+        // alert(" place holder:" + this.customerNode);
+        post("/agent/view/plcsByCustomer", {"name:":this.customerNode.key}, response=>{
             console.log(response.data);
         });
      }

@@ -42,7 +42,6 @@ import detailChart from "./detailChart";
 import {post} from "@/apis/restUtils";
 
 const customerModel = () => import("./customerInfoModal.vue");
-const plcInfoModal = () => import("./plcInfoModal.vue");
 
 export default {
   components: {
@@ -361,18 +360,16 @@ export default {
     onAddNode(nodeInfo) {
       this.customerModelView(nodeInfo); 
     },
+    
     // tree节点点击事件
-    onClick(params) {
-      this.treeParam = params;
-      var nodepath = this.getTreePath(params);
-      var nodeContent = {nodePath:nodepath, key: params.value, value:params.name, type: params.type};
-      console.info(nodeContent);
+    onClick(nodeInfo) {
+      this.treeParam = nodeInfo;
       this.statustable = false
       this.showDetail= true
-      this.detailinfo=params
-      this.treeParam = params;
-      if(!params.isLeaf){
-          this.sendNodeContent("/organization/node/trigger", params, reponse => {
+      this.detailinfo=nodeInfo
+      this.treeParam = nodeInfo;
+      if(!nodeInfo.isLeaf){
+          this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
             this.$refs.statustable.content = reponse.data;
             console.log(this.$refs.statustable.content)
           });
@@ -388,10 +385,12 @@ export default {
         path = "";
       }
       var key = nodeInfo.key;
-      if(nodeInfo.parent === null){
+      if(key != undefined){
+         path = "/" + key + path;  
+      }
+      if(nodeInfo.type  === "CUSTOMER" || nodeInfo.parent === null){
         return path;
       }
-      path = "/" + key + path;
       return this.getTreePath(nodeInfo.parent, path);
     },
     getCustomerNode(nodeInfo){
@@ -403,39 +402,6 @@ export default {
       }
       return this.getCustomerNode(nodeInfo.parent);
     },
-    plcModalView(nodeInfo){
-      this.$Modal.confirm({
-          title: 'plc列表',
-          render: (h) => {
-            return h(plcInfoModal, {
-              ref: 'plcInfoModal',
-              props: {
-                customerNode: this.getCustomerNode(nodeInfo)
-              },
-              on:{
-                showInfo:(name, sn) =>{
-                  nodeInfo.name = name;
-                  nodeInfo.key = sn;
-                  nodeInfo.value = name;
-                  nodeInfo.type = "LEAF";
-                  this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
-                    console.log(response.data);
-                  });
-                }
-              }
-            })
-          },
-          width: 600,
-          closable: false,
-          okText: "确定",
-          cancelText: "取消",
-          loading: true,
-          onOk() {
-            this.$Modal.remove();
-          }
-        });
-    },
-
     customerModelView(nodeInfo){
         this.$Modal.confirm({
           title: '客户列表',
@@ -447,6 +413,7 @@ export default {
               },
               on:{
                 showInfo:(key, value, type) =>{
+                  // alert("key:" + key + " value:" + value + " type:" + type);
                   nodeInfo.name = value;
                   nodeInfo.key = key;
                   nodeInfo.value = value;
@@ -456,9 +423,9 @@ export default {
                   if(type === "LEAF"){
                     nodeInfo.isLeaf = true;
                   }
-                  this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
-                    console.log(response.data);
-                  });
+                  // this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
+                  //   console.log(response.data);
+                  // });
                 }
               }
             })
@@ -475,6 +442,7 @@ export default {
     },
     sendNodeContent(path, nodeInfo, consumer){
        var treePath = this.getTreePath(nodeInfo);
+       // alert("treePath:" + treePath);
        if(nodeInfo.parent != null){
          var parentPath = this.getTreePath(nodeInfo.parent);
        }
