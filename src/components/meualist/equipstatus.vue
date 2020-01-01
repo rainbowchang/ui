@@ -360,7 +360,7 @@ export default {
     onAddNode(nodeInfo) {
       this.customerModelView(nodeInfo); 
     },
-    
+
     // tree节点点击事件
     onClick(nodeInfo) {
       this.treeParam = nodeInfo;
@@ -368,40 +368,30 @@ export default {
       this.showDetail= true
       this.detailinfo=nodeInfo
       this.treeParam = nodeInfo;
+      var customerNode = this.getParentCustomerNode(nodeInfo);
+      if(customerNode != null ){
+          this.sendNodeContentWhenClick(nodeInfo);
+          return 
+      }  
+      var customerNodes = this.getChildrenCustomerNodes(nodeInfo);
+      for(var i in customerNodes){
+        this.sendNodeContentWhenClick(customerNodes[i]);
+      }
+      return;
+    },
+    sendNodeContentWhenClick(nodeInfo){
       if(!nodeInfo.isLeaf){
-          this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-            this.$refs.statustable.content = reponse.data;
-            console.log(this.$refs.statustable.content)
-          });
-          return;
+        this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
+          this.$refs.statustable.content = reponse.data;
+          console.log(this.$refs.statustable.content)
+        });
+        return;
       }
       this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
             console.log(response.data);
       });
-      return;
     },
-    getTreePath(nodeInfo, path){
-      if(path == null){
-        path = "";
-      }
-      var key = nodeInfo.key;
-      if(key != undefined){
-         path = "/" + key + path;  
-      }
-      if(nodeInfo.type  === "CUSTOMER" || nodeInfo.parent === null){
-        return path;
-      }
-      return this.getTreePath(nodeInfo.parent, path);
-    },
-    getCustomerNode(nodeInfo){
-      if(nodeInfo == null || nodeInfo == undefined){
-        return null;
-      }
-      if(nodeInfo.type === "CUSTOMER"){
-        return nodeInfo;
-      }
-      return this.getCustomerNode(nodeInfo.parent);
-    },
+   
     customerModelView(nodeInfo){
         this.$Modal.confirm({
           title: '客户列表',
@@ -409,11 +399,10 @@ export default {
             return h(customerModel, {
               ref: 'customerModel',
               props: {
-                customerNode: this.getCustomerNode(nodeInfo)
+                customerNode: this.getParentCustomerNode(nodeInfo)
               },
               on:{
                 showInfo:(key, value, type) =>{
-                  // alert("key:" + key + " value:" + value + " type:" + type);
                   nodeInfo.name = value;
                   nodeInfo.key = key;
                   nodeInfo.value = value;
@@ -422,10 +411,12 @@ export default {
                   nodeInfo.addLeafNodeDisabled = true;
                   if(type === "LEAF"){
                     nodeInfo.isLeaf = true;
+                  }else{
+                    nodeInfo.isLeaf = false;
                   }
-                  // this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
-                  //   console.log(response.data);
-                  // });
+                  this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
+                    console.log(response.data);
+                  });
                 }
               }
             })
@@ -442,15 +433,60 @@ export default {
     },
     sendNodeContent(path, nodeInfo, consumer){
        var treePath = this.getTreePath(nodeInfo);
-       // alert("treePath:" + treePath);
        if(nodeInfo.parent != null){
          var parentPath = this.getTreePath(nodeInfo.parent);
        }
        var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.value, value:nodeInfo.name, type: nodeInfo.type};
-       console.log(" changed type:" + nodeInfo.type);
+       console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },
-
+    getTreePath(nodeInfo, path){
+      if(path == null){
+        path = "";
+      }
+      var key = nodeInfo.key;
+      if(key != undefined){
+         path = "/" + key + path;  
+      }
+      if(nodeInfo.type  === "CUSTOMER" || nodeInfo.parent === null){
+        return path;
+      }
+      return this.getTreePath(nodeInfo.parent, path);
+    },
+    getParentCustomerNode(nodeInfo){
+      if(nodeInfo == null || nodeInfo == undefined){
+        return null;
+      }
+      if(nodeInfo.type === "CUSTOMER"){
+        return nodeInfo;
+      }
+      return this.getParentCustomerNode(nodeInfo.parent);
+    },
+    getChildrenCustomerNodes(nodeInfo){
+        var customerNodes = [];
+        this.getSubCustomerNodes(nodeInfo, customerNodes);
+        return customerNodes;
+    },
+    getSubCustomerNodes(nodeInfo, customerNodes){
+      if(nodeInfo == null || nodeInfo == undefined){
+        return;
+      }
+      if(nodeInfo.type === "CUSTOMER"){
+        customerNodes.push(nodeInfo);
+        console.log(customerNodes, "CUSTOMER nodes");
+      }
+      console.log(nodeInfo, "subNode");
+      var children = nodeInfo.children;
+      if(children == null){
+        return;
+      }
+      console.log(customerNodes, "subcustomerNodes");
+      for(var i in children){
+        console.log(children[i], "children");
+        this.getSubCustomerNodes(children[i], customerNodes)
+      }
+      return;
+    },
     addNode() {
       var node = new TreeNode({ name: "new node", isLeaf: false });
       if (!this.data.children) this.data.children = [];
