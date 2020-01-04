@@ -1,13 +1,13 @@
 <template>
   <div class="center-warp">
-    <div>
+    <div class="numleft">
       <div class="title unread">
         实时数据
         <span>当前刀位号：1</span>
         <span>当前程序名：NC0035</span>
         <div>
           <template>
-            <table class="table-a" width="500" border="1" cellspacing="0" cellpadding="5">
+            <table class="table-a" width="340" border="1" cellspacing="0" cellpadding="5">
               <tr v-for="(item, i) in tableList" :key="i">
                 <td>{{ item.x }}</td>
                 <td>{{item.number}}</td>
@@ -23,7 +23,7 @@
         负载
         <div>
           <template>
-            <table class="table-b" width="500" border="0" cellspacing="10" cellpadding="5">
+            <table class="table-b" width="360" border="0" cellspacing="10" cellpadding="5">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}</td>
                 <td>
@@ -40,52 +40,44 @@
       </div>
       <div class="title unread">
         当前给进
-        <div style="width:600px;height:150px;">
+        <div style="width:30vw;height:150px;">
           <!-- <div style="text-align: right;">1805mm/min</div> -->
-          <div id="myChart5" style="width:600px;height:500px;"></div>
+          <div id="myChart5" style="width:30vw;height:200px;"></div>
           <!-- <ruleLine :number="1805"/> -->
         </div>
       </div>
     </div>
-    <div>
-      <div class="title unread" style="display: flex;">
+    <div class="numright">
+      <div class="title unread" style="display: flex;white-space: nowrap;">
         倍率
-        <div style="width: 400px;height: 300px;">
-          <div id="myChart1" style="width: 300px;height: 300px;"></div>
+        <div style="width: 310px;height: 300px;">
+          <div id="myChart1" style="width: 240px;height: 240px;"></div>
           <div class="myChart1Title">主轴</div>
         </div>
-        <div style="width: 400px;height: 300px;">
-          <div id="myChart2" style="width: 300px;height: 300px;"></div>
+        <div style="width: 310px;height: 300px;">
+          <div id="myChart2" style="width: 240px;height: 240px;"></div>
           <div class="myChart2Title">进给</div>
         </div>
       </div>
-      <div class="title unread" style="display: flex;">
+      <div class="title unread" style="display: flex;white-space: nowrap;">
         主轴转速
-        <div style="width: 400px;height: 400px;">
-          <div id="myChart3" style="width: 300px;height: 400px;"></div>
+        <div style="width: 250px;height: 240px;">
+          <div id="myChart3" style="width: 230px;height: 210px;"></div>
         </div>
-        <div style="width: 400px;height: 400px;">
-          <div id="myChart4" style="width: 300px;height: 400px;"></div>
+        <div style="width: 250px;height: 240px;">
+          <div id="myChart4" style="width: 220px;height: 210px;"></div>
         </div>
       </div>
     </div>
-    <el-dialog
-  title="编辑"
-  :visible.sync="dialogVisible"
-  width="30%"
-  :before-close="handleClose">
-  <div>
-    <el-input
-      placeholder="请输入内容"
-      v-model="itemParam.x"
-      clearable>
-  </el-input>
-  </div>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-</el-dialog>
+    <el-dialog title="编辑" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <div>
+        <el-input placeholder="请输入内容" v-model="itemParam.x" clearable></el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -169,7 +161,7 @@ export default {
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
-    this.getRightBottom5();
+      this.getRightBottom5();
     }
   },
   methods: {
@@ -224,7 +216,7 @@ export default {
             detail: {
               formatter: "{value}%",
               textStyle: {
-                fontSize: 20
+                fontSize: 12
               }
             },
             data: [{ value: 120, name: "主轴" }]
@@ -296,7 +288,7 @@ export default {
             detail: {
               formatter: "{value}%",
               textStyle: {
-                fontSize: 20
+                fontSize: 12
               }
             },
             data: [{ value: 120, name: "主轴" }]
@@ -341,7 +333,7 @@ export default {
             detail: {
               formatter: "{value}rpm",
               textStyle: {
-                fontSize: 20
+                fontSize: 12
               }
             },
             data: [{ value: 16297 }]
@@ -413,7 +405,7 @@ export default {
             detail: {
               formatter: "{value}rpm",
               textStyle: {
-                fontSize: 20
+                fontSize: 12
               }
             },
             data: [{ value: 16297 }]
@@ -463,7 +455,7 @@ export default {
         },
         grid: {
           containLabel: true,
-          width: "99%",
+          width: "95%",
           height: 120,
           left: 0,
           top: 50
@@ -495,16 +487,16 @@ export default {
       myChart.setOption(option);
     },
     handleSubmit(item, index) {
-      this.tableList[index].showFlag = !this.tableList[index].showFlag
+      this.tableList[index].showFlag = !this.tableList[index].showFlag;
       console.log(item, index);
     },
     editName(item, index) {
       console.log(item, index);
-      this.itemParam = item
-      this.dialogVisible = true
+      this.itemParam = item;
+      this.dialogVisible = true;
     },
-    handleClose () {
-      console.log(this.itemParam)
+    handleClose() {
+      console.log(this.itemParam);
     }
   }
 };
@@ -512,6 +504,15 @@ export default {
 <style scoped lang="less">
 .center-warp {
   display: flex;
+  overflow: auto;
+  overflow-x: hidden;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 100%;
+  .numleft {
+    width: 30vw !important;
+    transform: translateX(2em);
+  }
 }
 .title {
   font-size: 17px;
@@ -519,11 +520,12 @@ export default {
 }
 .unread {
   position: relative;
+  margin-bottom: 2em;
 }
 .unread:after {
   content: " ";
   position: absolute;
-  left: -10px;
+  left: -13px;
   top: 8px;
   width: 8px;
   height: 8px;
@@ -561,7 +563,7 @@ export default {
   bottom: 20px;
   right: 27%;
 }
- .backopt {
-    opacity: 0.3;
+.backopt {
+  opacity: 0.3;
 }
 </style>
