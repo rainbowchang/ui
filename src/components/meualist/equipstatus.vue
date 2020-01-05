@@ -438,7 +438,7 @@ export default {
        if(nodeInfo.parent != null){
          var parentPath = this.getTreePath(nodeInfo.parent);
        }
-       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.value, value:nodeInfo.name, type: nodeInfo.type};
+       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.value, name:nodeInfo.name, type: nodeInfo.type};
        console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },
