@@ -364,9 +364,6 @@ export default {
     // tree节点点击事件
     onClick(nodeInfo) {
       this.treeParam = nodeInfo;
-      this.statustable = false
-      this.showDetail= true
-      this.detailinfo=nodeInfo
       this.treeParam = nodeInfo;
       var customerNode = this.getParentCustomerNode(nodeInfo);
       if(customerNode != null ){
@@ -381,14 +378,19 @@ export default {
     },
     sendNodeContentWhenClick(nodeInfo){
       if(!nodeInfo.isLeaf){
+        this.statustable = true;
+        this.showDetail= false;
         this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
           this.$refs.statustable.content = reponse.data;
-          console.log(this.$refs.statustable.content)
+          console.log(this.$refs.statustable.content);
         });
         return;
       }
+      this.statustable = false;
+      this.showDetail= true;
+      console.log("detail Info" , this.detailinfo);
       this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
-            console.log(response.data);
+        this.detailinfo=response.data;
       });
     },
    

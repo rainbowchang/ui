@@ -153,14 +153,15 @@
      
      },
      getRemoteCustomers(){
-        get("/customer/getAll", response=>{
-           console.log(response.data);
+        get("/customer/getAllNames", response=>{
+           this.customerList = response.data;
         });
      },
      getRemotePlcs(){
         // alert(" place holder:" + this.customerNode);
-        post("/agent/view/plcsByCustomer", {"name:":this.customerNode.key}, response=>{
-            console.log(response.data);
+        console.log('customer key: ', this.customerNode.key);
+        post("/agent/view/plcsByCustomer", {"name":this.customerNode.key}, response=>{
+            this.plcList = response.data;
         });
      }
     }
