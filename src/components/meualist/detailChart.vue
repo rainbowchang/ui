@@ -161,11 +161,16 @@ export default {
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
-      this.getRightBottom5();
+      this.tableList = val.table;
+      this.getRightBottom(val.feedOverrides);
+      this.getRightBottom2(val.spindleOverrides);
+      this.getRightBottom3(val.feedSpeed);
+      this.getRightBottom4(val.feedSpeed);
+      this.getRightBottom5(val.spindleSpeed);
     }
   },
   methods: {
-    getRightBottom() {
+    getRightBottom(feedOverrides) {
       let option = {
         tooltip: {
           formatter: "{a} <br/>{b} : {c}%"
@@ -219,7 +224,7 @@ export default {
                 fontSize: 12
               }
             },
-            data: [{ value: 120, name: "主轴" }]
+            data: [{ value: feedOverrides, name: "主轴" }]
           }
         ]
       };
@@ -227,7 +232,7 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom2() {
+    getRightBottom2(spindleOverrides) {
       let option = {
         tooltip: {
           formatter: "{a} <br/>{b} : {c}%"
@@ -291,7 +296,7 @@ export default {
                 fontSize: 12
               }
             },
-            data: [{ value: 120, name: "主轴" }]
+            data: [{ value: spindleOverrides, name: "主轴" }]
           }
         ]
       };
@@ -299,7 +304,7 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom3() {
+    getRightBottom3(feedSpeed) {
       let option = {
         tooltip: {
           formatter: "{a} <br/>{b} : {c}%"
@@ -336,7 +341,7 @@ export default {
                 fontSize: 12
               }
             },
-            data: [{ value: 16297 }]
+            data: [{ value: feedSpeed }]
           }
         ]
       };
@@ -344,7 +349,7 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom4() {
+    getRightBottom4(feedSpeed) {
       let option = {
         tooltip: {
           formatter: "{a} <br/>{b} : {c}%"
@@ -408,7 +413,7 @@ export default {
                 fontSize: 12
               }
             },
-            data: [{ value: 16297 }]
+            data: [{ value: feedSpeed }]
           }
         ]
       };
@@ -416,7 +421,7 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom5() {
+    getRightBottom5(spindleSpeed) {
       let myChart = this.$echarts.init(document.getElementById("myChart5"));
       let option = {
         yAxis: [
@@ -474,7 +479,7 @@ export default {
           },
           {
             name: "实际值",
-            data: [18060],
+            data: [spindleSpeed],
             type: "bar",
             yAxisIndex: 1,
             barWidth: 50,
