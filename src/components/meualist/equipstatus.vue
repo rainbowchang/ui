@@ -366,14 +366,6 @@ export default {
 
     // tree节点点击事件
     onClick(nodeInfo) {
-      this.treeParam = nodeInfo;
-<<<<<<< Updated upstream
-=======
-      this.statustable = false;
-      this.showDetail= true;
-      this.detailinfo=nodeInfo;
->>>>>>> Stashed changes
-      this.treeParam = nodeInfo;
       if(this.getParentCustomerNode(nodeInfo) != null ){
           this.sendNodeContentWhenClick(nodeInfo);
           return 
@@ -511,16 +503,16 @@ export default {
       }
       if(nodeInfo.type === "CUSTOMER"){
         customerNodes.push(nodeInfo);
-        console.log(customerNodes, "CUSTOMER nodes");
+        // console.log(customerNodes, "CUSTOMER nodes");
       }
-      console.log(nodeInfo, "subNode");
+      // console.log(nodeInfo, "subNode");
       var children = nodeInfo.children;
       if(children == null){
         return;
       }
-      console.log(customerNodes, "subcustomerNodes");
+      // console.log(customerNodes, "subcustomerNodes");
       for(var i in children){
-        console.log(children[i], "children");
+        // console.log(children[i], "children");
         this.getSubCustomerNodes(children[i], customerNodes)
       }
       return;
