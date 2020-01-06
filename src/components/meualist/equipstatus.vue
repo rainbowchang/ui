@@ -39,7 +39,7 @@ import { VueTreeList, Tree, TreeNode } from "vue-tree-list";
 import statustable from "./statustable";
 import factory from "./factory";
 import detailChart from "./detailChart";
-import {post} from "@/apis/restUtils";
+import {get, post} from "@/apis/restUtils";
 
 const customerModel = () => import("./customerInfoModal.vue");
 
@@ -344,7 +344,10 @@ export default {
     };
   },
   mounted: function () {
-     console.log("reload..");
+     get("/organization/tree/all", response=>{
+      var childrenNodes = response.data.children;
+      this.data.addChildren(new TreeNode(childrenNodes));
+     });
   },
   methods: {
     // 删除节点	树节点
@@ -364,12 +367,17 @@ export default {
     // tree节点点击事件
     onClick(nodeInfo) {
       this.treeParam = nodeInfo;
+<<<<<<< Updated upstream
+=======
+      this.statustable = false;
+      this.showDetail= true;
+      this.detailinfo=nodeInfo;
+>>>>>>> Stashed changes
       this.treeParam = nodeInfo;
-      var customerNode = this.getParentCustomerNode(nodeInfo);
-      if(customerNode != null ){
+      if(this.getParentCustomerNode(nodeInfo) != null ){
           this.sendNodeContentWhenClick(nodeInfo);
           return 
-      }  
+      }
       var customerNodes = this.getChildrenCustomerNodes(nodeInfo);
       for(var i in customerNodes){
         this.sendNodeContentWhenClick(customerNodes[i]);
@@ -393,7 +401,19 @@ export default {
         this.detailinfo=response.data;
       });
     },
-   
+    buildSubNewTree(customerTreeDatas, condition){
+        for(var i in customerTreeDatas){
+            var customerTreeData = customerTreeDatas[i];
+            var customerBean = customerTreeData.customerBean;
+            if(customerBean == null){
+               continue;
+            }
+            if(condition(customerBean)){
+               return new Tree(customerTreeData);
+            }
+        }
+        return null;
+    },
     customerModelView(nodeInfo){
         this.$Modal.confirm({
           title: '客户列表',
@@ -454,6 +474,22 @@ export default {
         return path;
       }
       return this.getTreePath(nodeInfo.parent, path);
+    },
+    getOneTreeNode(nodeInfo, name){
+      if(nodeInfo == null || nodeInfo == undefined ){
+        return null;
+      }
+      if(nodeInfo.name === name){
+        return nodeInfo;
+      }
+      var children = nodeInfo.children;
+      for(var i in children){
+        var node = this.getOneTreeNode(children[i], name);
+        if(node != null && node.name === name){
+          return node;
+        }
+      }
+      return null;
     },
     getParentCustomerNode(nodeInfo){
       if(nodeInfo == null || nodeInfo == undefined){
