@@ -72,11 +72,11 @@
                     </div>
                     <div>
                       <div class="stop"></div>
-                      <span>停机：{{item.timeShutdown}}</span>
+                      <span>停机：{{item.timeStop}}</span>
                     </div>
                     <div>
                       <div class="interrupt"></div>
-                      <span>未连接：{{item.timeStop}}</span>
+                      <span>未连接：{{item.timeShutdown}}</span>
                     </div>
                   </div>
                 </div>
@@ -84,14 +84,14 @@
                 <div class="listright">
                   <div>
                     <span>故障占比</span>
-                    <i-circle :percent="70" stroke-color="#ff5500" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">{{item.alarmPercent}}</span>
+                    <i-circle :percent="item.alarmWeight" stroke-color="#ff5500" :size="80">
+                      <span class="demo-Circle-inner" style="font-size:16px">{{item.alarmWeight}}%</span>
                     </i-circle>
                   </div>
                   <div>
                     <span>加工占比</span>
-                    <i-circle :percent="50" stroke-color="#089642" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">{{item.workPercent}}</span>
+                    <i-circle :percent="item.workWeight" stroke-color="#089642" :size="80">
+                      <span class="demo-Circle-inner" style="font-size:16px">{{item.workWeight}}%</span>
                     </i-circle>
                   </div>
                 </div>
@@ -235,6 +235,7 @@ export default {
         color: ["#3398DB"],
         tooltip: {
           trigger: "axis",
+          formatter: "{c}%",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
             type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
@@ -261,7 +262,9 @@ export default {
         ],
         yAxis: [
           {
-            type: "value"
+            type: "value",
+            max: 100,
+            axisLabel: {formatter: "{value} %"}
           }
         ],
         series: [
