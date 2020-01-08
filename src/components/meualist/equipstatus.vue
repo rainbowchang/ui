@@ -61,295 +61,45 @@ export default {
       treeParam: {},
       newTree: {},
       data: new Tree([
-        {
-          name: "按客户分类",
-          id: 1,
-          pid: 0,
-          addLeafNodeDisabled: true,
-          dragDisabled: true, // 是否可拖动
-          children: [
-            {
-              name: "重要客户",
-              id: 2,
-              isLeaf: false,
-              addLeafNodeDisabled: true,
-              dragDisabled: true,
-              pid: 3,
-              children: [
-                {
-                  name: "客户1",
-                  id: 4,
-                  isLeaf: false,
-                  dragDisabled: true,
-                  addLeafNodeDisabled: true,
-                  pid: 5,
-                  value: "customer",
-                  children: [
-                    {
-                      name: "南京工厂",
-                      id: 6,
-                      isLeaf: false,
-                      dragDisabled: true,
-                      addLeafNodeDisabled: true,
-                      pid: 7,
-                      children: [
-                        {
-                          name: "车间1",
-                          id: 8,
-                          isLeaf: false,
-                          dragDisabled: true,
-                          addLeafNodeDisabled: true,
-                          pid: 9,
-                          children: [
-                            {
-                              name: "生产线1",
-                              id: 10,
-                              isLeaf: false,
-                              addLeafNodeDisabled: true,
-                              pid: 11,
-                              children: [
-                                {
-                                  name: "机床1",
-                                  id: 12,
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  dragDisabled: true,
-                                  pid: 13
-                                },
-                                {
-                                  name: "机床2",
-                                  id: 14,
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  dragDisabled: true,
-                                  pid: 15
-                                }
-                              ]
-                            },
-                            {
-                              name: "生产线2",
-                              id: 20,
-                              isLeaf: false,
-                              addLeafNodeDisabled: true,
-                              dragDisabled: true,
-                              pid: 21
-                            }
-                          ]
-                        },
-                        {
-                          name: "车间2",
-                          id: 22,
-                          isLeaf: false,
-                          addLeafNodeDisabled: true,
-                          dragDisabled: true,
-                          pid: 23
-                        }
-                      ]
-                    },
-                    {
-                      name: "北京工厂",
-                      id: 24,
-                      isLeaf: false,
-                      addLeafNodeDisabled: true,
-                      dragDisabled: true,
-                      pid: 25
-                    }
-                  ]
-                },
-                {
-                  name: "客户2",
-                  id: 26,
-                  isLeaf: false,
-                  addLeafNodeDisabled: true,
-                  dragDisabled: true,
-                  pid: 27
-                }
-              ]
-            },
-            {
-              name: "一般客户",
-              id: 28,
-              isLeaf: false,
-              addLeafNodeDisabled: true,
-              dragDisabled: true,
-              pid: 29
-            }
-          ]
-        },
-        {
-          name: "按区域分类",
-          id: 30,
-          pid: 31,
-          dragDisabled: true,
-          addLeafNodeDisabled: false,
-          children: [
-            {
-              name: "西北办事处",
-              id: 32,
-              isLeaf: false,
-              addLeafNodeDisabled: true,
-              dragDisabled: true,
-              pid: 33,
-              children: [
-                {
-                  name: "四川1",
-                  id: 34,
-                  isLeaf: false,
-                  addLeafNodeDisabled: true,
-                  dragDisabled: true,
-                  pid: 35,
-                  children: [
-                    {
-                      name: "客户1",
-                      id: 36,
-                      isLeaf: false,
-                      addLeafNodeDisabled: true,
-                      dragDisabled: true,
-                      pid: 37,
-                      children: [
-                        {
-                          name: "某某工厂1",
-                          id: 38,
-                          isLeaf: false,
-                          addLeafNodeDisabled: true,
-                          dragDisabled: true,
-                          pid: 39,
-                          children: [
-                            {
-                              name: "生成线1",
-                              id: 40,
-                              isLeaf: false,
-                              addLeafNodeDisabled: true,
-                              dragDisabled: true,
-                              pid: 41,
-                              children: [
-                                {
-                                  name: "机床1",
-                                  id: 42,
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  dragDisabled: true,
-                                  pid: 43
-                                },
-                                {
-                                  name: "机床2",
-                                  id: 44,
-                                  value: "sn-0001",
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  dragDisabled: true,
-                                  pid: 45
-                                },
-                                {
-                                  name: "机床3",
-                                  id: 46,
-                                  isLeaf: false,
-                                  addLeafNodeDisabled: true,
-                                  dragDisabled: true,
-                                  pid: 47
-                                }
-                              ]
-                            },
-                            {
-                              name: "生成线2",
-                              id: 48,
-                              isLeaf: false,
-                              addLeafNodeDisabled: true,
-                              dragDisabled: true,
-                              pid: 49
-                            },
-                            {
-                              name: "生成线13",
-                              id: 50,
-                              isLeaf: false,
-                              addLeafNodeDisabled: true,
-                              dragDisabled: true,
-                              pid: 51
-                            }
-                          ]
-                        },
-                        {
-                          name: "某某工厂2",
-                          id: 52,
-                          isLeaf: false,
-                          addLeafNodeDisabled: true,
-                          dragDisabled: true,
-                          pid: 53
-                        },
-                        {
-                          name: "某某工厂3",
-                          id: 54,
-                          isLeaf: false,
-                          addLeafNodeDisabled: true,
-                          dragDisabled: true,
-                          pid: 55
-                        }
-                      ]
-                    },
-                    {
-                      name: "客户2",
-                      id: 56,
-                      isLeaf: false,
-                      addLeafNodeDisabled: true,
-                      dragDisabled: true,
-                      pid: 57
-                    },
-                    {
-                      name: "客户3",
-                      id: 58,
-                      isLeaf: false,
-                      addLeafNodeDisabled: true,
-                      dragDisabled: true,
-                      pid: 59
-                    }
-                  ]
-                },
-                {
-                  name: "湖南",
-                  id: 60,
-                  isLeaf: false,
-                  addLeafNodeDisabled: true,
-                  dragDisabled: true,
-                  pid: 61
-                },
-                {
-                  name: "重新",
-                  id: 62,
-                  isLeaf: false,
-                  addLeafNodeDisabled: true,
-                  dragDisabled: true,
-                  pid: 63
-                }
-              ]
-            },
-            {
-              name: "华北办事处",
-              id: 64,
-              isLeaf: false,
-              addLeafNodeDisabled: true,
-              dragDisabled: true,
-              pid: 65
-            },
-            {
-              name: "东北办事处",
-              id: 66,
-              isLeaf: false,
-              addLeafNodeDisabled: true,
-              dragDisabled: true,
-              pid: 67
-            }
-          ]
-        }
+        
       ])
     };
   },
   mounted: function () {
      get("/organization/tree/all", response=>{
       var childrenNodes = response.data.children;
-      this.data.addChildren(new TreeNode(childrenNodes));
+      console.log(childrenNodes, "loadNodes");
+      for(var i in childrenNodes){
+          this.loadTreeNodes(this.data, childrenNodes[i]);
+      }
      });
   },
   methods: {
+    loadTreeNodes(tree, node){
+        var treeNode = this.createOneTreeNode(node);
+        tree.addChildren(treeNode);
+        var children = node.children;
+        if(children != null){
+           for(var i in children){
+            var child = children[i];
+            this.loadTreeNodes(treeNode, child)
+           }
+        }
+    },
+    createOneTreeNode(paraNode){ 
+        return new TreeNode(
+           {
+              pid: paraNode.name,  
+              id: paraNode.key,
+              key: paraNode.key, 
+              name:  paraNode.name, 
+              isLeaf: paraNode.leaf, 
+              addLeafNodeDisabled: true, 
+              dragDisabled:true,
+              type: paraNode.type
+            }
+          );
+    },
     // 删除节点	树节点
     onDel(node) {
       console.log(node, "onDel");
@@ -377,18 +127,19 @@ export default {
       return;
     },
     sendNodeContentWhenClick(nodeInfo){
+      // console.log(nodeInfo, "node info");
       if(!nodeInfo.isLeaf){
         this.statustable = true;
         this.showDetail= false;
         this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
           this.$refs.statustable.content = reponse.data;
-          console.log(this.$refs.statustable.content);
+          // console.log(this.$refs.statustable.content);
         });
         return;
       }
       this.statustable = false;
       this.showDetail= true;
-      console.log("detail Info" , this.detailinfo);
+      // console.log("detail Info" , this.detailinfo);
       this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
         this.detailinfo=response.data;
       });
@@ -419,7 +170,6 @@ export default {
                 showInfo:(key, value, type) =>{
                   nodeInfo.name = value;
                   nodeInfo.key = key;
-                  nodeInfo.value = value;
                   nodeInfo.type = type;
                   nodeInfo.dragDisabled = true;
                   nodeInfo.addLeafNodeDisabled = true;
@@ -450,8 +200,8 @@ export default {
        if(nodeInfo.parent != null){
          var parentPath = this.getTreePath(nodeInfo.parent);
        }
-       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.value, name:nodeInfo.name, type: nodeInfo.type};
-       console.log("send node contents:" + JSON.stringify(nodeContent));
+       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
+       // console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },
     getTreePath(nodeInfo, path){
