@@ -1,0 +1,138 @@
+// 添加客户
+<template>
+  <div class="wrapper">
+    <div class="top">
+      <el-button type="primary" icon="el-icon-arrow-left" @click="back">上一层</el-button>
+      <span>添加客户</span>
+    </div>
+    <div class="content">
+      <Form :model="formItem" :label-width="80">
+        <FormItem label="客户名称">
+          <Input v-model="formItem.name" placeholder="Enter something..."/>
+        </FormItem>
+        <FormItem label="客户帐号">
+          <Input v-model="formItem.account" placeholder="该账号为客户登录生产管理平台的管理员手机号"/>
+        </FormItem>
+        <FormItem label="客户级别">
+          <Select v-model="formItem.level">
+            <Option value="一级">一级</Option>
+            <Option value="二级">二级</Option>
+            <Option value="三级">三级</Option>
+          </Select>
+        </FormItem>
+      <!--   <FormItem label="客户性质">
+          <Select v-model="formItem.property">
+            <Option value="beijing">1</Option>
+            <Option value="shanghai">2</Option>
+            <Option value="shenzhen">3</Option>
+          </Select>
+        </FormItem> -->
+        <FormItem label="所属行业">
+          <Select v-model="formItem.trade">
+            <Option value="工业">工业</Option>
+            <Option value="农业">农业</Option>
+            <Option value="服务业">服务业</Option>
+            <Option value="金融">金融</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="联系人">
+          <Input v-model="formItem.linkman" placeholder="Enter something..."/>
+        </FormItem>
+        <FormItem label="联系电话">
+          <Input v-model="formItem.tel" placeholder="Enter something..."/>
+        </FormItem>
+        <FormItem label="所属区域">
+          <Select v-model="formItem.area">
+            <Option value="西南区域">西南区域</Option>
+            <Option value="华东区域">华东区域</Option>
+            <Option value="东北区域">东北区域</Option>
+            <Option value="西北区域">西北区域</Option>
+            <Option value="华北区域">华北区域</Option>
+            <Option value="华南区域">华南区域</Option>
+            <Option value="华中区域">华中区域</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="客户地址">
+           <Input v-model="formItem.address" placeholder="Enter address..."/>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="submit">创建</Button>
+        </FormItem>
+      </Form>
+    </div>
+  </div>
+</template>
+
+<script>
+import {post} from "@/apis/restUtils";
+
+export default {
+  data() {
+    return {
+      formItem: {
+        name: "",
+        account: "",
+        level: "",
+        property: "",
+        trade: "",
+        linkman: "",
+        tel: "",
+        area: "",
+        address: ""
+      }
+    };
+  },
+  methods: {
+    //返回上一层
+    back() {
+      this.$router.go(-1);
+    },
+    // 提交表单
+    submit(){
+      var router = this.$router;
+      var parameter = this.formItem;
+      post("/customer/register", parameter, function(data){
+        console.log(data, "data:");
+         router.push({ path: "management" });
+      });
+   }
+ }
+};
+</script>
+<style scoped>
+.wrapper {
+  width: 98%;
+  height: 95%;
+  border-radius: 3px;
+  background-color: white;
+  margin: 1% auto;
+  position: relative;
+}
+.top {
+  padding: 0 2em;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.top > span {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+.content {
+  width: 60%;
+  height: auto;
+  position: absolute;
+  top: 90px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  padding: 2em 4em;
+}
+.tips{
+    font-size: small;
+    color: #c0c0c0;
+}
+</style>

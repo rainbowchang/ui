@@ -60,6 +60,7 @@ export default {
       currentPage: 1, //分页当前页数,
       treeParam: {},
       newTree: {},
+      sendNode: {},
       data: new Tree([
         
       ])
@@ -173,14 +174,20 @@ export default {
                   nodeInfo.type = type;
                   nodeInfo.dragDisabled = true;
                   nodeInfo.addLeafNodeDisabled = true;
+
+                  this.sendNode.name = value;
+                  this.sendNode.key = key;
+                  this.sendNode.type = type;
+                  this.sendNode.dragDisabled = true;
+                  this.sendNode.addLeafNodeDisabled = true;
+
                   if(type === "LEAF"){
                     nodeInfo.isLeaf = true;
+                    this.sendNode.isLeaf = true;
                   }else{
                     nodeInfo.isLeaf = false;
+                    this.sendNode.isLeaf = false;
                   }
-                  this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
-                    console.log(response.data);
-                  });
                 }
               }
             })
@@ -191,6 +198,9 @@ export default {
           cancelText: "取消",
           loading: true,
           onOk() {
+             this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
+                    console.log(response.data);
+                  });
             this.$Modal.remove();
           }
         });

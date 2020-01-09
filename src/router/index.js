@@ -17,6 +17,8 @@ import faraway from "@/components/meualist/faraway"
 import main from "@/components/homepage/main"
 import statusinfo from "@/components/departs/statusinfo"
 import addwarehouse from "@/components/dialog/addwarehouse"
+import addCustomer from "@/components/customer/addcustomer"
+
 
 Vue.use(Router)
 
@@ -76,6 +78,9 @@ export default new Router({
             path: '/management',
             component: management
         }, {
+            path: '/addCustomer',
+            component: addCustomer
+        },{
             path: '/history',
             component: history
         }, {

@@ -33,7 +33,7 @@
 </template>
 <script>
 
-import {get} from "@/apis/restUtils";
+import restRuler from "../../router/RestRuler"
 
 export default {
   data() {
@@ -91,7 +91,7 @@ export default {
   },
   mounted: function () {
      var customerPara = this.customerlist;
-     get("/customer/getAll",function(data){
+     restRuler.get("/customer/view",function(data){
          for(var i in data){
             customerPara.push(data[i]);
          }
@@ -111,7 +111,11 @@ export default {
     },
     // 添加客户
     addcustomer() {
-      this.$router.push({ path: "addCustomer" });
+      this.$router.push({ path: "addcustomer" });
+    },
+    //设备列表
+    equip(index) {
+      this.$router.push({ path: "equipmentlist" });
     }
   }
 };
