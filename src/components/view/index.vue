@@ -3,9 +3,15 @@
   <div class="index bcimg">
     <div class="longcircle">
       <div class="bcimg arrowimg">
-        <div class="hello" @click="showModal">欢迎使用</div>
-        <div class="spread" @click="mapform">机床分布</div>
-        <div class="equip" @click="equips">设备平台</div>
+        <div class="hello" @click="showModal">
+          <span>欢迎使用</span>
+        </div>
+        <div class="spread" @click="mapform">
+          <span>机床分布</span>
+        </div>
+        <div class="equip" @click="equips">
+          <span>设备平台</span>
+        </div>
       </div>
     </div>
     <!-- 弹框 -->
@@ -13,16 +19,16 @@
       <div>
         <div class="tips">
           <span v-if="isSended">{{sendtimer}}秒后可关闭</span>
-          <span v-if="!isSended" @click="closeModal">x</span>
+          <Icon v-if="!isSended" @click="closeModal" style="font-size:2rem;font-weight:600;" type="ios-close-circle-outline" />
         </div>
-        <img :src="contentImg" class="backImg">
+        <img :src="contentImg" class="backImg" />
       </div>
     </Modal>
   </div>
 </template>
 
 <script>
-import pic1 from '../../assets/imgs/back.jpg'
+import pic1 from "../../assets/imgs/back.jpg";
 export default {
   data() {
     return {
@@ -31,44 +37,44 @@ export default {
       showModalFlag: false,
       sendtimer: 5,
       contentImg: pic1
-    }
+    };
   },
   created() {
-    this.closeSelf()
+    this.closeSelf();
   },
-  methods:{
-    closeSelf () {
-      this.showModalFlag = false
+  methods: {
+    closeSelf() {
+      this.showModalFlag = false;
     },
-    closeModal () {
-       this.modal1 = false
+    closeModal() {
+      this.modal1 = false;
     },
-    showModal () {
-      this.modal1 = true
+    showModal() {
+      this.modal1 = true;
       // 倒计时60秒
-    this.sendtimer = 5
-    this.isSended = true
-    setTimeout(() => {
+      this.sendtimer = 5;
+      this.isSended = true;
+      setTimeout(() => {
         let timer = window.setInterval(() => {
-            if (this.sendtimer-- <= 1) {
-                this.isSended = false
-                this.sendtimer = 5
-                window.clearInterval(timer)
-            }
-        }, 1000)
-    })
+          if (this.sendtimer-- <= 1) {
+            this.isSended = false;
+            this.sendtimer = 5;
+            window.clearInterval(timer);
+          }
+        }, 1000);
+      });
     },
-    ok () {
-        this.$Message.info('点击了确定');
+    ok() {
+      this.$Message.info("点击了确定");
     },
-    cancel () {
-        this.$Message.info('点击了取消');
+    cancel() {
+      this.$Message.info("点击了取消");
     },
-    mapform(){
-      this.$router.push("map")
+    mapform() {
+      this.$router.push("map");
     },
-    equips(){
-      this.$router.push("meua")
+    equips() {
+      this.$router.push("meua");
     }
   }
 };
@@ -89,7 +95,6 @@ export default {
   width: 900px;
   height: 600px;
   border-radius: 50%;
-  background-color: aliceblue;
   position: absolute;
   left: 0;
   top: 0;
@@ -109,40 +114,50 @@ export default {
   margin: auto;
 }
 .arrowimg > div {
+  position: absolute;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 50%;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.arrowimg>div >span{
   font-size: 2rem;
   font-weight: bold;
-  position: absolute;
 }
 .hello {
   left: 35%;
-  top: -20px;
+  top: -45px;
   margin: auto;
-  cursor:pointer;
+  cursor: pointer;
 }
 .spread {
-  cursor:pointer;
-  bottom: 65px;
-  left: -65px;
+  cursor: pointer;
+  bottom: -35px;
+  left: -75px;
 }
 .equip {
-  cursor:pointer;
-  bottom: 65px;
-  right: -70px;
+  cursor: pointer;
+  bottom: -35px;
+  right: -80px;
 }
 .tips {
   position: absolute;
-    z-index: 33;
-    top: 15px;
-    right: 45px;
-    cursor:pointer;
+  z-index: 33;
+  top: 15px;
+  right: 45px;
+  cursor: pointer;
 }
 .backImg {
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  z-index:5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
   object-fit: cover;
 }
 </style>

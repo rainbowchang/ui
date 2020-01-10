@@ -20,15 +20,21 @@
               <div class="with10">{{item.total}}台</div>
               <div class="with25">
                 <template>
-                  <Tooltip content="3 done / 3 in progress / 4 to do" style="width: 100%">
-                    <Progress :percent="item.firstNum" :success-percent="item.secondNum" />
-                  </Tooltip>
+                   <div class="statusline">
+                      <!-- status:  1加工，2故障，3停机，4关机，5断开 -->
+                      <div
+                        v-for="(value,index) in item.list"
+                        :key="index"
+                        :style="{width:value.percent}"
+                        :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'off':'interrupt'"
+                      ></div>
+                    </div>
                 </template>
               </div>
             </li>
           </ul>
         </div>
-        <div class="headBottom"  style="margin-top:3rem;margin-left:2em;">
+        <div class="headBottom" style="margin-top:3rem;margin-left:2em;">
           <div id="myChartBottom" :style="{width: '90%', height: '500px'}"></div>
         </div>
       </div>
@@ -45,7 +51,7 @@
               <div>客户名称</div>
               <div>报警编号</div>
             </li>
-            <li v-for="(item,index) in infolist" :key="index">
+            <li v-for="(item,index) in infolist" :key="index" style="font-size:0.8rem;">
               <div>{{item.index}}</div>
               <div>{{item.warningtime}}</div>
               <div>{{item.jcxh}}</div>
@@ -64,10 +70,10 @@
             <li class="title">
               <div>加工</div>
               <div>故障</div>
-              <div>修机</div>
+              <div>停机</div>
               <div>未连接</div>
             </li>
-            <li>
+            <li style="font-size:0.8rem;">
               <div>120</div>
               <div>120</div>
               <div>46</div>
@@ -78,14 +84,17 @@
         <div id="myChartRightBottom" :style="{width: '90%', height: '34%'}"></div>
         <div class="infolist">
           <ul>
-            <li class="title">
+            <li class="title" style="white-space: nowrap;font-size:0.9rem;">
               <div>龙门移动式</div>
               <div>卧式加工中心</div>
               <div>立式加工中心</div>
               <div>横梁移动式</div>
-              <div>高速型材/复材加工中心</div>
+              <div style="font-size:0.8rem">
+                高速型材
+                <br />复材加工中心
+              </div>
             </li>
-            <li>
+            <li style="font-size:0.8rem;">
               <div>144</div>
               <div>48</div>
               <div>149</div>
@@ -107,6 +116,12 @@ export default {
       headlist: [
         {
           id: 1,
+          list: [
+            { percent: "18%", status: 1 },
+            { percent: "12%", status: 2 },
+            { percent: "34%", status: 3 },
+            { percent: "36%", status: 5 }
+          ],
           area: "西南办事处",
           total: 100,
           firstNum: 20,
@@ -115,6 +130,12 @@ export default {
         },
         {
           id: 1,
+          list: [
+            { percent: "10%", status: 2 },
+            { percent: "28%", status: 3 },
+            { percent: "12%", status: 1 },
+            { percent: "50%", status: 5 }
+          ],
           area: "西北办事处",
           total: 70,
           firstNum: 40,
@@ -123,6 +144,12 @@ export default {
         },
         {
           id: 1,
+          list: [
+            { percent: "10%", status: 2 },
+            { percent: "28%", status: 3 },
+            { percent: "12%", status: 1 },
+            { percent: "50%", status: 5 }
+          ],
           area: "华东办事处",
           total: 80,
           firstNum: 50,
@@ -131,6 +158,12 @@ export default {
         },
         {
           id: 1,
+          list: [
+            { percent: "10%", status: 2 },
+            { percent: "28%", status: 3 },
+            { percent: "12%", status: 1 },
+            { percent: "50%", status: 5 }
+          ],
           area: "华北办事处",
           total: 90,
           firstNum: 30,
@@ -139,6 +172,12 @@ export default {
         },
         {
           id: 1,
+          list: [
+            { percent: "10%", status: 2 },
+            { percent: "28%", status: 3 },
+            { percent: "12%", status: 1 },
+            { percent: "50%", status: 5 }
+          ],
           area: "东北办事处",
           total: 80,
           firstNum: 30,
@@ -147,6 +186,12 @@ export default {
         },
         {
           id: 1,
+          list: [
+            { percent: "15%", status: 2 },
+            { percent: "8%", status: 3 },
+            { percent: "32%", status: 1 },
+            { percent: "45%", status: 5 }
+          ],
           area: "华南办事处",
           total: 60,
           firstNum: 30,
@@ -209,7 +254,7 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       var myChartContainer = document.getElementById("myChartChina");
       var resizeMyChartContainer = function() {
-        myChartContainer.style.width = document.body.offsetWidth / 2 + "px"; //页面一半的大小
+        myChartContainer.style.width = 150 + "%"; //页面一半的大小
       };
       resizeMyChartContainer();
       var myChartChina = this.$echarts.init(myChartContainer);
@@ -222,35 +267,22 @@ export default {
         tooltip: {},
         legend: {
           orient: "vertical",
-          left: "left",
           data: [""]
-        },
-        visualMap: {
-          min: 0,
-          max: 1500,
-          left: "10%",
-          top: "bottom",
-          text: ["高", "低"],
-          calculable: true,
-          color: ["#0b50b9", "#c3e2f4"]
         },
         selectedMode: "single",
         series: [
           {
             name: "",
             type: "map",
+            left: "10%",
             mapType: "china",
             itemStyle: {
               normal: {
-                borderColor: "rgba(0, 0, 0, 0.2)"
+                borderColor: "rgba(0, 0, 0, 0.2)",
+                background: "#3464c6",
+                areaStyle: { color: "#3464c6" }
               },
-              emphasis: {
-                shadowOffsetX: 0,
-                shadowOffsetY: 0,
-                shadowBlur: 20,
-                borderWidth: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
+              emphasis: { label: { show: true } }
             },
             showLegendSymbol: true,
             label: {
@@ -363,6 +395,9 @@ export default {
                 color: "#ffffff",
                 width: 1 //这里是为了突出显示加上的
               }
+            },
+            axisLabel: {
+              rotate: 30
             }
           }
         ],
@@ -374,6 +409,10 @@ export default {
                 color: "#ffffff",
                 width: 1 //这里是为了突出显示加上的
               }
+            },
+            splitLine: {
+              //网格线
+              show: false
             }
           }
         ],
@@ -398,12 +437,16 @@ export default {
         },
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
+          formatter: "{b} : {c} ({d}%)"
         },
+        color: ["#209345", "#e7141a", "#efea38", "#808080"],
         legend: {
+          textStyle: {
+            color: "white"
+          },
           bottom: 10,
           left: "center",
-          data: ["加工", "故障", "修机", "未连接"]
+          data: ["加工", "故障", "停机", "未连接"]
         },
         series: [
           {
@@ -414,7 +457,7 @@ export default {
             data: [
               { value: 120, name: "加工" },
               { value: 120, name: "故障" },
-              { value: 46, name: "修机" },
+              { value: 46, name: "停机" },
               { value: 192, name: "未连接" }
             ],
             itemStyle: {
@@ -441,9 +484,13 @@ export default {
         },
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
+          formatter: "{b} : {c} ({d}%)"
         },
+        color: ["#e98c49", "#00a0e9", "#9082bd", "#d1c0a6", "#89abd9"],
         legend: {
+          textStyle: {
+            color: "white"
+          },
           bottom: -8,
           left: "center",
           data: [
@@ -501,8 +548,9 @@ h2 {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: -webkit-linear-gradient(45deg, #263e7d, #278bc7, #263e7d);
-  background: linear-gradient(45deg, #263e7d, #278bc7, #263e7d);
+  background-image: url("../../assets/imgs/bg.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   color: white;
 }
 .titletip {
@@ -610,8 +658,10 @@ h2 {
   border: 0;
 }
 .title {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
+  word-break: break-all;
+  padding: 4px;
 }
 .title > div {
   padding-left: 12px !important;
@@ -664,7 +714,6 @@ h2 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1em;
-  border-bottom: 1px solid #1c92b6;
 }
 /* .headList > ul > li > div {
   width: 25%;
@@ -686,5 +735,40 @@ h2 {
   border: 0;
   font-size: 16px;
   font-weight: bold;
+}
+.statusline {
+  width: 90%;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.statusline > div {
+  height: 12px;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+.process,
+.breakdown,
+.stop,
+.interrupt {
+  width: 64px;
+  height: 12px;
+  border-radius: 12px;
+  background-color: #089642;
+  margin-right: 0.5em;
+}
+.breakdown {
+  background-color: #fb0200;
+}
+.stop {
+  background-color: #fffc02;
+}
+
+.interrupt {
+  background-color: #808080;
 }
 </style>
