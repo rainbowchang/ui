@@ -7,6 +7,9 @@
     </div>
     <div class="content">
       <Form :model="formItem" :label-width="80">
+         <FormItem v-if = "customerIdVisibale" label="客户Id">
+          <Input v-model="formItem.customerId" disabled placeholder="Enter something..."/>
+        </FormItem>
         <FormItem label="客户名称">
           <Input v-model="formItem.name" placeholder="Enter something..."/>
         </FormItem>
@@ -15,18 +18,10 @@
         </FormItem>
         <FormItem label="客户级别">
           <Select v-model="formItem.level">
-            <Option value="一级">一级</Option>
-            <Option value="二级">二级</Option>
-            <Option value="三级">三级</Option>
+            <Option value="important">重要用户</Option>
+            <Option value="common">一般用户</Option>
           </Select>
         </FormItem>
-      <!--   <FormItem label="客户性质">
-          <Select v-model="formItem.property">
-            <Option value="beijing">1</Option>
-            <Option value="shanghai">2</Option>
-            <Option value="shenzhen">3</Option>
-          </Select>
-        </FormItem> -->
         <FormItem label="所属行业">
           <Select v-model="formItem.trade">
             <Option value="工业">工业</Option>
@@ -52,11 +47,18 @@
             <Option value="华中区域">华中区域</Option>
           </Select>
         </FormItem>
+        <FormItem label="省份">
+          <Select v-model="formItem.province">
+            <Option value="四川">四川</Option>
+            <Option value="江苏">江苏</Option>
+            <Option value="北京">北京</Option>
+          </Select>
+        </FormItem>
         <FormItem label="客户地址">
            <Input v-model="formItem.address" placeholder="Enter address..."/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="submit">创建</Button>
+          <Button type="primary" @click="submit">确定</Button>
         </FormItem>
       </Form>
     </div>
@@ -79,8 +81,22 @@ export default {
         tel: "",
         area: "",
         address: ""
-      }
+      },
+      customerIdVisibale: false
     };
+  },
+  mounted: function (){
+      var router = this.$route;
+      var customerId = router.query.customerId;
+      
+      console.log("customerId:" + customerId);
+      if(customerId != undefined){
+        this.formItem.customerId = customerId;
+        this.customerIdVisibale = true;
+        post("/customer/getById", {customerId: customerId}, response=>{
+              this.formItem = response.data;
+         });
+      }
   },
   methods: {
     //返回上一层
@@ -92,7 +108,7 @@ export default {
       var router = this.$router;
       var parameter = this.formItem;
       post("/customer/register", parameter, function(data){
-        console.log(data, "data:");
+         console.log(data, "data:");
          router.push({ path: "management" });
       });
    }

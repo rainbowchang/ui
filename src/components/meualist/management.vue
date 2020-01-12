@@ -13,9 +13,6 @@
         <template slot-scope="{ row, index }" slot="details">
           <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">查看</Button>
         </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" style="margin-right: 5px" @click="equip(index)">6台|查看</Button>
-        </template>
       </Table>
       <!-- page-sizes分页数组，page-size分页当前一页的条数，total总条数 -->
       <el-pagination
@@ -70,32 +67,29 @@ export default {
           title: "客户详情",
           slot: "details",
           align: "center"
-        },
-        {
-          title: "设备列表",
-          slot: "action",
-          align: "center"
         }
       ],
       customerlist: [
-        {
-          name: "南京宁庆数控机床制造有限公司",
-          area: "西南区域",
-          account: "18612345675",
-          create: "2019.08.06 20：58",
-          details: "一级"
-        }
+        // {
+        //   name: "南京宁庆数控机床制造有限公司",
+        //   area: "西南区域",
+        //   account: "18612345675",
+        //   create: "2019.08.06 20：58",
+        //   details: "一级"
+        // }
       ],
       currentPage: 1 //分页当前页数,
     };
   },
   mounted: function () {
      var customerPara = this.customerlist;
-     get("/customer/getAll",function(data){
-         for(var i in data){
-            customerPara.push(data[i]);
+     get("/customer/getAll",function(response){
+         var customerBeanList = response.data;
+         for(var i in customerBeanList){
+            customerPara.push(customerBeanList[i]);
          }
-         // alert("customerList:" +JSON.stringify(customerPara));
+         // customerPara = response.data;
+         // alert("customerList:" +JSON.stringify(response.data));
      });
   },
   methods: {
@@ -107,7 +101,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
     show(index) {
-      console.log(this.customerlist[index]);
+      this.$router.push({ path: "addCustomer", query:{customerId:this.customerlist[index].customerId} });
     },
     // 添加客户
     addcustomer() {
