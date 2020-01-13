@@ -112,7 +112,7 @@ export default {
     },
     // 添加节点	树节点
     onAddNode(nodeInfo) {
-      this.customerModelView(nodeInfo); 
+      this.customerModelView(nodeInfo, this.sendNodeContent); 
     },
 
     // tree节点点击事件
@@ -158,7 +158,7 @@ export default {
         }
         return null;
     },
-    customerModelView(nodeInfo){
+    customerModelView(nodeInfo, sendNodeContent){
         this.$Modal.confirm({
           title: '客户列表',
           render: (h) => {
@@ -174,19 +174,10 @@ export default {
                   nodeInfo.type = type;
                   nodeInfo.dragDisabled = true;
                   nodeInfo.addLeafNodeDisabled = true;
-
-                  this.sendNode.name = value;
-                  this.sendNode.key = key;
-                  this.sendNode.type = type;
-                  this.sendNode.dragDisabled = true;
-                  this.sendNode.addLeafNodeDisabled = true;
-
                   if(type === "LEAF"){
                     nodeInfo.isLeaf = true;
-                    this.sendNode.isLeaf = true;
                   }else{
                     nodeInfo.isLeaf = false;
-                    this.sendNode.isLeaf = false;
                   }
                 }
               }
@@ -198,10 +189,10 @@ export default {
           cancelText: "取消",
           loading: true,
           onOk() {
-             this.sendNodeContent("/organization/addNode", nodeInfo, response =>{
+             sendNodeContent("/organization/addNode", nodeInfo, response =>{
                     console.log(response.data);
                   });
-            this.$Modal.remove();
+             this.$Modal.remove();
           }
         });
     },
