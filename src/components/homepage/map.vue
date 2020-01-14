@@ -35,7 +35,7 @@
           </ul>
         </div>
         <div class="headBottom" style="margin-top:3rem;margin-left:2em;">
-          <div id="myChartBottom" :style="{width: '90%', height: '500px'}"></div>
+          <div id="myChartBottom" :style="{width: '95%', height: '500px'}"></div>
         </div>
       </div>
       <div class="map">
@@ -64,7 +64,7 @@
       </div>
       <!-- 首页右侧 -->
       <div class="echartinfo" style="margin-top:0;">
-        <div id="myChartRight" :style="{width: '90%', height: '32%'}"></div>
+        <div id="myChartRight" :style="{width: '95%', height: '32%'}"></div>
         <div class="infolist" style="margin-top:0;">
           <ul>
             <li class="title">
@@ -81,7 +81,7 @@
             </li>
           </ul>
         </div>
-        <div id="myChartRightBottom" :style="{width: '90%', height: '34%'}"></div>
+        <div id="myChartRightBottom" :style="{width: '95%', height: '34%'}"></div>
         <div class="infolist">
           <ul>
             <li class="title" style="white-space: nowrap;font-size:0.9rem;">
@@ -658,7 +658,7 @@ h2 {
   border: 0;
 }
 .title {
-  font-size: 1rem;
+  font-size:0.9rem;
   font-weight: bold;
   word-break: break-all;
   padding: 4px;
