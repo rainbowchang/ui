@@ -122,7 +122,7 @@
         if(this.inputAlias != ""){
             name = this.inputAlias;
         }else{
-          this.inputAlias =  name;
+          this.inputAlias = name;
         }
         this.$emit('showInfo', key, name, "CUSTOMER");
      },
@@ -139,14 +139,22 @@
      inputCallback(){
         switch(this.nodeContent){
           case "customer":
+             if(this.customerName == "" || this.customerName == null){
+                this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
+                return;
+             }
              this.$emit('showInfo', this.customerName, this.inputAlias, "CUSTOMER");
              break;
           case "plc":
+             if(this.plcSn == "" && this.plcSn == null){
+                this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
+                return;
+             }
              this.$emit('showInfo', this.plcSn, this.inputAlias, "LEAF");
              break;
           case "other":
              this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
-            break;
+             break;
           default:
              break;
         }

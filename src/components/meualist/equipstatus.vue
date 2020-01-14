@@ -104,6 +104,9 @@ export default {
     // 删除节点	树节点
     onDel(node) {
       console.log(node, "onDel");
+      this.sendNodeContent("/organization/deleteNode", node, response=>{
+         console.log(response.data, "deleteResult");
+      });
       node.remove();
     },
     // 更换名字	{'id'，'oldName'，'newName'}
@@ -201,8 +204,12 @@ export default {
        if(nodeInfo.parent != null){
          var parentPath = this.getTreePath(nodeInfo.parent);
        }
+       if(treePath == "" || treePath == null){
+         alert("没有找到客户，所以，不能在服务端添加相应的节点");
+         return;
+       }
        var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
-       // console.log("send node contents:" + JSON.stringify(nodeContent));
+       console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },
     getTreePath(nodeInfo, path){
@@ -213,8 +220,11 @@ export default {
       if(key != undefined){
          path = "/" + key + path;  
       }
-      if(nodeInfo.type  === "CUSTOMER" || nodeInfo.parent === null){
+      if(nodeInfo.type  === "CUSTOMER"){
         return path;
+      }
+      if(nodeInfo.parent == null){
+        return "";
       }
       return this.getTreePath(nodeInfo.parent, path);
     },
