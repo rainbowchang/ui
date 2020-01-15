@@ -168,7 +168,8 @@ export default {
             return h(customerModel, {
               ref: 'customerModel',
               props: {
-                customerNode: this.getParentCustomerNode(nodeInfo)
+                customerNode: this.getParentCustomerNode(nodeInfo),
+                parentNode:nodeInfo.parent
               },
               on:{
                 showInfo:(key, value, type) =>{

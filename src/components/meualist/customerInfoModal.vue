@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
- import {get,post} from "@/apis/restUtils";
+ import {post} from "@/apis/restUtils";
 
   export default {
     name: "customerInfos",
@@ -67,7 +67,7 @@
             nodeContent: "other"
         }
     },
-    props: ['customerNode'],
+    props: ['customerNode',"parentNode"],
     mounted: function(){
         if(this.customerNode != null){
           this.customerName = this.customerNode.name;
@@ -160,13 +160,35 @@
         }
      
      },
+     getCustomerFeature(){
+       var customerBean ={};
+       console.log(this.parentNode, "customernNodePara");
+       var parent = this.parentNode;
+       if(parent == null){
+         return customerBean;
+       }
+       switch(parent.key){
+          case "一般客户":
+            customerBean.feature = "common";
+            break;
+          case "重要客户":
+            customerBean.feature = "important";
+            break;
+          default:
+            customerBean.feature = parent.key;
+            break;
+        }
+        return customerBean;
+     },
      getRemoteCustomers(){
-        get("/customer/getAllNames", response=>{
+        var customerBean = this.getCustomerFeature();
+        console.log(customerBean, "customerBean");
+        post("/customer/getCustomerByFeature", customerBean , response=>{
            this.customerList = response.data;
+           console.log(response.data, "customerList");
         });
      },
      getRemotePlcs(){
-        // alert(" place holder:" + this.customerNode);
         console.log('customer key: ', this.customerNode.key);
         post("/agent/view/plcsByCustomer", {"name":this.customerNode.key}, response=>{
             this.plcList = response.data;
