@@ -20,15 +20,15 @@
               <div class="with10">{{item.total}}台</div>
               <div class="with25">
                 <template>
-                   <div class="statusline">
-                      <!-- status:  1加工，2故障，3停机，4关机，5断开 -->
-                      <div
-                        v-for="(value,index) in item.list"
-                        :key="index"
-                        :style="{width:value.percent}"
-                        :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'off':'interrupt'"
-                      ></div>
-                    </div>
+                  <div class="statusline">
+                    <!-- status:  1加工，2故障，3停机，4关机，5断开 -->
+                    <div
+                      v-for="(value,index) in item.list"
+                      :key="index"
+                      :style="{width:value.percent}"
+                      :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'off':'interrupt'"
+                    ></div>
+                  </div>
                 </template>
               </div>
             </li>
@@ -658,13 +658,17 @@ h2 {
   border: 0;
 }
 .title {
-  font-size:0.9rem;
+  font-size: 0.9rem;
   font-weight: bold;
   word-break: break-all;
   padding: 4px;
 }
 .title > div {
-  padding-left: 12px !important;
+  padding:0 6px !important;
+  border-right: 1px solid white;
+}
+.title > div:last-child {
+  border: 0;
 }
 .europe,
 .usa {
