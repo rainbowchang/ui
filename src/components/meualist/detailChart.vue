@@ -3,11 +3,11 @@
     <div class="numleft">
       <div class="title unread">
         实时数据
-        <span>当前刀位号：1</span>
+        <span style="margin-right:2em;">当前刀位号：1</span>
         <span>当前程序名：NC0035</span>
         <div>
           <template>
-            <table class="table-a" width="340" border="1" cellspacing="0" cellpadding="5">
+            <table class="table-a" border="1" cellspacing="0" cellpadding="5" style="width: 100%;">
               <tr v-for="(item, i) in tableList" :key="i">
                 <td>{{ item.x }}</td>
                 <td>{{item.number}}</td>
@@ -23,7 +23,7 @@
         负载
         <div>
           <template>
-            <table class="table-b" width="360" border="0" cellspacing="10" cellpadding="5">
+            <table class="table-b" border="0" cellspacing="10" cellpadding="5" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}</td>
                 <td>
@@ -40,32 +40,32 @@
       </div>
       <div class="title unread">
         当前给进
-        <div style="width:30vw;height:150px;">
+        <div style="width:50vw;height:150px;">
           <!-- <div style="text-align: right;">1805mm/min</div> -->
-          <div id="myChart5" style="width:30vw;height:200px;"></div>
+          <div id="myChart5" style="width:50vw;height:200px;"></div>
           <!-- <ruleLine :number="1805"/> -->
         </div>
       </div>
     </div>
     <div class="numright">
       <div class="title unread" style="display: flex;white-space: nowrap;">
-        倍率
-        <div style="width: 310px;height: 300px;">
-          <div id="myChart1" style="width: 240px;height: 240px;"></div>
+        <span>倍率</span>
+        <div style="width: 310px;height: 300px;margin-top:2em;">
+          <div id="myChart1" style="width: 250px;height: 250px;"></div>
           <div class="myChart1Title">主轴</div>
         </div>
         <div style="width: 310px;height: 300px;">
-          <div id="myChart2" style="width: 240px;height: 240px;"></div>
+          <div id="myChart2" style="width: 250px;height: 250px;margin-top:2em;"></div>
           <div class="myChart2Title">进给</div>
         </div>
       </div>
       <div class="title unread" style="display: flex;white-space: nowrap;">
-        主轴转速
-        <div style="width: 250px;height: 240px;">
-          <div id="myChart3" style="width: 230px;height: 240px;"></div>
+        <span>主轴转速</span>
+        <div style="width: 310px;height: 300px;">
+          <div id="myChart3" style="width: 250px;height: 300px;margin-top:2em;"></div>
         </div>
-        <div style="width: 250px;height: 240px;">
-          <div id="myChart4" style="width: 220px;height: 240px;"></div>
+        <div style="width: 310px;height: 300px;">
+          <div id="myChart4" style="width: 250px;height: 300px;margin-top:2em;"></div>
         </div>
       </div>
     </div>
@@ -161,41 +161,45 @@ export default {
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
-      this.tableList = val.table;
--     this.getRightBottom(val.feedOverrides);
--     this.getRightBottom2(val.spindleOverrides);
--     this.getRightBottom3(val.feedSpeed);
--     this.getRightBottom4(val.feedSpeed);
--     this.getRightBottom5(val.spindleSpeed);
+      this.getRightBottom5();
     }
   },
   methods: {
     // 倍率1主轴
-    getRightBottom(feedOverrides) {
+    getRightBottom() {
       let data = {
-        value: 100
-      }
+        value: 12
+      };
       let option = {
         tooltip: {
-          formatter: "{a} <br/>{b} : {c}%"
+          enterable: true,
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          },
+          formatter: "倍率 : {data.value}%" //数据格式
         },
         series: [
           {
             max: 120,
             min: 50,
-            color: ["grey", "transparent"],
+            textStyle: {
+              fontSize: 13
+            },
+            color: ["gray", "transparent"],
             splitNumber: 14,
-            name: "业务指标",
+            name: "",
             type: "gauge",
             //仪表盘轴线相关配置。
             axisLine: {
               show: true,
-              lineStyle: {       // 属性lineStyle控制线条样式  
+              lineStyle: {
+                // 属性lineStyle控制线条样式
                 color: [
-                  [data.value/ 140, '#2d8cf0'],
-                  [1, 'grey']
+                  [data.value / 140, "#2d8cf0"],
+                  [1, "gray"]
                 ]
-              } 
+              }
             },
             splitLine: {
               show: true
@@ -203,6 +207,12 @@ export default {
             //刻度样式。
             axisTick: {
               show: false
+            },
+            pointer: {
+              // 仪表盘指针。
+              show: false, // 是否显示指针,默认 true。
+              length: "0%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
+              width: 0 // 指针宽度,默认 8。
             },
             //刻度标签。
             axisLabel: {
@@ -231,11 +241,12 @@ export default {
             },
             detail: {
               formatter: "{value}%",
+              offsetCenter: [0, 0],
               textStyle: {
-                fontSize: 12
+                fontSize: 14
               }
             },
-            data: [{ value: feedOverrides, name: "主轴" }]
+            data: [{ value: data.value }]
           }
         ]
       };
@@ -244,10 +255,10 @@ export default {
       myChart.setOption(option);
     },
     // 倍率2
-    getRightBottom2(spindleOverrides) {
+    getRightBottom2() {
       var data = {
-          value: 85.4
-      }
+        value: 13
+      };
       let option = {
         tooltip: {
           formatter: "{a} <br/>{b} : {c}%"
@@ -256,19 +267,21 @@ export default {
           {
             max: 120,
             min: 0,
-            color: ["grey", "transparent"],
+            color: ["gray", "transparent"],
             splitNumber: 24,
             name: "业务指标",
+            center: ["50%", "55%"], // 仪表盘位置(圆心坐标)
             type: "gauge",
             //仪表盘轴线相关配置。
             axisLine: {
               show: true,
-              lineStyle: {       // 属性lineStyle控制线条样式  
+              lineStyle: {
+                // 属性lineStyle控制线条样式
                 color: [
-                  [data.value / 120, '#2d8cf0'],
-                  [1, 'grey']
+                  [data.value / 120, "#2d8cf0"],
+                  [1, "gray"]
                 ]
-              } 
+              }
             },
             splitLine: {
               show: true
@@ -276,6 +289,12 @@ export default {
             //刻度样式。
             axisTick: {
               show: false
+            },
+            pointer: {
+              // 仪表盘指针。
+              show: false, // 是否显示指针,默认 true。
+              length: "70%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
+              width: 5 // 指针宽度,默认 8。
             },
             //刻度标签。
             axisLabel: {
@@ -315,10 +334,11 @@ export default {
             detail: {
               formatter: "{value}%",
               textStyle: {
-                fontSize: 12
+                fontSize: 14
               },
+              offsetCenter: [0, 0]
             },
-            data: [{ value: spindleOverrides, name: "主轴" }]
+            data: [{ value: data.value }]
           }
         ]
       };
@@ -326,14 +346,24 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom3(feedSpeed) {
+    getRightBottom3() {
       // 仪表盘所需数据
       var data = {
-          value: 16297
-      }
+        value: 18000
+      };
       let option = {
         tooltip: {
-          formatter: "{a} <br/>{b} : {c}%"
+          // 本系列特定的 tooltip 设定。
+          show: true,
+          formatter: "{b}：{c}%",
+          backgroundColor: "rgba(50,50,50,0.7)", // 提示框浮层的背景颜色。注意：series.tooltip 仅在 tooltip.trigger 为 'item' 时有效。
+          borderColor: "#333", // 提示框浮层的边框颜色。...
+          borderWidth: 0, // 提示框浮层的边框宽。...
+          padding: 5, // 提示框浮层内边距，单位px，默认各方向内边距为5，接受数组分别设定上右下左边距。...
+          textStyle: {
+            // 提示框浮层的文本样式。...
+            // color ,fontStyle ,fontWeight ,fontFamily ,fontSize ,lineHeight ,.......
+          }
         },
         series: [
           {
@@ -343,18 +373,20 @@ export default {
             color: ["grey", "transparent"],
             name: "业务指标",
             type: "gauge",
-            startAngle: 270,
+            center: ["50%", "50%"], // 仪表盘位置(圆心坐标)
+            // startAngle: 270,
             //结束角度。
-            endAngle: 0,
+            // endAngle: 0,
             //仪表盘轴线相关配置。
             axisLine: {
               show: true,
-              lineStyle: {       // 属性lineStyle控制线条样式  
+              lineStyle: {
+                // 属性lineStyle控制线条样式
                 color: [
-                  [data.value / 30000, '#2d8cf0'],
-                  [1, 'grey']
+                  [data.value / 30000, "#2d8cf0"],
+                  [1, "gray"]
                 ]
-              }  
+              }
             },
             splitLine: {
               show: true
@@ -368,18 +400,20 @@ export default {
               show: true,
               distance: -65
             },
-            pointer: {              // 仪表盘指针。
-                show: false,             // 是否显示指针,默认 true。
-                length: "70%",          // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
-                width: 5,               // 指针宽度,默认 8。
+            pointer: {
+              // 仪表盘指针。
+              show: false, // 是否显示指针,默认 true。
+              length: "70%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
+              width: 5 // 指针宽度,默认 8。
             },
             detail: {
               formatter: "{value}rpm",
+              offsetCenter: [0, 0],
               textStyle: {
-                fontSize: 12
+                fontSize: 14
               }
             },
-            data: [{ value: feedSpeed }]
+            data: [{ value: data.value }]
           }
         ]
       };
@@ -387,10 +421,10 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom4(feedSpeed) {
+    getRightBottom4() {
       var data = {
-          value: feedSpeed
-      }
+        value: 18000
+      };
       let option = {
         tooltip: {
           formatter: "{a} <br/>{b} : {c}%"
@@ -399,24 +433,32 @@ export default {
           {
             max: 30000,
             min: 0,
-            color: ["grey", "transparent"],
+            color: ["gray", "transparent"],
             splitNumber: 20,
+            center: ["50%", "50%"], // 仪表盘位置(圆心坐标)
             name: "业务指标",
             type: "gauge",
             //仪表盘轴线相关配置。
             axisLine: {
               show: true,
-              lineStyle: {       // 属性lineStyle控制线条样式  
+              lineStyle: {
+                // 属性lineStyle控制线条样式
                 color: [
-                  [data.value/30000, '#2d8cf0'],
-                  [0.8, '#2d8cf0'],
-                  [0.9, '#e6a23c'],
-                  [1, '#ed4014']
+                  [data.value / 30000, "#2d8cf0"],
+                  [0.8, "#2d8cf0"],
+                  [0.9, "#e6a23c"],
+                  [1, "#ed4014"]
                 ]
-              } 
+              }
             },
             splitLine: {
               show: true
+            },
+            pointer: {
+              // 仪表盘指针。
+              show: true, // 是否显示指针,默认 true。
+              length: "65%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
+              width: 5 // 指针宽度,默认 8。
             },
             //刻度样式。
             axisTick: {
@@ -425,7 +467,7 @@ export default {
             //刻度标签。
             axisLabel: {
               show: true,
-              color:"black",
+              color: "gray",
               distance: -65,
               formatter: function(value) {
                 switch (value) {
@@ -455,12 +497,12 @@ export default {
               }
             },
             detail: {
-              formatter: "{value}rpm",
+              formatter: "",
               textStyle: {
                 fontSize: 12
               }
             },
-            data: [{ value: feedSpeed }]
+            data: [{ value: data.value }]
           }
         ]
       };
@@ -468,7 +510,10 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom5(spindleSpeed) {
+    getRightBottom5() {
+      var data = {
+        value: 2300
+      };
       let myChart = this.$echarts.init(document.getElementById("myChart5"));
       let option = {
         yAxis: [
@@ -509,14 +554,14 @@ export default {
           containLabel: true,
           width: "95%",
           height: 120,
-          left:0,
+          left: 0,
           top: 50
         },
         series: [
           {
             name: "差",
             splitNumber: 8,
-            data: [80000],
+            data: [5000],
             type: "bar",
             yAxisIndex: 0,
             stack: "range",
@@ -526,7 +571,7 @@ export default {
           },
           {
             name: "实际值",
-            data: [spindleSpeed],
+            data: [data.value],
             type: "bar",
             yAxisIndex: 1,
             barWidth: 50,
@@ -564,6 +609,10 @@ export default {
   .numleft {
     width: 30vw !important;
     transform: translateX(2em);
+  }
+  .numright {
+    width: 42vw !important;
+    padding-left: 4em;
   }
 }
 .title {
@@ -607,13 +656,13 @@ export default {
   position: absolute;
   bottom: 80px;
   /* text-align: center; */
-  left: 20%;
+  left: 19.5%;
   /* right: 10px; */
 }
 .myChart2Title {
   position: absolute;
   bottom: 80px;
-  right: 27%;
+  right: 35%;
 }
 .backopt {
   opacity: 0.3;
