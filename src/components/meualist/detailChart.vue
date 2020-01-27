@@ -152,23 +152,26 @@ export default {
     };
   },
   mounted() {
-    this.getRightBottom();
-    this.getRightBottom2();
-    this.getRightBottom3();
-    this.getRightBottom4();
-    this.getRightBottom5();
+    this.getOverrides("myChart1", 0);
+    this.getOverrides("myChart2", 0);
+    this.getSpindleSpeed(0);
+    this.getfeedSpeed(0);
   },
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
-      this.getRightBottom5();
+      this.tableList = val.table;
+      this.getOverrides("myChart1", val.spindleOverrides);
+      this.getOverrides("myChart2", val.feedOverrides);
+      this.getSpindleSpeed(val.spindleSpeed);
+      this.getfeedSpeed(val.feedSpeed);
     }
   },
   methods: {
-    // 倍率1主轴
-    getRightBottom() {
+    // 倍率:主轴，进给
+    getOverrides(charName, overrides) {
       let data = {
-        value: 12
+        value: overrides
       };
       let option = {
         tooltip: {
@@ -250,106 +253,18 @@ export default {
           }
         ]
       };
-      let myChart = this.$echarts.init(document.getElementById("myChart1"));
+      let myChart = this.$echarts.init(document.getElementById(charName));
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    // 倍率2
-    getRightBottom2() {
-      var data = {
-        value: 13
-      };
-      let option = {
-        tooltip: {
-          formatter: "{a} <br/>{b} : {c}%"
-        },
-        series: [
-          {
-            max: 120,
-            min: 0,
-            color: ["gray", "transparent"],
-            splitNumber: 24,
-            name: "业务指标",
-            center: ["50%", "55%"], // 仪表盘位置(圆心坐标)
-            type: "gauge",
-            //仪表盘轴线相关配置。
-            axisLine: {
-              show: true,
-              lineStyle: {
-                // 属性lineStyle控制线条样式
-                color: [
-                  [data.value / 120, "#2d8cf0"],
-                  [1, "gray"]
-                ]
-              }
-            },
-            splitLine: {
-              show: true
-            },
-            //刻度样式。
-            axisTick: {
-              show: false
-            },
-            pointer: {
-              // 仪表盘指针。
-              show: false, // 是否显示指针,默认 true。
-              length: "70%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
-              width: 5 // 指针宽度,默认 8。
-            },
-            //刻度标签。
-            axisLabel: {
-              show: true,
-              distance: -60,
-              formatter: function(value) {
-                switch (value) {
-                  case 5:
-                    return ""; //隐藏
-                  case 15:
-                    return ""; //隐藏
-                  case 25:
-                    return ""; //隐藏
-                  case 35:
-                    return ""; //隐藏
-                  case 45:
-                    return ""; //隐藏
-                  case 55:
-                    return ""; //隐藏
-                  case 65:
-                    return ""; //隐藏
-                  case 75:
-                    return ""; //隐藏
-                  case 85:
-                    return ""; //隐藏
-                  case 95:
-                    return ""; //隐藏
-                  case 105:
-                    return ""; //隐藏
-                  case 115:
-                    return ""; //隐藏
-                  default:
-                    return value;
-                }
-              }
-            },
-            detail: {
-              formatter: "{value}%",
-              textStyle: {
-                fontSize: 14
-              },
-              offsetCenter: [0, 0]
-            },
-            data: [{ value: data.value }]
-          }
-        ]
-      };
-      let myChart = this.$echarts.init(document.getElementById("myChart2"));
-      // // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
+    getSpindleSpeed(spindleSpeed) {
+      this.getSpindleSpeedOveral(spindleSpeed);
+      this.getSpindleSpeedDetail(spindleSpeed);
     },
-    getRightBottom3() {
+    getSpindleSpeedOveral(spindleSpeed){
       // 仪表盘所需数据
       var data = {
-        value: 18000
+        value: spindleSpeed
       };
       let option = {
         tooltip: {
@@ -421,9 +336,9 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom4() {
+    getSpindleSpeedDetail(spindleSpeed) {
       var data = {
-        value: 18000
+        value: spindleSpeed
       };
       let option = {
         tooltip: {
@@ -510,9 +425,9 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRightBottom5() {
+    getfeedSpeed(feedSpeed) {
       var data = {
-        value: 2300
+        value: feedSpeed
       };
       let myChart = this.$echarts.init(document.getElementById("myChart5"));
       let option = {

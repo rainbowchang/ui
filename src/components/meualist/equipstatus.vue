@@ -147,6 +147,14 @@ export default {
       this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
         this.detailinfo=response.data;
       });
+      if(this.timer){
+        clearInterval(this.timer);
+      }
+      this.timer = setInterval(() => {
+          this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
+          this.detailinfo=response.data;
+        });
+      }, 3000);
     },
     buildSubNewTree(customerTreeDatas, condition){
         for(var i in customerTreeDatas){
