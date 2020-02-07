@@ -18,7 +18,7 @@
         >
           <!-- <span class="icon" slot="addTreeNode">新增</span> -->
           <!-- <span class="icon" slot="addLeafNode">新增文件</span> -->
-          <!-- <span class="icon" slot="editNode">编辑</span> -->
+          <!-- <span class="icon" slot="editNode" v-if = false>编辑</span> -->
           <!-- <span class="icon" slot="delNode">删除</span> -->
         </vue-tree-list>
         <!-- <button @click="getNewTree">Get new tree</button> -->
@@ -97,6 +97,7 @@ export default {
               isLeaf: paraNode.leaf, 
               addLeafNodeDisabled: true, 
               dragDisabled:true,
+              editNodeDisabled:true,
               type: paraNode.type
             }
           );
