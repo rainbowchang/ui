@@ -145,7 +145,10 @@ export default {
       this.showDetail= true;
       // console.log("detail Info" , this.detailinfo);
       this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
-        this.detailinfo=response.data;
+        var data = response.data;
+        if(data.table != null){
+          this.detailinfo=response.data;    
+        }
       });
       if(this.timer){
         clearInterval(this.timer);

@@ -9,10 +9,10 @@
           <template>
             <table class="table-a" border="1" cellspacing="0" cellpadding="5" style="width: 100%;">
               <tr v-for="(item, i) in tableList" :key="i">
-                <td>{{ item.x }}</td>
+                <td>{{ item.name + "坐标" }}</td>
                 <td>{{item.number}}</td>
                 <td>
-                  <button v-if="item.number" @click="editName(item,i)" class="bottonStyle">编辑</button>
+                  <button v-if="item.number" @click="editAxisDialog(item,i)" class="bottonStyle">编辑</button>
                 </td>
               </tr>
             </table>
@@ -25,7 +25,7 @@
           <template>
             <table class="table-b" border="0" cellspacing="10" cellpadding="5" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
-                <td style="width:20px;">{{ item.name }}</td>
+                <td style="width:20px;">{{ item.name }}({{item.load}})</td>
                 <td>
                   <Progress :percent="item.percent" hide-info :stroke-width="20"></Progress>
                 </td>
@@ -71,11 +71,11 @@
     </div>
     <el-dialog title="编辑" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <div>
-        <el-input placeholder="请输入内容" v-model="itemParam.x" clearable></el-input>
+        <el-input placeholder="请输入内容" v-model="inputContent" clearable></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="editAxisName(inputContent)">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -89,63 +89,64 @@ export default {
   props: ["detailinfo"],
   data() {
     return {
+      inputContent: "",
       itemParam: {},
       dialogVisible: false,
       tableList: [
         {
-          x: "X坐标",
           number: "100000.0000",
           name: "X",
           percent: 50,
+          load: 100,
           showFlag: true
         },
         {
-          x: "Y坐标",
           number: "100000.0000",
           name: "Y",
           percent: 30,
+          load: 60,
           showFlag: true
         },
         {
-          x: "Z坐标",
           number: "100000.0000",
           name: "Z",
           percent: 90,
+          load: 190,
           showFlag: true
         },
         {
-          x: "A坐标",
           number: "100000.0000",
           name: "A",
           percent: 60,
+          load: 120,
           showFlag: true
         },
         {
-          x: "B坐标",
           number: null,
           name: "B",
           percent: 80,
+          load: 160,
           showFlag: true
         },
         {
-          x: "C坐标",
           number: null,
           name: "C",
           percent: 80,
+          load: 160,
           showFlag: true
         },
         {
-          x: "SP1坐标",
           number: null,
           name: "SP1",
           percent: 80,
+          load: 160,
           showFlag: true
         },
         {
-          x: "SP2坐标",
           number: null,
           name: "SP2",
           percent: 80,
+          load: 160,
           showFlag: true
         }
       ]
@@ -502,10 +503,16 @@ export default {
       this.tableList[index].showFlag = !this.tableList[index].showFlag;
       console.log(item, index);
     },
-    editName(item, index) {
+    editAxisDialog(item, index) {
       console.log(item, index);
       this.itemParam = item;
+      this.inputContent = item.name;
       this.dialogVisible = true;
+    },
+    editAxisName(name) {
+      console.log("name",name);
+      this.itemParam.name = name;
+      this.dialogVisible = false;
     },
     handleClose() {
       console.log(this.itemParam);
