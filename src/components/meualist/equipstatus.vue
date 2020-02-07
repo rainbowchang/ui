@@ -217,11 +217,11 @@ export default {
          var parentPath = this.getTreePath(nodeInfo.parent);
        }
        if(treePath == "" || treePath == null){
-         alert("没有找到客户，所以，不能在服务端添加相应的节点");
+         // alert("没有找到客户，所以，不能在服务端添加相应的节点");
          return;
        }
        var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
-       console.log("send node contents:" + JSON.stringify(nodeContent));
+       // console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },
     getTreePath(nodeInfo, path){

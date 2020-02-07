@@ -82,6 +82,8 @@
 </template>
 <script>
 // import ruleLine from "./ruleLine";
+import {post} from "@/apis/restUtils";
+
 export default {
   components: {
     // ruleLine
@@ -90,6 +92,7 @@ export default {
   data() {
     return {
       inputContent: "",
+      sn: "",
       itemParam: {},
       dialogVisible: false,
       tableList: [
@@ -162,6 +165,7 @@ export default {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
       this.tableList = val.table;
+      this.sn = val.sn;
       this.getOverrides("myChart1", val.spindleOverrides);
       this.getOverrides("myChart2", val.feedOverrides);
       this.getSpindleSpeed(val.spindleSpeed);
@@ -507,11 +511,19 @@ export default {
       console.log(item, index);
       this.itemParam = item;
       this.inputContent = item.name;
+      this.itemParam.oldName = item.name;
       this.dialogVisible = true;
     },
     editAxisName(name) {
       console.log("name",name);
       this.itemParam.name = name;
+      this.itemParam.sn = this.sn;
+      post("/plcInfo/updateAxis", this.itemParam,response=>{
+         var result = response.data;
+         if(result.status == "fail"){
+           alert(result.message);
+         }
+      });
       this.dialogVisible = false;
     },
     handleClose() {
