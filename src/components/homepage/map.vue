@@ -109,6 +109,7 @@
 </template>
 <script>
 import "echarts/map/js/china.js";
+import {post, areas, provinces, getAreaByProvince} from "@/apis/restUtils";
 // import Heatmap from "heatmap.js";
 export default {
   data() {
@@ -122,7 +123,7 @@ export default {
             { percent: "34%", status: 3 },
             { percent: "36%", status: 5 }
           ],
-          area: "西南办事处",
+          area: "西南区域",
           total: 100,
           firstNum: 20,
           secondNum: 30,
@@ -136,7 +137,7 @@ export default {
             { percent: "12%", status: 1 },
             { percent: "50%", status: 5 }
           ],
-          area: "西北办事处",
+          area: "西北区域",
           total: 70,
           firstNum: 40,
           secondNum: 20,
@@ -150,7 +151,7 @@ export default {
             { percent: "12%", status: 1 },
             { percent: "50%", status: 5 }
           ],
-          area: "华东办事处",
+          area: "华东区域",
           total: 80,
           firstNum: 50,
           secondNum: 10,
@@ -164,7 +165,7 @@ export default {
             { percent: "12%", status: 1 },
             { percent: "50%", status: 5 }
           ],
-          area: "华北办事处",
+          area: "华北区域",
           total: 90,
           firstNum: 30,
           secondNum: 15,
@@ -178,7 +179,7 @@ export default {
             { percent: "12%", status: 1 },
             { percent: "50%", status: 5 }
           ],
-          area: "东北办事处",
+          area: "东北区域",
           total: 80,
           firstNum: 30,
           secondNum: 15,
@@ -192,7 +193,7 @@ export default {
             { percent: "32%", status: 1 },
             { percent: "45%", status: 5 }
           ],
-          area: "华南办事处",
+          area: "华南区域",
           total: 60,
           firstNum: 30,
           secondNum: 15,
@@ -243,14 +244,35 @@ export default {
       ]
     };
   },
+
   mounted() {
-    this.drawLine();
-    this.getBottom();
-    this.getRight();
-    this.getRightBottom();
+    this.sendArea();
+    this.sendProvince();
   },
   methods: {
-    drawLine() {
+    sendArea(){
+      var areaPaths = [];
+      areas.forEach(e => {
+        areaPaths.push("/按区域分类/" + e)
+      })
+      post("/organization/getAreaPlcInfo", areaPaths, reponse => {
+        this.headlist = reponse.data;
+        this.getBottom();
+        this.getRight();
+        this.getRightBottom();
+      });
+    },
+
+    sendProvince(){
+      var provincePaths = [];
+      provinces.forEach(e => provincePaths.push("/按区域分类/" + getAreaByProvince(e) + "/" + e));
+      console.log(provincePaths)
+      post("/organization/getProvincePlcInfo", provincePaths, reponse => {
+        this.drawLine(reponse.data);
+      })
+    },
+    
+    drawLine(data) {
       // 基于准备好的dom，初始化echarts实例
       var myChartContainer = document.getElementById("myChartChina");
       var resizeMyChartContainer = function() {
@@ -259,9 +281,6 @@ export default {
       resizeMyChartContainer();
       var myChartChina = this.$echarts.init(myChartContainer);
 
-      function randomData() {
-        return Math.round(Math.random() * 500);
-      }
       // 绘制图表
       var optionMap = {
         tooltip: {},
@@ -293,42 +312,7 @@ export default {
                 show: true
               }
             },
-            data: [
-              { name: "北京", value: randomData() },
-              { name: "天津", value: randomData() },
-              { name: "上海", value: randomData() },
-              { name: "重庆", value: randomData() },
-              { name: "河北", value: randomData() },
-              { name: "河南", value: randomData() },
-              { name: "云南", value: randomData() },
-              { name: "辽宁", value: randomData() },
-              { name: "黑龙江", value: randomData() },
-              { name: "湖南", value: randomData() },
-              { name: "安徽", value: randomData() },
-              { name: "山东", value: randomData() },
-              { name: "新疆", value: randomData() },
-              { name: "江苏", value: randomData() },
-              { name: "浙江", value: randomData() },
-              { name: "江西", value: randomData() },
-              { name: "湖北", value: randomData() },
-              { name: "广西", value: randomData() },
-              { name: "甘肃", value: randomData() },
-              { name: "山西", value: randomData() },
-              { name: "内蒙古", value: randomData() },
-              { name: "陕西", value: randomData() },
-              { name: "吉林", value: randomData() },
-              { name: "福建", value: randomData() },
-              { name: "贵州", value: randomData() },
-              { name: "广东", value: randomData() },
-              { name: "青海", value: randomData() },
-              { name: "西藏", value: randomData() },
-              { name: "四川", value: randomData() },
-              { name: "宁夏", value: randomData() },
-              { name: "海南", value: randomData() },
-              { name: "台湾", value: randomData() },
-              { name: "香港", value: randomData() },
-              { name: "澳门", value: randomData() }
-            ]
+            data: data
           }
         ]
       };

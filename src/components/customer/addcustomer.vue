@@ -37,21 +37,13 @@
           <Input v-model="formItem.tel" placeholder="Enter something..."/>
         </FormItem>
         <FormItem label="所属区域">
-          <Select v-model="formItem.area">
-            <Option value="西南区域">西南区域</Option>
-            <Option value="华东区域">华东区域</Option>
-            <Option value="东北区域">东北区域</Option>
-            <Option value="西北区域">西北区域</Option>
-            <Option value="华北区域">华北区域</Option>
-            <Option value="华南区域">华南区域</Option>
-            <Option value="华中区域">华中区域</Option>
+          <Select v-model="formItem.area" v-on="setArea(formItem.area)">
+            <Option v-for="area in areas" :value="area" :key="area">{{area}}</Option>
           </Select>
         </FormItem>
         <FormItem label="省份">
           <Select v-model="formItem.province">
-            <Option value="四川">四川</Option>
-            <Option value="江苏">江苏</Option>
-            <Option value="北京">北京</Option>
+            <Option v-for="province in provinces" :value="province" :key="province">{{province}}</Option>
           </Select>
         </FormItem>
         <FormItem label="客户地址">
@@ -66,7 +58,7 @@
 </template>
 
 <script>
-import {post} from "@/apis/restUtils";
+import {post, areas, getProvinceByArea} from "@/apis/restUtils";
 
 export default {
   data() {
@@ -82,13 +74,14 @@ export default {
         area: "",
         address: ""
       },
+      areas: areas,
       customerIdVisibale: false
     };
   },
+
   mounted: function (){
       var router = this.$route;
       var customerId = router.query.customerId;
-      
       console.log("customerId:" + customerId);
       if(customerId != undefined){
         this.formItem.customerId = customerId;
@@ -98,7 +91,11 @@ export default {
          });
       }
   },
+
   methods: {
+    setArea(area){
+      this.provinces = getProvinceByArea(area)
+    },
     //返回上一层
     back() {
       this.$router.go(-1);
