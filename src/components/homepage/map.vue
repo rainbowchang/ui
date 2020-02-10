@@ -74,10 +74,10 @@
               <div>未连接</div>
             </li>
             <li style="font-size:0.8rem;">
-              <div>120</div>
-              <div>120</div>
-              <div>46</div>
-              <div>192</div>
+              <div>{{statusNum[0].value}}</div>
+              <div>{{statusNum[1].value}}</div>
+              <div>{{statusNum[2].value}}</div>
+              <div>{{statusNum[3].value}}</div>
             </li>
           </ul>
         </div>
@@ -114,6 +114,7 @@ import {post, areas, provinces, getAreaByProvince} from "@/apis/restUtils";
 export default {
   data() {
     return {
+      statusNum: [{name:"加工", value:0}, {name:"故障",value:0}, {name:"停机",value:0}, {name:"未连接",value:0}],
       headlist: [
         {
           id: 1,
@@ -257,8 +258,14 @@ export default {
       })
       post("/organization/getAreaPlcInfo", areaPaths, reponse => {
         this.headlist = reponse.data;
+        this.headlist.forEach(e => {
+          this.statusNum[0].value += e.firstNum;
+          this.statusNum[1].value += e.secondNum;
+          this.statusNum[2].value += e.thridNum;
+          this.statusNum[3].value += (e.total - (e.firstNum + e.secondNum + e.thridNum));
+        })
         this.getBottom();
-        this.getRight();
+        this.getRight(this.statusNum);
         this.getRightBottom();
       });
     },
@@ -266,7 +273,6 @@ export default {
     sendProvince(){
       var provincePaths = [];
       provinces.forEach(e => provincePaths.push("/按区域分类/" + getAreaByProvince(e) + "/" + e));
-      console.log(provincePaths)
       post("/organization/getProvincePlcInfo", provincePaths, reponse => {
         this.drawLine(reponse.data);
       })
@@ -413,7 +419,7 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getRight() {
+    getRight(data) {
       let option = {
         title: {
           text: "全国机床状态实时分布",
@@ -438,12 +444,7 @@ export default {
             radius: ["42%", "53%"], // 半径
             center: ["50%", "50%"],
             selectedMode: "single",
-            data: [
-              { value: 120, name: "加工" },
-              { value: 120, name: "故障" },
-              { value: 46, name: "停机" },
-              { value: 192, name: "未连接" }
-            ],
+            data: data,
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,
