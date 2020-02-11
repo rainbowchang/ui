@@ -53,11 +53,11 @@
             </li>
             <li v-for="(item,index) in infolist" :key="index" style="font-size:0.8rem;">
               <div>{{item.index}}</div>
-              <div>{{item.warningtime}}</div>
-              <div>{{item.jcxh}}</div>
-              <div>{{item.xlh}}</div>
+              <div>{{item.warningTime}}</div>
+              <div>{{item.plcType}}</div>
+              <div>{{item.sn}}</div>
               <div>{{item.name}}</div>
-              <div>{{item.warncode}}</div>
+              <div>{{item.warningCode}}</div>
             </li>
           </ul>
         </div>
@@ -109,7 +109,7 @@
 </template>
 <script>
 import "echarts/map/js/china.js";
-import {post, areas, provinces, getAreaByProvince} from "@/apis/restUtils";
+import {post, get, areas, provinces, getAreaByProvince} from "@/apis/restUtils";
 // import Heatmap from "heatmap.js";
 export default {
   data() {
@@ -205,42 +205,42 @@ export default {
         {
           index: 1,
           name: "客户1",
-          jcxh: "VCER5512",
-          warningtime: "2019.09.20",
-          xlh: "12638055",
-          warncode: "7rg6566"
+          plcType: "VCER5512",
+          warningTime: "2019.09.20",
+          sn: "12638055",
+          warnningCode: "7rg6566"
         },
         {
           index: 2,
           name: "客户2",
-          jcxh: "VC325",
-          warningtime: "2019.09.20",
-          xlh: "12638055",
-          warncode: "7rg6566"
+          plcType: "VC325",
+          warningTime: "2019.09.20",
+          sn: "12638055",
+          warningCode: "7rg6566"
         },
         {
           index: 3,
           name: "客户3",
-          jcxh: "VJWE32Y",
-          warningtime: "2019.09.20",
-          xlh: "51684155",
-          warncode: "7rg6566"
+          plcType: "VJWE32Y",
+          warningTime: "2019.09.20",
+          sn: "51684155",
+          warningCode: "7rg6566"
         },
         {
           index: 4,
           name: "客户4",
-          jcxh: "NDFW4Y",
-          warningtime: "2019.09.20",
-          xlh: "12638055",
-          warncode: "7rg6566"
+          plcType: "NDFW4Y",
+          warningTime: "2019.09.20",
+          sn: "12638055",
+          warningCode: "7rg6566"
         },
         {
           index: 5,
           name: "客户5",
           jcxh: "JRS5555",
-          warningtime: "2019.09.20",
+          warningTime: "2019.09.20",
           xlh: "12638055",
-          warncode: "7rg6566"
+          warningCode: "7rg6566"
         }
       ]
     };
@@ -249,6 +249,7 @@ export default {
   mounted() {
     this.sendArea();
     this.sendProvince();
+    this.sendWarning();
   },
   methods: {
     sendArea(){
@@ -278,6 +279,12 @@ export default {
       })
     },
     
+    sendWarning(){
+      get("/organization/getWarningPlcInfo", reponse => {
+        this.infolist = reponse.data;
+      })
+    },
+
     drawLine(data) {
       // 基于准备好的dom，初始化echarts实例
       var myChartContainer = document.getElementById("myChartChina");
@@ -461,7 +468,6 @@ export default {
       myChart.setOption(option);
     },
     getRightBottom() {
-      console.log("2");
       let option = {
         title: {
           text: "全国机床产品系列分布",
