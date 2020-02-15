@@ -34,13 +34,14 @@ export default {
     return {
       isSended: false,
       modal1: false,
-      showModalFlag: false,
+      showModalFlag: true,
       sendtimer: 5,
       contentImg: pic1
     };
   },
   created() {
-    this.closeSelf();
+
+    this.showModal();
   },
   methods: {
     closeSelf() {
@@ -60,6 +61,10 @@ export default {
             this.isSended = false;
             this.sendtimer = 5;
             window.clearInterval(timer);
+            if(this.showModalFlag)
+            {this.closeModal();
+                this.closeSelf();
+            }
           }
         }, 1000);
       });
