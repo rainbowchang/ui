@@ -1,4 +1,4 @@
-var backEndUrl = "http://127.0.0.1:8000"
+var backEndUrl = "http://47.114.139.202:8081"
 if(process.env.VUE_APP_BACK_END_URL != undefined){
     backEndUrl = process.env.VUE_APP_BACK_END_URL;
 }
