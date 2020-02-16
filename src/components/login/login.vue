@@ -68,10 +68,11 @@ export default {
       this.$refs[name].validate(valid => {
           post("/user/login",parameter,reponse => {
             if (valid && reponse.data.status == "success") {
-            this.$Message.success("登陆成功!");
-            router.push({ path: "/index" });  
+              localStorage.setItem("UserName", parameter.username);
+              this.$Message.success("登陆成功!");
+              router.push({ path: "/index" });  
           } else {
-            this.$Message.error("用户名或密码错误!");
+              this.$Message.error("用户名或密码错误!");
           }
         });
       });

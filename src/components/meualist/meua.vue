@@ -36,7 +36,7 @@
       </MenuItem>
       <Submenu name="3">
         <template slot="title">
-          <span>你好，xxx</span>
+          <span>你好，{{username}}</span>
         </template>
         <MenuItem name="exit">
           <span>退出</span>
@@ -54,6 +54,7 @@ export default {
   name: "Homepage",
   data() {
     return {
+      username: localStorage.getItem("UserName"),
       theme1: "primary",
       index: false,
       equipstatus: true,
