@@ -590,13 +590,13 @@ export default {
   position: absolute;
   bottom: 80px;
   /* text-align: center; */
-  left: 19.5%;
+  left: 23.5%;
   /* right: 10px; */
 }
 .myChart2Title {
   position: absolute;
   bottom: 80px;
-  right: 35%;
+  right: 22%;
 }
 .backopt {
   opacity: 0.3;

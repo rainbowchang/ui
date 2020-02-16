@@ -40,7 +40,7 @@
       </div>
       <div class="map">
         <!-- 中国地图 -->
-        <div id="myChartChina" :style="{width: '100%', height: '500px'}"></div>
+        <div id="myChartChina" :style="{width: '100%', height: '400px'}"></div>
         <div class="infolist">
           <ul>
             <li class="title">
@@ -81,7 +81,7 @@
             </li>
           </ul>
         </div>
-        <div id="myChartRightBottom" :style="{width: '95%', height: '34%'}"></div>
+        <div id="myChartRightBottom" :style="{width: '95%', height: '25%'}"></div>
         <div class="infolist">
           <ul>
             <li class="title" style="white-space: nowrap;font-size:0.9rem;">
@@ -307,6 +307,8 @@ export default {
             name: "",
             type: "map",
             left: "10%",
+            top: "10%",
+            zoom: 1.2,
             mapType: "china",
             itemStyle: {
               normal: {
@@ -377,7 +379,7 @@ export default {
           },
           left: "3%",
           right: "4%",
-          bottom: "3%",
+          bottom: "40%",
           containLabel: true
         },
         xAxis: [
