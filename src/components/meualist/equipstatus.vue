@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       factory: false,
-      showDetail: true,
+      showDetail: false,
       detailinfo:null,//标尺页面传递信息
       statustable: false,
       dateChoose: "", //table选择开始结束时间
@@ -133,11 +133,16 @@ export default {
     },
     sendNodeContentWhenClick(nodeInfo){
       // console.log(nodeInfo, "node info");
+       if(this.timer){
+        clearInterval(this.timer);
+      }
       if(!nodeInfo.isLeaf){
-        this.statustable = true;
         this.showDetail= false;
         this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-          this.$refs.statustable.content = reponse.data;
+          var statusInfos = reponse.data;
+          this.$refs.statustable.content = statusInfos;
+          this.$refs.statustable.totalCount = statusInfos.length;
+          this.statustable = true;
           // console.log(this.$refs.statustable.content);
         });
         return;
@@ -151,9 +156,6 @@ export default {
           this.detailinfo=response.data;    
         }
       });
-      if(this.timer){
-        clearInterval(this.timer);
-      }
       this.timer = setInterval(() => {
           this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
           this.detailinfo=response.data;

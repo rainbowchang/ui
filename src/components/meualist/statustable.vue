@@ -3,7 +3,7 @@
     <!-- 右侧table及各个功能 -->
     <div class="tableinfo">
       <div class="search">
-        <span class="font">全部设备：共6台</span>
+        <span class="font">全部设备：共{{totalCount}}台</span>
         <div class="searchinput">
           <Input :style="{width:'180px;'}" search enter-button placeholder="请输入查询内容" />
         </div>
@@ -36,6 +36,7 @@ export default {
   components: { statusinfo },
   data() {
     return {
+      totalCount: 0,
       statusinfoshow: false, //详情弹窗是否展示
       dateChoose: "", //table选择开始结束时间
       currentPage: 1, //分页当前页数,
