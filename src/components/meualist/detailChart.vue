@@ -1,13 +1,13 @@
 <template>
   <div class="center-warp">
     <div class="numleft">
-      <div class="title unread" style="margin-bottom:1px;">
+      <div class="title unread" style="margin-bottom:6px;">
         实时数据
         <span style="margin-right:2em;">当前刀位号：1</span>
         <span>当前程序名：NC0035</span>
         <div>
           <template>
-            <table class="table-a" border="1" cellspacing="0" cellpadding="0" style="width: 100%;">
+            <table class="table-a" border="1" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item, i) in tableList" :key="i">
                 <td>{{ item.name + "坐标" }}</td>
                 <td>{{item.number}}</td>
@@ -19,11 +19,11 @@
           </template>
         </div>
       </div>
-      <div class="title unread">
+      <div class="title unread" style="margin-bottom:6px;">
         负载
-        <div>
+        <div style="margin-bottom:2px;">
           <template>
-            <table class="table-b" border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+            <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}({{item.load}})</td>
                 <td>
@@ -37,16 +37,16 @@
             </table>
           </template>
         </div>
-        <div class="title unread">
-          当前给进
-          <div style="width:10vw;height:10%;">
-            <!-- <div style="text-align: right;">1805mm/min</div> -->
-            <div id="myChart5" style="width:40vw;height:90px;"></div>
-            <!-- <ruleLine :number="1805"/> -->
-            </div>
-          </div>
       </div>
-    </div>
+      <div class="title unread">
+        当前给进
+        <div>
+          <!-- <div style="text-align: right;">1805mm/min</div> -->
+          <div id="myChart5" style="width:35vw;height:90px;"></div>
+          <!-- <ruleLine :number="1805"/> -->
+          </div>
+        </div>
+      </div>
     <div class="numright">
       <div class="title unread" style="display: flex;white-space: nowrap;">
         <span style="width:30%;">倍率</span>
