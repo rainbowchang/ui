@@ -1,13 +1,13 @@
 <template>
   <div class="center-warp">
     <div class="numleft">
-      <div class="title unread">
+      <div class="title unread" style="margin-bottom:1px;">
         实时数据
         <span style="margin-right:2em;">当前刀位号：1</span>
         <span>当前程序名：NC0035</span>
         <div>
           <template>
-            <table class="table-a" border="1" cellspacing="0" cellpadding="5" style="width: 100%;">
+            <table class="table-a" border="1" cellspacing="0" cellpadding="0" style="width: 100%;">
               <tr v-for="(item, i) in tableList" :key="i">
                 <td>{{ item.name + "坐标" }}</td>
                 <td>{{item.number}}</td>
@@ -23,7 +23,7 @@
         负载
         <div>
           <template>
-            <table class="table-b" border="0" cellspacing="10" cellpadding="5" style="width: 100%;">
+            <table class="table-b" border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}({{item.load}})</td>
                 <td>
@@ -37,35 +37,35 @@
             </table>
           </template>
         </div>
-      </div>
-      <div class="title unread">
-        当前给进
-        <div style="width:50vw;height:150px;">
-          <!-- <div style="text-align: right;">1805mm/min</div> -->
-          <div id="myChart5" style="width:50vw;height:200px;"></div>
-          <!-- <ruleLine :number="1805"/> -->
-        </div>
+        <div class="title unread">
+          当前给进
+          <div style="width:10vw;height:10%;">
+            <!-- <div style="text-align: right;">1805mm/min</div> -->
+            <div id="myChart5" style="width:40vw;height:90px;"></div>
+            <!-- <ruleLine :number="1805"/> -->
+            </div>
+          </div>
       </div>
     </div>
     <div class="numright">
       <div class="title unread" style="display: flex;white-space: nowrap;">
-        <span>倍率</span>
-        <div style="width: 310px;height: 300px;margin-top:2em;">
+        <span style="width:30%;">倍率</span>
+        <div style="width: 310px;height: 200px;margin:0em;">
           <div id="myChart1" style="width: 250px;height: 250px;"></div>
           <div class="myChart1Title">主轴</div>
         </div>
-        <div style="width: 310px;height: 300px;">
-          <div id="myChart2" style="width: 250px;height: 250px;margin-top:2em;"></div>
+        <div style="width: 310px;height: 200px;">
+          <div id="myChart2" style="width: 250px;height: 250px;margin:0em;"></div>
           <div class="myChart2Title">进给</div>
         </div>
       </div>
       <div class="title unread" style="display: flex;white-space: nowrap;">
-        <span>主轴转速</span>
-        <div style="width: 310px;height: 300px;">
-          <div id="myChart3" style="width: 250px;height: 300px;margin-top:2em;"></div>
+        <span style="width:30%">主轴转速</span>
+        <div style="width: 310px;height: 200px;">
+          <div id="myChart3" style="width: 250px;height: 300px;margin:0em;"></div>
         </div>
-        <div style="width: 310px;height: 300px;">
-          <div id="myChart4" style="width: 250px;height: 300px;margin-top:2em;"></div>
+        <div style="width: 310px;height: 200px;">
+          <div id="myChart4" style="width: 250px;height: 300px;margin:0em;"></div>
         </div>
       </div>
     </div>
@@ -473,9 +473,10 @@ export default {
         grid: {
           containLabel: true,
           width: "95%",
-          height: 120,
+          height: 80,
           left: 0,
-          top: 50
+          top: 5,
+          bottom: 0
         },
         series: [
           {
@@ -568,11 +569,11 @@ export default {
   border-radius: 4px;
 }
 .table-a {
-  border: 1px solid gray;
+  border: 0px solid gray;
   td {
     text-align: center;
     .bottonStyle {
-      width: 100px;
+      width: 34px;
       border: 0;
     }
   }
@@ -588,15 +589,15 @@ export default {
 }
 .myChart1Title {
   position: absolute;
-  bottom: 80px;
+  bottom: 10px;
   /* text-align: center; */
-  left: 23.5%;
+  left: 33%;
   /* right: 10px; */
 }
 .myChart2Title {
   position: absolute;
-  bottom: 80px;
-  right: 22%;
+  bottom: 10px;
+  right: 18%;
 }
 .backopt {
   opacity: 0.3;
