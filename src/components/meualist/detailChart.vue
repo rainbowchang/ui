@@ -588,16 +588,16 @@ export default {
   }
 }
 .myChart1Title {
-  position: absolute;
-  bottom: 10px;
+  position: relative;
+    bottom: 23%;
   /* text-align: center; */
-  left: 33%;
+  left: 35%;
   /* right: 10px; */
 }
 .myChart2Title {
-  position: absolute;
-  bottom: 10px;
-  right: 18%;
+  position: relative;
+  bottom: 20%;
+  right: -36%;
 }
 .backopt {
   opacity: 0.3;
