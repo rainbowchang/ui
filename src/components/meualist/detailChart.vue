@@ -27,11 +27,11 @@
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}({{item.load}})</td>
                 <td>
-                  <Progress :percent="item.percent" hide-info :stroke-width="20"></Progress>
+                  <Progress :percent="item.percent" hide-info :stroke-width="20" text-inside></Progress>
                 </td>
                 <td style="width:45px;">
-                  <button v-if="item.showFlag" @click="handleSubmit(item,i)" class="bottonStyle">显示</button>
-                  <button v-if="!item.showFlag" @click="handleSubmit(item,i)" class="bottonStyle">隐藏</button>
+                  <button v-if="item.showFlag" @click="handleSubmit(item,i)" class="bottonStyle">隐藏</button>
+                  <button v-if="!item.showFlag" @click="handleSubmit(item,i)" class="bottonStyle">显示</button>
                 </td>
               </tr>
             </table>

@@ -290,6 +290,9 @@ export default {
       var myChartContainer = document.getElementById("myChartChina");
       var resizeMyChartContainer = function() {
         myChartContainer.style.width = 150 + "%"; //页面一半的大小
+
+        myChartContainer.style.height = 50 + "%"; //页面一半的大小
+
       };
       resizeMyChartContainer();
       var myChartChina = this.$echarts.init(myChartContainer);
