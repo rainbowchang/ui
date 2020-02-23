@@ -25,7 +25,7 @@
           <template>
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
-                <td style="width:20px;">{{ item.name }}({{item.load}})</td>
+                <td style="width:20px;">{{ item.name }}</td>
                 <td>
                   <Progress :percent="item.percent" hide-info :stroke-width="20" text-inside></Progress>
                 </td>
