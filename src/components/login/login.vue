@@ -69,8 +69,9 @@ export default {
           post("/user/login",parameter,reponse => {
             if (valid && reponse.data.status == "success") {
               localStorage.setItem("UserName", parameter.username);
+              localStorage.setItem("Flag", true);
               this.$Message.success("登陆成功!");
-              router.push({ path: "/index" });  
+              router.push({path: "/index"});  
           } else {
               this.$Message.error("用户名或密码错误!");
           }

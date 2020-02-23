@@ -40,7 +40,11 @@ export default {
     };
   },
   created() {
-    this.closeSelf();
+    if(localStorage.getItem("Flag") == "true")
+      this.showModal();
+    else
+      this.closeModal();
+    localStorage.setItem("Flag", false);
   },
   methods: {
     closeSelf() {
