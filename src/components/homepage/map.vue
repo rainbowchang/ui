@@ -34,7 +34,7 @@
             </li>
           </ul>
         </div>
-        <div class="headBottom" style="margin-top:3rem;margin-left:2em;">
+        <div class="headBottom">
           <div id="myChartBottom" :style="{width: '95%', height: '500px'}"></div>
         </div>
       </div>
@@ -84,7 +84,7 @@
         <div id="myChartRightBottom" :style="{width: '95%', height: '25%'}"></div>
         <div class="infolist">
           <ul>
-            <li class="title" style="white-space: nowrap;font-size:0.9rem;">
+            <li class="title" style="white-space: wrapper;font-size:0.9rem;">
               <div>龙门移动式</div>
               <div>卧式加工中心</div>
               <div>立式加工中心</div>
@@ -289,10 +289,9 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       var myChartContainer = document.getElementById("myChartChina");
       var resizeMyChartContainer = function() {
-        myChartContainer.style.width = 150 + "%"; //页面一半的大小
+        myChartContainer.style.width = 100 + "%"; //页面一半的大小
 
         myChartContainer.style.height = 50 + "%"; //页面一半的大小
-
       };
       resizeMyChartContainer();
       var myChartChina = this.$echarts.init(myChartContainer);
@@ -487,7 +486,7 @@ export default {
           textStyle: {
             color: "white"
           },
-          bottom: -8,
+          bottom: -3,
           left: "center",
           data: [
             "龙门移动式",
@@ -548,6 +547,7 @@ h2 {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   color: white;
+  overflow-y: auto; 
 }
 .titletip {
   height: 5%;
@@ -574,20 +574,24 @@ h2 {
 }
 .content {
   width: 100%;
-  height: 98%;
+  height: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 }
 .content > div {
-  height: 98%;
+  height: auto;
 }
 .mapDiv {
   width: 50%;
   height: 50%;
   padding: 10px;
   box-sizing: border-box;
+}
+.headBottom{
+  margin-top:3rem;
+  margin-left:2em;
 }
 .mapCon .title {
   position: absolute;
@@ -615,7 +619,7 @@ h2 {
 }
 .leftcontent {
   width: 29%;
-  height: 90%;
+  height: auto;
   padding-top: 2em;
   border-right: 2px solid #28b2f0;
 }
@@ -647,17 +651,17 @@ h2 {
   text-align: center;
 }
 .echartinfo > ul > li > .font {
-  padding-left: 1em;
+  padding-left: 2em;
 }
 .infolist .title {
   background-color: #3364c6;
   border: 0;
 }
 .title {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: bold;
   word-break: break-all;
-  padding: 4px;
+  padding: 1%;
 }
 .title > div {
   padding:0 6px !important;
@@ -724,6 +728,7 @@ h2 {
   text-align: center;
 }
 .with15 {
+  white-space: nowrap;
   width: 15%;
   text-align: left;
 }
@@ -732,9 +737,11 @@ h2 {
   text-align: left;
 }
 .title1 {
+  white-space: nowrap;
   border: 0;
   font-size: 16px;
   font-weight: bold;
+
 }
 .statusline {
   width: 90%;

@@ -9,9 +9,9 @@
           <template>
             <table class="table-a" border="1" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item, i) in tableList" :key="i">
-                <td>{{ item.name + "坐标" }}</td>
+                <td width="25%" height="25%">{{ item.name + "坐标" }}</td>
                 <td>{{item.number}}</td>
-                <td>
+                <td width="20%" height="20%">
                   <button v-if="item.number" @click="editAxisDialog(item,i)" class="bottonStyle">编辑</button>
                 </td>
               </tr>
@@ -164,6 +164,7 @@ export default {
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
+        console.log("twl", val);
       this.tableList = val.table;
       this.sn = val.sn;
       this.getOverrides("myChart1", val.spindleOverrides);
@@ -175,6 +176,7 @@ export default {
   methods: {
     // 倍率:主轴，进给
     getOverrides(charName, overrides) {
+      console.log("overides:", overrides);
       let data = {
         value: overrides
       };
@@ -245,6 +247,7 @@ export default {
                   default:
                     return value;
                 }
+
               }
             },
             detail: {
@@ -364,8 +367,8 @@ export default {
               lineStyle: {
                 // 属性lineStyle控制线条样式
                 color: [
-                  [data.value / 30000, "#2d8cf0"],
-                  [0.8, "#2d8cf0"],
+                  [data.value / 30000, "gray"],
+                  [0.8, "green"],
                   [0.9, "#e6a23c"],
                   [1, "#ed4014"]
                 ]
@@ -573,7 +576,7 @@ export default {
   td {
     text-align: center;
     .bottonStyle {
-      width: 34px;
+      width: 100%;
       border: 0;
     }
   }
@@ -582,7 +585,7 @@ export default {
   td {
     text-align: center;
     .bottonStyle {
-      width: 40px;
+      width: 100%;
       border: 0;
     }
   }
@@ -591,13 +594,13 @@ export default {
   position: relative;
     bottom: 23%;
   /* text-align: center; */
-  left: 35%;
+  left: 43%;
   /* right: 10px; */
 }
 .myChart2Title {
   position: relative;
-  bottom: 20%;
-  right: -36%;
+  bottom: 23%;
+  right: -42%;
 }
 .backopt {
   opacity: 0.3;
