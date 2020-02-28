@@ -64,45 +64,51 @@
       </div>
       <!-- 首页右侧 -->
       <div class="echartinfo" style="margin-top:0;">
-        <div id="myChartRight" :style="{width: '95%', height: '32%'}"></div>
-        <div class="infolist" style="margin-top:0;">
-          <ul>
-            <li class="title">
-              <div>加工</div>
-              <div>故障</div>
-              <div>停机</div>
-              <div>未连接</div>
-            </li>
-            <li style="font-size:0.8rem;">
-              <div>{{statusNum[0].value}}</div>
-              <div>{{statusNum[1].value}}</div>
-              <div>{{statusNum[2].value}}</div>
-              <div>{{statusNum[3].value}}</div>
-            </li>
-          </ul>
+        <div>
+          <div id="myChartRight" :style="{width: '95%', height: '62%'}"></div>
+          <div class="infolist1" style="margin-top:0;">
+            <ul>
+              <li class="title">
+                <div>加工</div>
+                <div>故障</div>
+                <div>停机</div>
+                <div>未连接</div>
+              </li>
+              <li style="font-size:0.8rem;">
+                <div>{{statusNum[0].value}}</div>
+                <div>{{statusNum[1].value}}</div>
+                <div>{{statusNum[2].value}}</div>
+                <div>{{statusNum[3].value}}</div>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div id="myChartRightBottom" :style="{width: '95%', height: '25%'}"></div>
-        <div class="infolist">
-          <ul>
-            <li class="title" style="white-space: wrapper;font-size:0.9rem;">
-              <div>龙门移动式</div>
-              <div>卧式加工中心</div>
-              <div>立式加工中心</div>
-              <div>横梁移动式</div>
-              <div style="font-size:0.8rem">
-                高速型材
-                <br />复材加工中心
-              </div>
-            </li>
-            <li style="font-size:0.8rem;">
-              <div>144</div>
-              <div>48</div>
-              <div>149</div>
-              <div>72</div>
-              <div>74</div>
-            </li>
-          </ul>
+        
+        <div>
+          <div id="myChartRightBottom" :style="{width: '95%', height: '86%'}"></div>
+          <div class="infolist1">
+            <ul>
+              <li class="title" style="white-space: wrapper;font-size:0.9rem;">
+                <div>龙门移动式</div>
+                <div>卧式加工中心</div>
+                <div>立式加工中心</div>
+                <div>横梁移动式</div>
+                <div style="font-size:0.8rem">
+                  高速型材
+                  <br />复材加工中心
+                </div>
+              </li>
+              <li style="font-size:0.8rem;">
+                <div>144</div>
+                <div>48</div>
+                <div>149</div>
+                <div>72</div>
+                <div>74</div>
+              </li>
+            </ul>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -350,9 +356,11 @@ export default {
           titleList.push(n.area);
           seriesList.push(n.total);
         });
+        console.log("series list:",seriesList);
       }
+      let myChartBottomElement = document.getElementById("myChartBottom");
       let myChart = this.$echarts.init(
-        document.getElementById("myChartBottom")
+        myChartBottomElement 
       );
       var option = {
         title: {
@@ -398,7 +406,7 @@ export default {
               }
             },
             axisLabel: {
-              rotate: 30
+              rotate: 50
             }
           }
         ],
@@ -422,13 +430,17 @@ export default {
             name: "直接访问",
             type: "bar",
             barWidth: "50%",
-            data: seriesList
+            data: [0.5, 1,1,1,1,1,1]
           }
         ]
       };
       // var myChart = echarts.init(document.getElementById('myChartBottom'))
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+      // myChart.onresize = function(){
+      //   myChart.resize();
+      // }
+      window.addEventListener('resize',() => { myChart.resize(); })
     },
     getRight(data) {
       let option = {
@@ -445,7 +457,7 @@ export default {
           textStyle: {
             color: "white"
           },
-          bottom: 10,
+          bottom: -2,
           left: "center",
           data: ["加工", "故障", "停机", "未连接"]
         },
@@ -470,6 +482,7 @@ export default {
       let myChart = this.$echarts.init(document.getElementById("myChartRight"));
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+      window.addEventListener('resize',() => { myChart.resize(); })
     },
     getRightBottom() {
       let option = {
@@ -486,7 +499,7 @@ export default {
           textStyle: {
             color: "white"
           },
-          bottom: -3,
+          bottom: -2,
           left: "center",
           data: [
             "龙门移动式",
@@ -500,7 +513,7 @@ export default {
           {
             type: "pie",
             radius: ["42%", "53%"], // 半径
-            center: ["50%", "50%"],
+            center: ["50%", "45%"],
             selectedMode: "single",
             data: [
               { value: 140, name: "龙门移动式" },
@@ -525,6 +538,7 @@ export default {
       );
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+      window.addEventListener('resize',() => { myChart.resize(); })
     },
     back() {
       this.$router.push("index");
@@ -627,18 +641,36 @@ h2 {
   width: 29%;
   height: 90%;
   padding-top: 2em;
+  display: flex;
+  flex-wrap: wrap;
+}
+.echartinfo > div {
+  width: 100%;
 }
 .infolist {
   margin-top: 4rem;
   width: 100%;
   height: auto;
 }
+
+.infolist1 {
+  margin-top: -5rem;
+  width: 100%;
+  height: auto;
+}
+
 .infolist > ul {
   width: 86%;
   height: auto;
   margin: 0 auto;
 }
-.infolist > ul > li {
+.infolist1 > ul {
+  width: 94%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.infolist > ul > li,.infolist1 > ul > li {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -646,14 +678,14 @@ h2 {
   margin-bottom: 1em;
   border-bottom: 1px solid #1c92b6;
 }
-.infolist > ul > li > div {
+.infolist > ul > li > div ,.infolist1 > ul > li > div{
   width: 25%;
   text-align: center;
 }
 .echartinfo > ul > li > .font {
   padding-left: 2em;
 }
-.infolist .title {
+.infolist .title ,.infolist1 .title{
   background-color: #3364c6;
   border: 0;
 }
