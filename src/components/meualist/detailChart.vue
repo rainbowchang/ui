@@ -167,15 +167,15 @@ export default {
         console.log("twl", val);
       this.tableList = val.table;
       this.sn = val.sn;
-      this.getOverrides("myChart1", val.spindleOverrides);
-      this.getOverrides("myChart2", val.feedOverrides);
+      this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
+      this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
       this.getSpindleSpeed(val.spindleSpeed);
       this.getfeedSpeed(val.feedSpeed);
     }
   },
   methods: {
     // 倍率:主轴，进给
-    getOverrides(charName, overrides) {
+    getOverrides(charName, overrides, min, max, splitNumber) {
       console.log("overides:", overrides);
       let data = {
         value: overrides
@@ -191,13 +191,13 @@ export default {
         },
         series: [
           {
-            max: 120,
-            min: 50,
+            max: max,
+            min: min,
             textStyle: {
               fontSize: 13
             },
             color: ["gray", "transparent"],
-            splitNumber: 14,
+            splitNumber: splitNumber,
             name: "",
             type: "gauge",
             //仪表盘轴线相关配置。
@@ -229,6 +229,7 @@ export default {
               show: true,
               distance: -60,
               formatter: function(value) {
+                console.log("formatter:", value);
                 switch (value) {
                   case 55:
                     return ""; //隐藏
