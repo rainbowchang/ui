@@ -26,12 +26,15 @@
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}</td>
-                <td>
-                  <Progress :percent="item.percent" hide-info :stroke-width="20" text-inside></Progress>
+                <td style="width:78%;">
+                  <Progress :percent="item.percent" hide-info :stroke-width="20"></Progress>
+                </td>
+                 <td>
+                  <span>{{item.load + "%"}}</span>
                 </td>
                 <td style="width:45px;">
-                  <button v-if="item.showFlag" @click="handleSubmit(item,i)" class="bottonStyle">隐藏</button>
-                  <button v-if="!item.showFlag" @click="handleSubmit(item,i)" class="bottonStyle">显示</button>
+                  <button v-if="item.showFlag" @click="handleSubmit(item,i, false)" class="bottonStyle">隐藏</button>
+                  <button v-if="!item.showFlag" @click="handleSubmit(item,i, true)" class="bottonStyle">显示</button>
                 </td>
               </tr>
             </table>
@@ -39,10 +42,10 @@
         </div>
       </div>
       <div class="title unread">
-        当前给进
+        当前进给
         <div>
           <!-- <div style="text-align: right;">1805mm/min</div> -->
-          <div id="myChart5" style="width:35vw;height:90px;"></div>
+          <div id="myChart5" style="width:400%;height:200%;"></div>
           <!-- <ruleLine :number="1805"/> -->
           </div>
         </div>
@@ -164,7 +167,6 @@ export default {
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
-        console.log("twl", val);
       this.tableList = val.table;
       this.sn = val.sn;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
@@ -229,7 +231,6 @@ export default {
               show: true,
               distance: -60,
               formatter: function(value) {
-                console.log("formatter:", value);
                 switch (value) {
                   case 55:
                     return ""; //隐藏
@@ -508,20 +509,31 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    handleSubmit(item, index) {
-      this.tableList[index].showFlag = !this.tableList[index].showFlag;
+    handleSubmit(item, index, show) {
+      this.tableList[index].showFlag = show;
+      var param = {
+          currentName: item.name,
+          sn: this.sn,
+          show: show
+      }
+      post("/plcInfo/updateAxis", param,response=>{
+         var result = response.data;
+         if(result.status == "fail"){
+           alert(result.message);
+         }
+      });
       console.log(item, index);
     },
     editAxisDialog(item, index) {
       console.log(item, index);
       this.itemParam = item;
       this.inputContent = item.name;
-      this.itemParam.oldName = item.name;
+      this.itemParam.currentName = item.name;
       this.dialogVisible = true;
     },
     editAxisName(name) {
       console.log("name",name);
-      this.itemParam.name = name;
+      this.itemParam.newName = name;
       this.itemParam.sn = this.sn;
       post("/plcInfo/updateAxis", this.itemParam,response=>{
          var result = response.data;
@@ -588,6 +600,8 @@ export default {
     .bottonStyle {
       width: 100%;
       border: 0;
+      white-space: nowrap;
+      background-color:lightGray;
     }
   }
 }
