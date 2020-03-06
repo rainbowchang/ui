@@ -430,7 +430,7 @@ export default {
             name: "直接访问",
             type: "bar",
             barWidth: "50%",
-            data: [0.5, 1,1,1,1,1,1]
+            data: seriesList
           }
         ]
       };
