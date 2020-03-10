@@ -20,7 +20,7 @@
           <span @click="register">用户注册</span>
         </div>
         <FormItem class="loginbtn">
-          <Button @click="handleSubmit('formInline')">登陆</Button>
+          <Button @click="handleSubmit('formInline')">登录</Button>
         </FormItem>
       </Form>
     </div>
@@ -70,7 +70,7 @@ export default {
             if (valid && reponse.data.status == "success") {
               localStorage.setItem("UserName", parameter.username);
               localStorage.setItem("Flag", true);
-              this.$Message.success("登陆成功!");
+              this.$Message.success("登录成功!");
               router.push({path: "/index"});  
           } else {
               this.$Message.error("用户名或密码错误!");

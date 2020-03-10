@@ -3,8 +3,8 @@
     <div class="numleft">
       <div class="title unread" style="margin-bottom:6px;">
         实时数据
-        <span style="margin-right:2em;">当前刀位号：1</span>
-        <span>当前程序名：NC0035</span>
+        <span style="margin-right:2em;">当前刀位号：{{toolNumber}}</span>
+        <span>当前程序名：{{currentProgram}}</span>
         <div>
           <template>
             <table class="table-a" border="1" cellspacing="0" cellpadding="1" style="width: 100%;">
@@ -169,6 +169,8 @@ export default {
       console.log("前一个页面传递来的信息", val);
       this.tableList = val.table;
       this.sn = val.sn;
+      this.toolNumber=val.toolNumber;
+      this.currentProgram=val.currentProgram;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
       this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
       this.getSpindleSpeed(val.spindleSpeed);
