@@ -7,5 +7,6 @@ RUN npm install && npm run build
 FROM nginx
 RUN mkdir /app
 COPY --from=0 /app/dist /app
-RUN echo build at $(date), commit ${GIT_COMMIT}@${GIT_URL} >/home/version
+ARG VERSION
+RUN echo build at $(date), commit ${VERSION} >/home/version
 COPY nginx.conf /etc/nginx/nginx.conf
