@@ -1,6 +1,7 @@
 <template>
   <div class="center-warp">
     <div class="numleft">
+      <h3 style="margin-bottom:2%">当前设备：{{sn.toUpperCase()}}：</h3>
       <div class="title unread" style="margin-bottom:6px;">
         实时数据
         <span style="margin-right:2em;">当前刀位号：{{toolNumber}}</span>
