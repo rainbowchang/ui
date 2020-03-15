@@ -35,7 +35,7 @@
                 <!-- 中间图表 -->
                 <div class="listmid">
                   <div>
-                    <div class="statusline">
+                    <div class="statusline" style=" margin-bottom: -1.8%">
                       <!-- status:  1加工，2故障，3停机，4关机，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
@@ -44,14 +44,14 @@
                         :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'off':'interrupt'"
                       ></div>
                     </div>
-                    <div class="timeline">
+                   <!--  <div class="timeline">
                       <div></div>
                       <div></div>
                       <div></div>
                       <div></div>
                       <div></div>
                       <div></div>
-                    </div>
+                    </div> -->
                     <div class="timeline timeshow">
                       <div>04:00</div>
                       <div>08:00</div>
@@ -649,20 +649,20 @@ export default {
 }
 .statusline {
   width: 100%;
-  height: 18px;
+  height: 10%;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 .statusline > div {
-  height: 12px;
+  height: -1%;
   border: 0;
   border-radius: 0;
   margin: 0;
 }
 .timeline {
   width: 100%;
-  height: 18px;
+  height: 10%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -670,7 +670,7 @@ export default {
 }
 .timeline > div {
   width: 13%;
-  height: 12px;
+  height: 10%;
   border-right: 1px solid #e9e9e9;
 }
 .timeshow {
