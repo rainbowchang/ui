@@ -12,7 +12,7 @@
                 <td width="25%" height="25%">{{ item.name + "坐标" }}</td>
                 <td>{{item.number}}</td>
                 <td width="20%" height="20%">
-                  <button v-if="item.number" @click="editAxisDialog(item,i)" class="bottonStyle">编辑</button>
+                  <button @click="editAxisDialog(item,i)" class="bottonStyle">编辑</button>
                 </td>
               </tr>
             </table>
@@ -184,6 +184,10 @@ export default {
       let data = {
         value: overrides
       };
+      let showValue = data.value;
+      if(data.value < min){
+        showValue = min;
+      }
       let option = {
         tooltip: {
           enterable: true,
@@ -210,7 +214,7 @@ export default {
               lineStyle: {
                 // 属性lineStyle控制线条样式
                 color: [
-                  [data.value / 140, "#2d8cf0"],
+                  [(showValue - min) / (120-min), "#2d8cf0"],
                   [1, "gray"]
                 ]
               }
