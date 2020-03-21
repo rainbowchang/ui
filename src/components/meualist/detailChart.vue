@@ -1,8 +1,7 @@
 <template>
   <div class="center-warp">
     <div class="numleft">
-      <h3 style="margin-bottom:2%">当前设备：{{sn.toUpperCase()}}：</h3>
-      <h3 style="margin-bottom:2%">加工件数：{{workPieces}}：</h3>
+      <h3 style="margin-bottom:2%">当前设备：{{sn.toUpperCase()}}, 加工件数：{{workPieces}}</h3>
       <div class="title unread" style="margin-bottom:6px;">
         实时数据
         <span style="margin-right:2em;">当前刀位号：{{toolNumber}}</span>
@@ -44,9 +43,9 @@
         </div>
       </div>
       <div class="title unread">
-        当前进给
+        加工速度
         <div>
-          <!-- <div style="text-align: right;">1805mm/min</div> -->
+          <div style="text-align: right;">{{feedSpeed}}mm/min</div>
           <div id="myChart5" style="width:400%;height:200%;"></div>
           <!-- <ruleLine :number="1805"/> -->
           </div>
@@ -99,6 +98,7 @@ export default {
       inputContent: "",
       sn: "",
       workPieces: 0,
+      feedSpeed: 0,
       itemParam: {},
       dialogVisible: false,
       tableList: [
@@ -173,6 +173,7 @@ export default {
       this.tableList = val.table;
       this.sn = val.sn;
       this.workPieces = val.workPieces;
+      this.feedSpeed = val.feedSpeed;
       this.toolNumber=val.toolNumber;
       this.currentProgram=val.currentProgram;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
