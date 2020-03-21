@@ -2,6 +2,7 @@
   <div class="center-warp">
     <div class="numleft">
       <h3 style="margin-bottom:2%">当前设备：{{sn.toUpperCase()}}：</h3>
+      <h3 style="margin-bottom:2%">加工件数：{{workPieces}}：</h3>
       <div class="title unread" style="margin-bottom:6px;">
         实时数据
         <span style="margin-right:2em;">当前刀位号：{{toolNumber}}</span>
@@ -97,6 +98,7 @@ export default {
     return {
       inputContent: "",
       sn: "",
+      workPieces: 0,
       itemParam: {},
       dialogVisible: false,
       tableList: [
@@ -170,11 +172,12 @@ export default {
       console.log("前一个页面传递来的信息", val);
       this.tableList = val.table;
       this.sn = val.sn;
+      this.workPieces = val.workPieces;
       this.toolNumber=val.toolNumber;
       this.currentProgram=val.currentProgram;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
       this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
-      this.getSpindleSpeed(val.spindleSpeed);
+      this.getSpindleSpeed(val.spindleSpeed, val.maxSpindleSpeed);
       this.getfeedSpeed(val.feedSpeed);
     }
   },
@@ -274,12 +277,15 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getSpindleSpeed(spindleSpeed) {
-      this.getSpindleSpeedOveral(spindleSpeed);
-      this.getSpindleSpeedDetail(spindleSpeed);
+    getSpindleSpeed(spindleSpeed, maxSpindleSpeed) {
+      this.getSpindleSpeedOveral(spindleSpeed,maxSpindleSpeed);
+      this.getSpindleSpeedDetail(spindleSpeed, maxSpindleSpeed);
     },
-    getSpindleSpeedOveral(spindleSpeed){
+    getSpindleSpeedOveral(spindleSpeed, maxSpindleSpeed){
       // 仪表盘所需数据
+      if(maxSpindleSpeed == null){
+        maxSpindleSpeed = 30000;
+      }
       var data = {
         value: spindleSpeed
       };
@@ -299,7 +305,7 @@ export default {
         },
         series: [
           {
-            max: 30000,
+            max: maxSpindleSpeed,
             min: 0,
             splitNumber: 2,
             color: ["grey", "transparent"],
@@ -353,7 +359,10 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    getSpindleSpeedDetail(spindleSpeed) {
+    getSpindleSpeedDetail(spindleSpeed, maxSpindleSpeed) {
+      if(maxSpindleSpeed == null){
+        maxSpindleSpeed = 30000;
+      }
       var data = {
         value: spindleSpeed
       };
@@ -363,7 +372,7 @@ export default {
         },
         series: [
           {
-            max: 30000,
+            max: maxSpindleSpeed,
             min: 0,
             color: ["gray", "transparent"],
             splitNumber: 20,
