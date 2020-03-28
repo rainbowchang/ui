@@ -227,12 +227,13 @@ export default {
       console.log("第二个pie状图上方时间选择", this.dateChoose2);
     },
     getBottom(dateData, workData, bottom) {
+      console.log("workdata", workData);
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(
         document.getElementById(bottom)
       );
       let option = {
-        color: ["#3398DB"],
+        color: ["#3398DB"], 
         tooltip: {
           trigger: "axis",
           formatter: "{c}%",
@@ -478,6 +479,7 @@ export default {
             {"serial":serial,"date":""}, 
             reponse => {
               this.statuslist.splice(i,0,reponse.data);
+              console.log("status list" , this.statuslist);
           });
         }
 
