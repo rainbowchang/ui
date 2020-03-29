@@ -41,7 +41,7 @@
       <div class="map">
         <!-- 中国地图 -->
         <div id="myChartChina" :style="{width: '100%', height: '400px'}"></div>
-        <div class="infolist">
+        <div class="infolist" >
           <ul>
             <li class="title">
               <div>序号</div>
@@ -51,14 +51,16 @@
               <div>客户名称</div>
               <div>报警编号</div>
             </li>
-            <li v-for="(item,index) in infolist" :key="index" style="font-size:0.8rem;">
-              <div>{{item.index}}</div>
-              <div>{{item.warningTime}}</div>
-              <div>{{item.plcType}}</div>
-              <div>{{item.sn}}</div>
-              <div>{{item.name}}</div>
-              <div>{{item.warningCode}}</div>
-            </li>
+            <div style="overflow-y:scroll; overflow-x:scroll;">
+              <li v-for="(item,index) in infolist" :key="index" style="font-size:0.8rem;">
+                <div>{{item.index}}</div>
+                <div>{{item.warningTime}}</div>
+                <div>{{item.plcType}}</div>
+                <div>{{item.sn}}</div>
+                <div>{{item.name}}</div>
+                <div>{{item.warningCode}}</div>
+              </li>
+          </div>
           </ul>
         </div>
       </div>
@@ -668,6 +670,15 @@ h2 {
   width: 94%;
   height: auto;
   margin: 0 auto;
+}
+
+.infolist > ul > div > li{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #1c92b6;
 }
 
 .infolist > ul > li,.infolist1 > ul > li {
