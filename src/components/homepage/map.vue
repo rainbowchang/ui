@@ -34,7 +34,7 @@
             </li>
           </ul>
         </div>
-        <div class="headBottom">
+        <div class="headBottom" style="overflow-y:scroll; overflow-x:scroll;">
           <div id="myChartBottom" :style="{width: '95%', height: '500px'}"></div>
         </div>
       </div>
@@ -652,7 +652,7 @@ h2 {
 .infolist {
   margin-top: 4rem;
   width: 100%;
-  height: auto;
+  height: 50%;
 }
 
 .infolist1 {
@@ -748,7 +748,7 @@ h2 {
 }
 .headList {
   width: 100%;
-  height: auto;
+  height: 50%;
 }
 .headList > ul {
   width: 86%;
