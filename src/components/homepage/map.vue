@@ -47,7 +47,7 @@
               <div>序号</div>
               <div>报警时间</div>
               <div>机床型号</div>
-              <div>机床序列号</div>
+              <div>出厂编号</div>
               <div>客户名称</div>
               <div>报警编号</div>
             </li>
