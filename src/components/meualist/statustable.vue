@@ -85,8 +85,9 @@ export default {
                     params.row.status == "加工"
                       ? "#19be6b"
                       : params.row.status == "故障"
-                      ? "#ed4014"
-                      : "#808695",
+                      ? "#ed4014": params.row.status == "停机"
+                      ? "#fffc02": params.row.status == "未连接"?
+                      "#808080": "#e9e9e9",
                   borderRadius: "50%",
                   marginRight: "8px"
                 }
