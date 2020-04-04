@@ -65,12 +65,14 @@
         </div>
       </div>
       <div class="title unread" style="display: flex;white-space: nowrap;">
-        <span style="width:30%">主轴转速</span>
+        <span style="width:30%">主轴负载/转速</span>
         <div style="width: 310px;height: 200px;">
           <div id="myChart3" style="width: 250px;height: 300px;margin:0em;"></div>
+          <div class="myChart2Title">负载</div>
         </div>
         <div style="width: 310px;height: 200px;">
           <div id="myChart4" style="width: 250px;height: 300px;margin:0em;"></div>
+          <div class="myChart2Title">转速</div>
         </div>
       </div>
     </div>
@@ -179,11 +181,15 @@ export default {
       this.currentProgram=val.currentProgram;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
       this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
+      this.getOverrides("myChart3", this.getSpindleLoad(), 0,100, 10);
       this.getSpindleSpeed(val.spindleSpeed, val.maxSpindleSpeed);
       this.getfeedSpeed(val.feedSpeed);
     }
   },
   methods: {
+    getSpindleLoad(){
+      return this.tableList[6].load;
+    },
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
       console.log("overides:", overrides);
@@ -280,7 +286,7 @@ export default {
       myChart.setOption(option);
     },
     getSpindleSpeed(spindleSpeed, maxSpindleSpeed) {
-      this.getSpindleSpeedOveral(spindleSpeed,maxSpindleSpeed);
+      //this.getSpindleSpeedOveral(spindleSpeed,maxSpindleSpeed);
       this.getSpindleSpeedDetail(spindleSpeed, maxSpindleSpeed);
     },
     getSpindleSpeedOveral(spindleSpeed, maxSpindleSpeed){
@@ -377,7 +383,7 @@ export default {
             max: maxSpindleSpeed,
             min: 0,
             color: ["gray", "transparent"],
-            splitNumber: 20,
+            splitNumber: 10,
             center: ["50%", "50%"], // 仪表盘位置(圆心坐标)
             name: "业务指标",
             type: "gauge",
