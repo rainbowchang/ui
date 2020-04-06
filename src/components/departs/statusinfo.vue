@@ -233,6 +233,10 @@ export default {
         document.getElementById(bottom)
       );
       let option = {
+         title: {
+            text: "阶段时间机床利用率",
+            left: 'center'
+         },
         color: ["#3398DB"], 
         tooltip: {
           trigger: "axis",
@@ -263,6 +267,7 @@ export default {
         ],
         yAxis: [
           {
+            name:'利用率占比',
             type: "value",
             max: 100,
             axisLabel: {formatter: "{value} %"}
@@ -282,8 +287,6 @@ export default {
           }
         ]
       };
-      // var myChart = echarts.init(document.getElementById('myChartBottom'))
-      // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
     getpie(pieData, chart) {
@@ -323,8 +326,7 @@ export default {
           }
         ]
       };
-      // var myChart = echarts.init(document.getElementById('myChart2'))
-      // // 使用刚指定的配置项和数据显示图表。
+      //使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
     getBottom2() {
