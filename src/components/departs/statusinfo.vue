@@ -35,7 +35,7 @@
                 <!-- 中间图表 -->
                 <div class="listmid">
                   <div>
-                    <div class="statusline" style=" margin-bottom: -1.8%">
+                    <div class="statusline" style=" margin-bottom: -1.4%">
                       <!-- status:  1加工，2故障，3停机，4关机，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
