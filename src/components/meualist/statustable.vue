@@ -22,7 +22,7 @@
         ></Table>
         <Button type="primary" icon="ios-search" class="searchbtn" @click="tostatusInfo">按时间序列查询</Button>
         <!-- page-sizes分页数组，page-size分页当前一页的条数，total总条数 -->
-        <Page style="position:absolute;bottom:1em;" :total="100" show-elevator show-sizer />
+        <Page style="position:absolute;bottom:0em; margin-top: 10%" :total="100" show-elevator show-sizer />
       </div>
       <Modal v-model="statusinfoshow" class="statusstyle" fullscreen footer-hide>
         <statusinfo :statusinfo="{selections,statusinfoshow}" @modelshow="modelshow"></statusinfo>
@@ -201,15 +201,15 @@ export default {
 .wrapperd {
   width: 100%;
   height: 100%;
-  margin: 1% auto;
+  margin: 0% auto;
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  overflow: hidden;
+  /*overflow: auto;*/
 }
 .wrapper > div {
-  height: 100%;
+  height: 90%;
   background-color: white;
   border-radius: 3px;
 }
@@ -222,7 +222,7 @@ export default {
 }
 .tableinfo {
   width: 100%;
-  padding: 2em 1em;
+  padding: 2em -1em;
 }
 .font {
   font-size: 16px;
