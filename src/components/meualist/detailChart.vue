@@ -55,7 +55,7 @@
     <div class="numright">
       <div class="title unread" style="display: flex;white-space: nowrap;">
         <span style="width:30%;">倍率</span>
-        <div style="width: 310px;height: 200px;margin:0em;">
+        <div style="width: 310px;height: 200px;margin:0em;margin-right:2em">
           <div id="myChart1" style="width: 250px;height: 250px;"></div>
           <div class="myChart1Title">主轴</div>
         </div>
@@ -67,7 +67,7 @@
       <div class="title unread" style="display: flex;white-space: nowrap;">
         <span style="width:30%">主轴负载/转速</span>
         <div style="width: 310px;height: 200px;">
-          <div id="myChart3" style="width: 250px;height: 300px;margin:0em;"></div>
+          <div id="myChart3" style="width: 250px;height: 300px;margin-right:1em;"></div>
           <div class="myChart2Title">负载</div>
         </div>
         <div style="width: 310px;height: 200px;">
@@ -194,7 +194,7 @@ export default {
     getOverrides(charName, overrides, min, max, splitNumber) {
       console.log("overides:", overrides);
       let data = {
-        value: overrides
+        value: Math.abs(overrides)
       };
       let showValue = data.value;
       if(data.value < min){
@@ -393,7 +393,7 @@ export default {
               lineStyle: {
                 // 属性lineStyle控制线条样式
                 color: [
-                  [data.value / 30000, "gray"],
+                  // [data.value / 30000, "gray"],
                   [0.8, "green"],
                   [0.9, "#e6a23c"],
                   [1, "#ed4014"]
@@ -417,6 +417,8 @@ export default {
             axisLabel: {
               show: true,
               color: "gray",
+              fontSize: 10,
+              padding: 2,
               distance: -65,
               formatter: function(value) {
                 switch (value) {

@@ -41,7 +41,7 @@
                         v-for="(value,index) in item.list"
                         :key="index"
                         :style="{width:value.percent}"
-                        :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'off':'interrupt'"
+                        :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'none':'interrupt'"
                       ></div>
                     </div>
                    <!--  <div class="timeline">
@@ -634,6 +634,7 @@ export default {
 .process,
 .breakdown,
 .stop,
+.none,
 .interrupt {
   width: 64px;
   height: 12px;
@@ -646,6 +647,10 @@ export default {
 }
 .stop {
   background-color: #fffc02;
+}
+
+.none{
+  background-color: #C0C0C0
 }
 
 .interrupt {
@@ -666,7 +671,7 @@ export default {
 }
 .timeline {
   width: 100%;
-  height: 10%;
+  height: 4%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -687,6 +692,7 @@ export default {
   border: 0;
   text-align: right;
   transform: translateX(1em);
+  margin-top: 2%
 }
 .currentdata {
   display: flex;
