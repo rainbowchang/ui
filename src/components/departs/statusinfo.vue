@@ -36,7 +36,7 @@
                 <div class="listmid">
                   <div>
                     <div class="statusline" style=" margin-bottom: -1.4%">
-                      <!-- status:  1加工，2故障，3停机，4关机，5断开 -->
+                      <!-- status:  1加工，2故障，3停机，4无状态，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
                         :key="index"
@@ -85,13 +85,13 @@
                   <div>
                     <span>故障占比</span>
                     <i-circle :percent="item.alarmWeight" stroke-color="#ff5500" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">{{item.alarmWeight}}%</span>
+                      <span class="demo-Circle-inner" style="font-size:16px">{{Math.round(item.alarmWeight)}}%</span>
                     </i-circle>
                   </div>
                   <div>
                     <span>加工占比</span>
                     <i-circle :percent="item.workWeight" stroke-color="#089642" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">{{item.workWeight}}%</span>
+                      <span class="demo-Circle-inner" style="font-size:16px">{{Math.round(item.workWeight)}}%</span>
                     </i-circle>
                   </div>
                 </div>
