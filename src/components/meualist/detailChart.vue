@@ -226,7 +226,7 @@ export default {
               lineStyle: {
                 // 属性lineStyle控制线条样式
                 color: [
-                  [(showValue - min) / (120-min), "#2d8cf0"],
+                  [(showValue - min) / (max-min), "#2d8cf0"],
                   [1, "gray"]
                 ]
               }
