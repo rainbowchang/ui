@@ -22,6 +22,11 @@
             <Option value="common">一般用户</Option>
           </Select>
         </FormItem>
+        <FormItem label="用户角色">
+          <Select v-model="formItem.roles" multiple>
+            <Option v-for="role in roles" :value="role" :key="role">{{role}}</Option>
+          </Select>
+        </FormItem>
         <FormItem label="所属行业">
           <Select v-model="formItem.trade">
             <Option value="工业">工业</Option>
@@ -75,7 +80,8 @@ export default {
         address: ""
       },
       areas: areas,
-      customerIdVisibale: false
+      customerIdVisibale: false,
+      roles:["普通终端用户","高级终端用户"]
     };
   },
 

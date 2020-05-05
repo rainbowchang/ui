@@ -121,18 +121,19 @@ export default {
 
     // tree节点点击事件
     onClick(nodeInfo) {
-      if(this.getParentCustomerNode(nodeInfo) != null ){
-          this.sendNodeContentWhenClick(nodeInfo);
-          return 
-      }
-      var customerNodes = this.getChildrenCustomerNodes(nodeInfo);
-      for(var i in customerNodes){
-        this.sendNodeContentWhenClick(customerNodes[i]);
-      }
+      this.sendNodeContentWhenClick(nodeInfo);
+      // if(this.getParentCustomerNode(nodeInfo) != null ){
+      //     this.sendNodeContentWhenClick(nodeInfo);
+      //     return 
+      // }
+      // var customerNodes = this.getChildrenCustomerNodes(nodeInfo);
+      // for(var i in customerNodes){
+      //   this.sendNodeContentWhenClick(customerNodes[i]);
+      // }
       return;
     },
     sendNodeContentWhenClick(nodeInfo){
-      // console.log(nodeInfo, "node info");
+      console.log(nodeInfo, "node info");
        if(this.timer){
         clearInterval(this.timer);
       }
@@ -223,7 +224,7 @@ export default {
          // alert("没有找到客户，所以，不能在服务端添加相应的节点");
          return;
        }
-       var nodeContent = {parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
+       var nodeContent = {parentKey: nodeInfo.parent.name, parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
        // console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },

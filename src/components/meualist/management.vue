@@ -83,7 +83,7 @@ export default {
   },
   mounted: function () {
      var customerPara = this.customerlist;
-     get("/customer/getAll",function(response){
+     get("/customer/getEndUsers",function(response){
          var customerBeanList = response.data;
          for(var i in customerBeanList){
             customerPara.push(customerBeanList[i]);
