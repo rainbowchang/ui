@@ -11,8 +11,8 @@
     <br>
     <div v-if= "customerVisible" style="padding-top: 10px">
         <span>客户列表：</span>
-        <i-select v-model="customerName" style="width:200px" @on-change = "customerSelectCallback">
-            <i-option v-for="item in customerList" :key = "item.label" :value="item.label">{{ item.label }}</i-option>
+        <i-select :label-in-value="true" v-model="customerId" style="width:200px"  @on-change = "customerSelectCallback">
+            <i-option v-for="item in customerList" :key = "item.key" :value="item.key">{{ item.label }}</i-option>
         </i-select> 
     </div>
     <br>
@@ -59,7 +59,7 @@
                 }
             ],
             nodeContentList: [],
-            customerName: '',
+            customerId: '',
             plcSn: '',
             inputAlias: "",
             customerVisible: false,
@@ -70,7 +70,7 @@
     props: ['customerNode',"parentNode"],
     mounted: function(){
         if(this.customerNode != null){
-          this.customerName = this.customerNode.name;
+          this.customerId = this.customerNode.key;
           this.nodeContentList = [
                 {
                     value: 'plc',
@@ -116,9 +116,10 @@
         }
         return "";
      },
-     customerSelectCallback(value){
-        var key = value;
-        var name = value;
+     customerSelectCallback(val){
+        console.log("label:" + val.label + " value:" + val.value)
+        var key = val.value;
+        var name = val.label;
         if(this.inputAlias != ""){
             name = this.inputAlias;
         }else{
@@ -139,11 +140,11 @@
      inputCallback(){
         switch(this.nodeContent){
           case "customer":
-             if(this.customerName == "" || this.customerName == null){
+             if(this.customerId == "" || this.customerId == null){
                 this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
                 return;
              }
-             this.$emit('showInfo', this.customerName, this.inputAlias, "CUSTOMER");
+             this.$emit('showInfo', this.customerId, this.inputAlias, "CUSTOMER");
              break;
           case "plc":
              if(this.plcSn == "" && this.plcSn == null){
