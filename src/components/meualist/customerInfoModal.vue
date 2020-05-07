@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
- import {post} from "@/apis/restUtils";
+ import {get,post} from "@/apis/restUtils";
 
   export default {
     name: "customerInfos",
@@ -181,11 +181,10 @@
         return customerBean;
      },
      getRemoteCustomers(){
-        var customerBean = this.getCustomerFeature();
-        console.log(customerBean, "customerBean");
-        post("/customer/getCustomerByFeature", customerBean , response=>{
-           this.customerList = response.data;
+        // var customerBean = this.getCustomerFeature();
+        get("/customer/getCustomerByFeature", response=>{
            console.log(response.data, "customerList");
+           this.customerList = response.data;
         });
      },
      getRemotePlcs(){
