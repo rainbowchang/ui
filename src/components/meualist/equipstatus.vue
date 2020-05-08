@@ -224,7 +224,7 @@ export default {
          // alert("没有找到客户，所以，不能在服务端添加相应的节点");
          return;
        }
-       var nodeContent = {parentKey: nodeInfo.parent.name, parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
+       var nodeContent = {parentKey: nodeInfo.parent.key, parentPath: parentPath, nodePath:treePath, key: nodeInfo.key, name:nodeInfo.name, type: nodeInfo.type};
        // console.log("send node contents:" + JSON.stringify(nodeContent));
        post(path, nodeContent,consumer);
     },
