@@ -69,7 +69,9 @@
     },
     props: ['customerNode',"parentNode"],
     mounted: function(){
+
         if(this.customerNode != null){
+          console.log("customer node is:" + this.customerNode.name);
           this.customerId = this.customerNode.key;
           this.nodeContentList = [
                 {

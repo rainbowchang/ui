@@ -100,6 +100,8 @@ export default {
     return {
       inputContent: "",
       sn: "",
+      toolNumber: 0,
+      currentProgram: "",
       workPieces: 0,
       feedSpeed: 0,
       itemParam: {},
@@ -173,6 +175,9 @@ export default {
   watch: {
     detailinfo(val) {
       console.log("前一个页面传递来的信息", val);
+      if(val === null || val === undefined){
+        return;
+      }
       this.tableList = val.table;
       this.sn = val.sn;
       this.workPieces = val.workPieces;
