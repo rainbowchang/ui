@@ -258,6 +258,10 @@ export default {
     this.sendArea();
     this.sendProvince();
     this.sendWarning();
+    this.getBottom();
+    this.getRight(this.statusNum);
+    this.getRightBottom();
+    this.drawLine();
   },
   methods: {
     sendArea(){
@@ -266,16 +270,18 @@ export default {
         areaPaths.push("/按区域分类/" + e)
       })
       post("/organization/getAreaPlcInfo", areaPaths, reponse => {
-        this.headlist = reponse.data;
-        this.headlist.forEach(e => {
-          this.statusNum[0].value += e.firstNum;
-          this.statusNum[1].value += e.secondNum;
-          this.statusNum[2].value += e.thridNum;
-          this.statusNum[3].value += (e.total - (e.firstNum + e.secondNum + e.thridNum));
-        })
-        this.getBottom();
-        this.getRight(this.statusNum);
-        this.getRightBottom();
+        if(reponse.status == 200) {
+          this.headlist = reponse.data;
+          this.headlist.forEach(e => {
+            this.statusNum[0].value += e.firstNum;
+            this.statusNum[1].value += e.secondNum;
+            this.statusNum[2].value += e.thridNum;
+            this.statusNum[3].value += (e.total - (e.firstNum + e.secondNum + e.thridNum));
+          })
+          this.getBottom();
+          this.getRight(this.statusNum);
+          this.getRightBottom();
+        }
       });
     },
 
@@ -283,13 +289,17 @@ export default {
       var provincePaths = [];
       provinces.forEach(e => provincePaths.push("/按区域分类/" + getAreaByProvince(e) + "/" + e));
       post("/organization/getProvincePlcInfo", provincePaths, reponse => {
-        this.drawLine(reponse.data);
+        if(reponse.status == 200) {
+          this.drawLine(reponse.data);
+        }
       })
     },
     
     sendWarning(){
       get("/organization/getWarningPlcInfo", reponse => {
-        this.infolist = reponse.data;
+        if(reponse.status == 200){
+          this.infolist = reponse.data;
+        }
       })
     },
 

@@ -9,7 +9,9 @@ export const post = (url, param, consumer) => {
     return axios.post(appConfig.restUrl(url), param,
     {
         headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
+            'Content-Type': 'application/json;charset=UTF-8',
+            'userName' : localStorage.getItem("UserName"),
+            'url' : url
         }
     }).then(response => {
         console.log(response);
@@ -21,7 +23,9 @@ export const get = (url, consumer) => {
     return axios.get(appConfig.restUrl(url),
     {
         headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
+            'Content-Type': 'application/json;charset=UTF-8',
+            'userName' : localStorage.getItem("UserName"),
+            'url' : url
         }
     }).then(response => {
         console.log(response);
