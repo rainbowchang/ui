@@ -1,27 +1,57 @@
 <template>
   <div class="wrapper">
     <div class="loginbox">
-      <Form ref="formDate" class="formlogin" :model="formDate" :rules="ruleInline" inline :label-width="80">
-        <FormItem label="手机号" type="number" prop="mobile" class="labelCss">
-            <i-input v-model="formDate.mobile" placeholder="可用于登录和找回密码">
+      <Form ref="formuser" class="formlogin" :model="formuser" :rules="ruleInline" inline :label-width="80">
+        <FormItem label="手机号" type="number" prop="tel" class="labelCss">
+            <i-input v-model="formuser.tel" placeholder="可用于登录和找回密码">
                 <i-select :model.sync="select1" slot="prepend" style="width: 80px;height: 32px;">
                     <i-option value="+86">+86</i-option>
                 </i-select>
             </i-input>
         </FormItem>
         <FormItem label="用户名" prop="username" class="labelCss">
-          <i-input type="text" v-model="formDate.username" placeholder="请设置用户名"></i-input>
+          <i-input type="text" v-model="formuser.username" placeholder="请设置用户名"></i-input>
         </FormItem>
         <FormItem label="密码" prop="password" class="labelCss">
-          <i-input type="password" v-model="formDate.password" placeholder="请设置登录密码"></i-input>
+          <i-input type="password" v-model="formuser.password" placeholder="请设置登录密码"></i-input>
+        </FormItem>
+        <FormItem label="密码确认" prop="password" class="labelCss">
+          <i-input type="password" v-model="formuser.password" placeholder="请确认登录密码"></i-input>
+        </FormItem>
+        <FormItem label="公司" prop="company" class="labelCss">
+          <i-input type="text" v-model="formuser.company" placeholder="请设置公司名"></i-input>
+        </FormItem>
+        <FormItem label="所属行业">
+          <Select v-model="formuser.trade">
+            <Option value="工业">工业</Option>
+            <Option value="农业">农业</Option>
+            <Option value="服务业">服务业</Option>
+            <Option value="金融">金融</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="地区" prop="area" class="labelCss">
+          <Select v-model="formuser.area" v-on="setArea(formuser.area)">
+            <Option v-for="area in areas" :value="area" :key="area">{{area}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="省份" prop="province" class="labelCss">
+          <Select v-model="formuser.province">
+            <Option v-for="province in provinces" :value="province" :key="province">{{province}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="地址" prop="address" class="labelCss">
+          <i-input type="text" v-model="formuser.address" placeholder="请设置地址"></i-input>
+        </FormItem>
+        <FormItem label="紧急联系人" prop="linkman" class="labelCss">
+          <i-input type="text" v-model="formuser.linkman" placeholder="请设置紧急联系人"></i-input>
         </FormItem>
         <FormItem label="验证码" prop="sessionCode" class="labelCss">
-          <i-input  style="width: 30%;" type="number" v-model="formDate.sessionCode" placeholder="请输入验证码" ></i-input>
+          <i-input  style="width: 30%;" type="number" v-model="formuser.sessionCode" placeholder="请输入验证码" ></i-input>
           <Button v-show="isSended" class="btn-default">{{sendtimer+'秒后获取'}}</Button>
-          <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formDate.mobile)">获取短信验证码</i-button>
+          <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formuser.tel)">获取短信验证码</i-button>
         </FormItem>
         <FormItem class="loginbtn">
-          <Button @click="handleSubmit('formDate')"><span style="margin-left: 45px;">注册</span></Button>
+          <Button @click="handleSubmit('formuser')"><span style="margin-left: 45px;">注册</span></Button>
         </FormItem>
       </Form>
     </div>
@@ -29,7 +59,7 @@
 </template>
 
 <script>
-import {post} from "@/apis/restUtils"
+import {post,areas, getProvinceByArea} from "@/apis/restUtils"
 export default {
   data() {
     return {
@@ -37,10 +67,16 @@ export default {
       sendtimer: 60,
       select1: '+86',
       single: false,
-      formDate: {
-        mobile: '',
+      formuser: {
         username: '',
         password: '',
+        tel: 0,
+        area: '',
+        province: '',
+        address: '',
+        company: '',
+        linkman: '',
+        trade: '',
         sessionCode: ''
       },
       ruleInline: {
@@ -51,7 +87,7 @@ export default {
             trigger: "blur"
           }
         ],
-        mobile: [
+        tel: [
           {
             required: true,
             message: "请输入手机号",
@@ -78,11 +114,15 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      areas: areas,
     };
   },
   methods: {
     //   发送验证码
+    setArea(area){
+      this.provinces = getProvinceByArea(area)
+    },
     sendMoblie(mobile) {
         if (!mobile) {
             this.$Message.error('请输入手机号！')
@@ -106,10 +146,11 @@ export default {
     // 注册
     handleSubmit(name) {
       var router = this.$router;
-      var param = this.formDate;
+      var param = this.formuser;
+      console.log(name)
       this.$refs[name].validate(valid => {
         post("/user/register",param,reponse => {
-          if (valid && reponse.data.status == "success") {
+          if (valid && reponse.data.status == "success") {      
             this.$Message.success("注册成功，请登录!");
             router.push({ path: "/login" })
           } else {
@@ -127,6 +168,9 @@ export default {
 
 <style scoped>
 .wrapper {
+  top: 0;
+  bottom: 0;
+  overflow: auto;
   width: 100%;
   height: 100%;
   background: -webkit-linear-gradient(white, red);
@@ -161,7 +205,7 @@ export default {
   height: auto;
 }
 .loginbtn {
-  width: 60%;
+  width: 50%;
 }
 .loginbtn > div > button {
   width: 100%;
