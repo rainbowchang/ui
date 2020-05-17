@@ -8,6 +8,7 @@
                             <Icon type="ios-boat-outline" size = "30" color="white"/>
                        </div>
                     </div>
+              
                     <div class="layout-nav">
                         <MenuItem name="1">
                             <Icon type="ios-navigate"></Icon>

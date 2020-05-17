@@ -17,7 +17,7 @@ import faraway from "@/components/meualist/faraway"
 import main from "@/components/homepage/main"
 import statusinfo from "@/components/departs/statusinfo"
 import addCustomer from "@/components/customer/addcustomer"
-import userLeftMenu from "@/components/user/userLeftMenu"
+import configCenter from "@/components/user/configCenter"
 
 
 Vue.use(Router)
@@ -41,9 +41,9 @@ export default new Router({
         name: 'login',
         component: login,
     }, {
-        path: '/userLeftMenu',
-        name: 'userLeftMenu',
-        component: userLeftMenu,
+        path: '/configCenter',
+        name: 'configCenter',
+        component: configCenter,
     },{
         path: '/index',
         name: 'index',
