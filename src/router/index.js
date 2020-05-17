@@ -16,8 +16,8 @@ import history from "@/components/meualist/history"
 import faraway from "@/components/meualist/faraway"
 import main from "@/components/homepage/main"
 import statusinfo from "@/components/departs/statusinfo"
-import addwarehouse from "@/components/dialog/addwarehouse"
 import addCustomer from "@/components/customer/addcustomer"
+import userLeftMenu from "@/components/user/userLeftMenu"
 
 
 Vue.use(Router)
@@ -41,6 +41,10 @@ export default new Router({
         name: 'login',
         component: login,
     }, {
+        path: '/userLeftMenu',
+        name: 'userLeftMenu',
+        component: userLeftMenu,
+    },{
         path: '/index',
         name: 'index',
         component: index,
@@ -90,9 +94,5 @@ export default new Router({
             path: 'statusinfo',
             component: statusinfo
         }]
-    },
-    {
-      path: '/addwarehouse',
-      component: addwarehouse  
     }]
 })
