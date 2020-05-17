@@ -1,42 +1,107 @@
 <template>
-    <Menu mode="horizontal" :theme="theme1" active-name="1" width = "50px">
-        <MenuItem name="1">
-            <Icon type="ios-paper" />
-            内容管理
-        </MenuItem>
-        <MenuItem name="2">
-            <Icon type="ios-people" />
-            用户管理
-        </MenuItem>
-        <Submenu name="3">
-            <template slot="title">
-                <Icon type="ios-stats" />
-                统计分析
+  <div style="display: block">
+     <div class="c_button">
+         <Button type="primary">新增</Button>	
+    </div>
+    <div>
+        <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
+            <template slot-scope="{ row }" slot="name">
+               <strong>{{ row.name }}</strong>
+           </template>
+           <template slot-scope="{ row, index }" slot="action">
+               <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+               <Button type="error" size="small" @click="remove(index)">Delete</Button>
             </template>
-            <MenuGroup title="使用">
-                <MenuItem name="3-1">新增和启动</MenuItem>
-                <MenuItem name="3-2">活跃分析</MenuItem>
-                <MenuItem name="3-3">时段分析</MenuItem>
-            </MenuGroup>
-            <MenuGroup title="留存">
-                <MenuItem name="3-4">用户留存</MenuItem>
-                <MenuItem name="3-5">流失用户</MenuItem>
-            </MenuGroup>
-        </Submenu>
-        <MenuItem name="4">
-            <Icon type="ios-construct" />
-            综合设置
-        </MenuItem>
-    </Menu>
-  
-   
+         </Table>
+    </div>
+  </div>
 </template>
 <script>
     export default {
         data () {
             return {
-                theme1: 'light'
+                columns12: [
+                    {
+                        title: 'Name',
+                        slot: 'name',
+                        resizable: true,
+                        width: 180
+                    },
+                    {
+                        title: '类型',
+                        key: 'type',
+                        resizable: true,
+                        width: 180
+                    },
+                    {
+                        title: '内容',
+                        key: 'content'
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        width: 150,
+                        align: 'center'
+                    }
+                ],
+                tableData: [
+                    {
+                        name: 'John Brown',
+                        type: "api",
+                        content: 'New York No. 1 Lake Park'
+                    },
+                    {
+                        name: 'Jim Green',
+                        type: "page",
+                        content: 'London No. 1 Lake Park'
+                    },
+                    {
+                        name: 'Joe Black',
+                        type: "api",
+                        content: 'Sydney No. 1 Lake Park'
+                    },
+                    {
+                        name: 'Jon Snow',
+                        type: "api",
+                        content: 'Ottawa No. 2 Lake Park'
+                    },
+                    {
+                        name: 'Jon Snow',
+                        type: "tree",
+                        content: 'Ottawa No. 2 Lake Park'
+                    },
+                    {
+                        name: 'Jon Snow',
+                        type: "tree",
+                        content: 'Ottawa No. 2 Lake Park'
+                    },
+                    {
+                        name: 'Jon Snow',
+                        type: "tree",
+                        content: 'Ottawa No. 2 Lake Park'
+                    }
+                ]
+            }
+        },
+        methods: {
+            show (index) {
+                this.$Modal.info({
+                    title: 'User Info',
+                    content: `Name：${this.tableData[index].name}<br>Type：${this.tableData[index].type}<br>Content：${this.tableData[index].content}`
+                });
+
+            },
+            remove (index) {
+                this.tableData.splice(index, 1);
             }
         }
-    }
+    };
 </script>
+<style>
+.c_button{
+     display: flex; 
+     justify-content: flex-end; 
+     width: 95%
+}
+</style>
+

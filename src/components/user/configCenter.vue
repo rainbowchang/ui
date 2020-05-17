@@ -29,21 +29,22 @@
                     <BreadcrumbItem><h3>配置管理中心</h3></BreadcrumbItem>
                 </Breadcrumb>
                 <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
-                    <Layout :style="{minHeight: '100vh'}">
-                        <Sider hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed">
-                            <Menu active-name="1" theme="dark" width="auto" :open-names="['1']">
-                                <MenuItem name="1" :style="{margin: '0px 40 '}">
-                                   <Icon type="md-document" />
-                                     用户管理
-                                </MenuItem>
-                                <MenuItem name="2">
-                                  <Icon type="md-chatbubbles" />
-                                    角色管理
-                                </MenuItem>
-                            </Menu>
+                    <Layout :style="{minHeight: '67vh'}">
+                        <Sider hide-trigger collapsible :collapsed-width="78">
+                         <Menu active-name="1" theme="dark" width="auto"  @on-select="showComponent">
+                            <MenuItem name="userManager" :style="{margin: '0px 40 '}">
+                               <Icon type="md-document" />
+                                 用户管理
+                            </MenuItem>
+                            <MenuItem name="abilityManager">
+                              <Icon type="md-chatbubbles" />
+                                能力管理
+                            </MenuItem>
+                        </Menu>
                         </Sider>
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
-                            Content
+                            <userManager v-show="showUserManager" ref = "refUserManager"></userManager>
+                            <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>
                         </Content>
                     </Layout>
                 </Content>
@@ -53,13 +54,35 @@
     </div>
 </template>
 <script>
+    import userManager from "./userManager";
+    import abilityManager from "./abilityManager";
+
     export default {
+        components:{userManager, abilityManager},
         data () {
             return {
-                isCollapsed: false
+                showUserManager: true,
+                showAbilityManager: false
             };
+        },
+        methods:{
+          
+            showComponent(name){
+                switch(name){
+                  case "userManager":
+                     this.showUserManager = true;
+                     this.showAbilityManager = false;
+                     break;
+                  case "abilityManager":
+                     this.showUserManager = false;
+                     this.showAbilityManager = true;
+                     break;
+                   default:
+                      break;
+                }
+            }
         }
-    }
+    };
 </script>
 
 <style scoped>
@@ -71,13 +94,13 @@
     overflow: hidden;
 }
 .layout-logo{
-    width: 100px;
+    width: 50px;
     height: 30px; 
     float: left;
     position: absolute;
     top: 15px;
-    left: 20px;
-    text-align: center;
+    left: 10px;
+    text-align: left;
 }
 .layout-nav{
     width: 420px;
