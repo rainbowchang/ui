@@ -1,6 +1,11 @@
 <template>
   <!-- 箭头椭圆 -->
   <div class="index bcimg">
+    <div class="c_button" v-show="adminFlag">
+         <Button  icon="ios-navigate" type="text" ghost size="large" 
+         @click="adminConfig">配置管理中心
+         </Button> 
+    </div>
     <div class="longcircle">
       <div class="bcimg arrowimg">
         <div class="hello" @click="showModal">
@@ -36,7 +41,8 @@ export default {
       modal1: false,
       showModalFlag: false,
       sendtimer: 5,
-      contentImg: pic1
+      contentImg: pic1,
+      adminFlag: true
     };
   },
   created() {
@@ -79,6 +85,9 @@ export default {
     },
     equips() {
       this.$router.push("meua");
+    },
+    adminConfig(){
+      this.$router.push("configCenter");
     }
   }
 };
@@ -137,6 +146,11 @@ export default {
   top: -45px;
   margin: auto;
   cursor: pointer;
+}
+.c_button{
+     display: flex; 
+     justify-content: flex-end; 
+     width: 95%;
 }
 .spread {
   cursor: pointer;

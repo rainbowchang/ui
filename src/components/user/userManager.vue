@@ -77,7 +77,7 @@
 		                row: row,
 		              },
 		              on:{
-		                showInfo:(key) =>{
+		                onModifyOk:(key) =>{
 		                  alert(key);
 		                }
 		              }
@@ -98,11 +98,14 @@
             },
             showRoles (row){
                 this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${row.name}<br>
+                    title: '角色列表',
+                    content: this.getRoles(row)
+                });
+            },
+            getRoles(row){
+            	return `Name：${row.name}<br>
                               Age：${row.age}<br>
                               Address：${row.address}`
-                });
             }
         }
     };
