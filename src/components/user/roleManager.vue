@@ -1,5 +1,8 @@
 <template>
   <div style="display: block">
+     <div class="c_button">
+         <Button type="primary" size="small">新增</Button>	
+    </div>
     <div>
         <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="name">
@@ -9,6 +12,9 @@
                <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
                <Button type="error" size="small" @click="remove(index)">Delete</Button>
             </template>
+             <template slot-scope="{ row }" slot="abilities">
+               <label class="c_label" @click="showAbilities(row)">{{ row.abilities }} </label>
+           </template>
          </Table>
     </div>
   </div>
@@ -19,20 +25,18 @@
             return {
                 columns12: [
                     {
-                        title: 'Name',
+                        title: '角色名称',
                         slot: 'name',
                         resizable: true,
                         width: 180
                     },
                     {
-                        title: '类型',
-                        key: 'type',
-                        resizable: true,
-                        width: 180
+                        title: '描述',
+                        key: 'description'
                     },
                     {
-                        title: '内容',
-                        key: 'content'
+                        title: '角色',
+                        slot: 'abilities'
                     },
                     {
                         title: '操作',
@@ -44,8 +48,8 @@
                 tableData: [
                     {
                         name: 'John Brown',
-                        type: "api",
-                        content: 'New York No. 1 Lake Park'
+                        description: "api",
+                        abilities: "0个角色"
                     },
                     {
                         name: 'Jim Green',
@@ -90,10 +94,24 @@
             },
             remove (index) {
                 this.tableData.splice(index, 1);
+            },
+            showAbilities (row) {
+                alert(row.abilities);
             }
         }
     };
 </script>
 <style>
+.c_button{
+     display: flex; 
+     justify-content: flex-end; 
+     width: 95%
+}
+.c_label{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
 </style>
 

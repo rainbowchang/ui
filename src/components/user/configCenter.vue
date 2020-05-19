@@ -31,10 +31,14 @@
                 <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
                     <Layout :style="{minHeight: '67vh'}">
                         <Sider hide-trigger collapsible :collapsed-width="78">
-                         <Menu active-name="1" theme="dark" width="auto"  @on-select="showComponent">
+                         <Menu active-name="userManager" theme="dark" width="auto"  @on-select="showComponent">
                             <MenuItem name="userManager" :style="{margin: '0px 40 '}">
                                <Icon type="md-document" />
                                  用户管理
+                            </MenuItem>
+                            <MenuItem name="roleManager">
+                              <Icon type="md-chatbubbles" />
+                                角色管理
                             </MenuItem>
                             <MenuItem name="abilityManager">
                               <Icon type="md-chatbubbles" />
@@ -45,6 +49,7 @@
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                             <userManager v-show="showUserManager" ref = "refUserManager"></userManager>
                             <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>
+                             <roleManager v-show="showRoleManager" ref = "RefRoleManager"></roleManager>
                         </Content>
                     </Layout>
                 </Content>
@@ -55,33 +60,42 @@
 </template>
 <script>
     import userManager from "./userManager";
+    import roleManager from "./roleManager";
     import abilityManager from "./abilityManager";
 
     export default {
-        components:{userManager, abilityManager},
+        components:{userManager, roleManager, abilityManager},
         data () {
             return {
                 showUserManager: true,
-                showAbilityManager: false
+                showAbilityManager: false,
+                showRoleManager:false
             };
         },
         methods:{
-          
             showComponent(name){
+                this.setDefaultValue();
                 switch(name){
                   case "userManager":
                      this.showUserManager = true;
-                     this.showAbilityManager = false;
                      break;
                   case "abilityManager":
-                     this.showUserManager = false;
                      this.showAbilityManager = true;
+                     break;
+                 case "roleManager":
+                     this.showRoleManager = true;
                      break;
                    default:
                       break;
                 }
+            },
+            setDefaultValue(){
+                this.showUserManager = false;
+                this.showAbilityManager = false;
+                this.showRoleManager = false;
             }
         }
+
     };
 </script>
 
