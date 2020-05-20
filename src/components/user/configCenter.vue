@@ -2,24 +2,24 @@
     <div class="layout">
         <Layout>
             <Header>
-                <Menu mode="horizontal" theme="dark" active-name="1">
+                <Menu mode="horizontal" theme="dark" active-name="index"  @on-select="showMenu">
                     <div class="layout-logo">
                        <div style="margin-top: -13px;">
                             <Icon type="ios-boat-outline" size = "30" color="white"/>
                        </div>
                     </div>
                     <div class="layout-nav">
-                        <MenuItem name="1">
+                        <MenuItem name="index">
                             <Icon type="ios-navigate"></Icon>
                             首页
                         </MenuItem>
-                        <MenuItem name="2">
+                        <MenuItem name="equipstatus">
                             <Icon type="ios-keypad"></Icon>
-                            机床平台
+                            设备平台
                         </MenuItem>
-                        <MenuItem name="3">
+                        <MenuItem name="map">
                             <Icon type="ios-analytics"></Icon>
-                            大屏显示
+                            机床分布
                         </MenuItem>
                     </div>
                 </Menu>
@@ -93,7 +93,17 @@
                 this.showUserManager = false;
                 this.showAbilityManager = false;
                 this.showRoleManager = false;
+            },
+            showMenu(name){
+                this.$router.push(name);
+            },
+            showDeviceInfo(){
+                this.$router.push("equipstatus");
+            },
+            showMapInfo(){
+                this.$router.push("map");
             }
+
         }
 
     };
