@@ -18,6 +18,7 @@ import main from "@/components/homepage/main"
 import statusinfo from "@/components/departs/statusinfo"
 import addCustomer from "@/components/customer/addcustomer"
 import configCenter from "@/components/user/configCenter"
+import personalUser from "@/components/user/personalUser"
 
 
 Vue.use(Router)
@@ -44,6 +45,10 @@ export default new Router({
         path: '/configCenter',
         name: 'configCenter',
         component: configCenter,
+    },{
+        path: '/personalUser',
+        name: 'personalUser',
+        component: personalUser,
     },{
         path: '/index',
         name: 'index',

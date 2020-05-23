@@ -1,107 +1,143 @@
 <template>
-  <div style="display: block">
-     <div class="c_button">
-         <Button type="primary">新增</Button>	
+    <div class="layout">
+        <Layout>
+            <Header>
+                <Menu mode="horizontal" theme="dark" active-name="index"  @on-select="showMenu">
+                    <div class="layout-logo">
+                       <div style="margin-top: -13px;">
+                            <Icon type="ios-boat-outline" size = "30" color="white"/>
+                       </div>
+                    </div>
+                     <div class="layout-nav">
+                        <MenuItem name="equipstatus">
+                            <!--<Icon type="ios-keypad"></Icon> -->
+                            <h3>个人信息中心</h3>
+                        </MenuItem>
+                    </div>
+                    <div class="layout-nav">
+                        <MenuItem name="equipstatus">
+                            <Icon type="ios-keypad"></Icon>
+                            <h3>个人信息中心</h3>
+                        </MenuItem>
+                    </div>
+                </Menu>
+            </Header>
+            <Layout :style="{padding: '0 50px'}">
+                <Breadcrumb :style="{margin: '16px 0'}">
+                    <BreadcrumbItem><h3>配置管理中心</h3></BreadcrumbItem>
+                </Breadcrumb>
+                <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
+                    <Layout :style="{minHeight: '67vh'}">
+                        <Sider hide-trigger collapsible :collapsed-width="78">
+                         <Menu active-name="userManager" theme="dark" width="auto"  @on-select="showComponent">
+                            <MenuItem name="userManager" :style="{margin: '0px 40 '}">
+                               <Icon type="md-document" />
+                                 用户管理
+                            </MenuItem>
+                            <MenuItem name="roleManager">
+                              <Icon type="md-chatbubbles" />
+                                角色管理
+                            </MenuItem>
+                            <MenuItem name="abilityManager">
+                              <Icon type="md-chatbubbles" />
+                                能力管理
+                            </MenuItem>
+                        </Menu>
+                        </Sider>
+                        <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
+                            <userManager v-show="showUserManager" ref = "refUserManager"></userManager>
+                            <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>
+                             <roleManager v-show="showRoleManager" ref = "RefRoleManager"></roleManager>
+                        </Content>
+                    </Layout>
+                </Content>
+            </Layout>
+            <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
+        </Layout>
     </div>
-    <div>
-        <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
-            <template slot-scope="{ row }" slot="name">
-               <strong>{{ row.name }}</strong>
-           </template>
-           <template slot-scope="{ row, index }" slot="action">
-               <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
-               <Button type="error" size="small" @click="remove(index)">Delete</Button>
-            </template>
-         </Table>
-    </div>
-  </div>
 </template>
 <script>
+    import userManager from "./userManager";
+    import roleManager from "./roleManager";
+    import abilityManager from "./abilityManager";
+
     export default {
+        components:{userManager, roleManager, abilityManager},
         data () {
             return {
-                columns12: [
-                    {
-                        title: 'Name',
-                        slot: 'name',
-                        resizable: true,
-                        width: 180
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age',
-                        resizable: true,
-                        width: 180
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    },
-                    {
-                        title: '操作',
-                        slot: 'action',
-                        width: 150,
-                        align: 'center'
-                    }
-                ],
-                tableData: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    }
-                ]
-            }
+                showUserManager: true,
+                showAbilityManager: false,
+                showRoleManager:false
+            };
         },
-        methods: {
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.tableData[index].name}<br>Age：${this.tableData[index].age}<br>Address：${this.tableData[index].address}`
-                });
-
+        methods:{
+            showComponent(name){
+                this.setDefaultValue();
+                switch(name){
+                  case "userManager":
+                     this.showUserManager = true;
+                     break;
+                  case "abilityManager":
+                     this.showAbilityManager = true;
+                     break;
+                 case "roleManager":
+                     this.showRoleManager = true;
+                     break;
+                   default:
+                      break;
+                }
             },
-            remove (index) {
-                this.tableData.splice(index, 1);
+            setDefaultValue(){
+                this.showUserManager = false;
+                this.showAbilityManager = false;
+                this.showRoleManager = false;
+            },
+            showMenu(name){
+                this.$router.push(name);
+            },
+            showDeviceInfo(){
+                this.$router.push("equipstatus");
+            },
+            showMapInfo(){
+                this.$router.push("map");
             }
+
         }
+
     };
 </script>
-<style>
-.c_button{
-     display: flex; 
-     justify-content: flex-end; 
-     width: 95%
+
+<style scoped>
+.layout{
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.layout-logo{
+    width: 50px;
+    height: 30px; 
+    float: left;
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    text-align: left;
+}
+.layout-title{
+    width: 300px;
+    margin: 0 auto;
+    text-align: left;
+    margin-left: 20px
+}
+.layout-nav{
+    width: 420px;
+    margin: 0 auto;
+    text-align: right;
+    margin-right: 20px;
+
+}
+.layout-footer-center{
+    text-align: center;
 }
 </style>
-

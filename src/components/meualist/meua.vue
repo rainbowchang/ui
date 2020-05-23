@@ -41,6 +41,9 @@
         <MenuItem name="exit">
           <span>退出</span>
         </MenuItem>
+        <MenuItem name="personalUser">
+          <span>个人中心</span>
+        </MenuItem>
       </Submenu>
     </Menu>
     <div class="viewpage">

@@ -45,7 +45,7 @@
             "no-console": "off",
             "vue/html-self-closing": "off",
             "vue/no-parsing-error": [2, {
-              "x-invalid-end-tag": true
+              "x-invalid-end-tag": false
             }],
             "indent": "off",
             "no-multiple-empty-lines": [0, {"max": 100}],
