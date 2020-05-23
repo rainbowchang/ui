@@ -8,7 +8,7 @@
                             <Icon type="ios-boat-outline" size = "30" color="white"/>
                        </div>
                     </div>
-                     <div class="layout-nav">
+                     <div class="layout-title">
                         <MenuItem name="equipstatus">
                             <!--<Icon type="ios-keypad"></Icon> -->
                             <h3>个人信息中心</h3>
@@ -17,18 +17,18 @@
                     <div class="layout-nav">
                         <MenuItem name="equipstatus">
                             <Icon type="ios-keypad"></Icon>
-                            <h3>个人信息中心</h3>
+                            返回
                         </MenuItem>
                     </div>
                 </Menu>
             </Header>
             <Layout :style="{padding: '0 50px'}">
                 <Breadcrumb :style="{margin: '16px 0'}">
-                    <BreadcrumbItem><h3>配置管理中心</h3></BreadcrumbItem>
+                    <BreadcrumbItem></BreadcrumbItem>
                 </Breadcrumb>
                 <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
                     <Layout :style="{minHeight: '67vh'}">
-                        <Sider hide-trigger collapsible :collapsed-width="78">
+                        <!-- <Sider hide-trigger collapsible :collapsed-width="78">
                          <Menu active-name="userManager" theme="dark" width="auto"  @on-select="showComponent">
                             <MenuItem name="userManager" :style="{margin: '0px 40 '}">
                                <Icon type="md-document" />
@@ -43,7 +43,7 @@
                                 能力管理
                             </MenuItem>
                         </Menu>
-                        </Sider>
+                        </Sider> -->
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                             <userManager v-show="showUserManager" ref = "refUserManager"></userManager>
                             <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>
@@ -125,17 +125,15 @@
     text-align: left;
 }
 .layout-title{
-    width: 300px;
+    width: 200px;
     margin: 0 auto;
-    text-align: left;
-    margin-left: 20px
+    text-align: center;
 }
 .layout-nav{
     width: 420px;
     margin: 0 auto;
     text-align: right;
-    margin-right: 20px;
-
+    margin-left: 90%;
 }
 .layout-footer-center{
     text-align: center;
