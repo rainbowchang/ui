@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+    import {get} from "@/apis/restUtils"
     export default {
         data () {
             return {
@@ -31,11 +32,7 @@
                         width: 180
                     },
                     {
-                        title: '描述',
-                        key: 'description'
-                    },
-                    {
-                        title: '角色',
+                        title: '能力',
                         slot: 'abilities'
                     },
                     {
@@ -48,40 +45,40 @@
                 tableData: [
                     {
                         name: 'John Brown',
-                        description: "api",
                         abilities: "0个角色"
                     },
                     {
                         name: 'Jim Green',
-                        type: "page",
-                        content: 'London No. 1 Lake Park'
+                        abilities: "0个角色"
                     },
                     {
                         name: 'Joe Black',
-                        type: "api",
-                        content: 'Sydney No. 1 Lake Park'
+                        abilities: "0个角色"
                     },
                     {
                         name: 'Jon Snow',
-                        type: "api",
-                        content: 'Ottawa No. 2 Lake Park'
+                        abilities: "0个角色"
                     },
                     {
                         name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park'
+                        abilities: "0个角色"
                     },
                     {
                         name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park'
+                        abilities: "0个角色"
                     },
                     {
                         name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park'
+                        abilities: "0个角色"
                     }
                 ]
+            }
+        },
+        mounted: {
+            function() {
+                get("/admin/getAllRoles", reponse => {
+                    this.tableData = reponse.data;
+                })
             }
         },
         methods: {

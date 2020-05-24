@@ -1,74 +1,52 @@
 <template>
     <Form :model="formItem" :label-width="80">
-        <FormItem label="Input">
-            <Input v-model="formItem.input" placeholder="Enter something..."/>
+        <FormItem label="ID">
+            <Input v-model="formItem.customerId" placeholder="Enter something..."/>
         </FormItem>
-        <FormItem label="Select">
-            <Select v-model="formItem.select">
-                <Option value="beijing">New York</Option>
-                <Option value="shanghai">London</Option>
-                <Option value="shenzhen">Sydney</Option>
-            </Select>
+        <FormItem label="name">
+            <Input v-model="formItem.name" placeholder="Enter something..."/>
         </FormItem>
-        <FormItem label="DatePicker">
-            <Row>
-                <Col span="11">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.date"></DatePicker>
-                </Col>
-                <Col span="2" style="text-align: center">-</Col>
-                <Col span="11">
-                    <TimePicker type="time" placeholder="Select time" v-model="formItem.time"></TimePicker>
-                </Col>
-            </Row>
+        <FormItem label="address">
+            <Input v-model="formItem.address" placeholder="Enter something..."/>
         </FormItem>
-        <FormItem label="Radio">
-            <RadioGroup v-model="formItem.radio">
-                <Radio label="male">Male</Radio>
-                <Radio label="female">Female</Radio>
-            </RadioGroup>
+        <FormItem label="tel">
+            <Input v-model="formItem.tel" placeholder="Enter something..."/>
         </FormItem>
-        <FormItem label="Checkbox">
-            <CheckboxGroup v-model="formItem.checkbox">
-                <Checkbox label="Eat"></Checkbox>
-                <Checkbox label="Sleep"></Checkbox>
-                <Checkbox label="Run"></Checkbox>
-                <Checkbox label="Movie"></Checkbox>
+        <FormItem label="company">
+            <Input v-model="formItem.company" placeholder="Enter something..."/>
+        </FormItem>
+        <FormItem label="roles">
+            <CheckboxGroup v-model="formItem.roles">
+                <Checkbox v-for="role in roles" :key="role" :label=role></Checkbox>
             </CheckboxGroup>
-        </FormItem>
-        <FormItem label="Switch">
-            <i-switch v-model="formItem.switch" size="large">
-                <span slot="open">On</span>
-                <span slot="close">Off</span>
-            </i-switch>
-        </FormItem>
-        <FormItem label="Slider">
-            <Slider v-model="formItem.slider" range></Slider>
-        </FormItem>
-        <FormItem label="Text">
-            <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
-        </FormItem>
-        <FormItem>
-            <Button type="primary">Submit</Button>
-            <Button style="margin-left: 8px">Cancel</Button>
         </FormItem>
     </Form>
 </template>
 <script>
+    import {get} from "@/apis/restUtils"
     export default {
         data () {
             return {
                 formItem: {
-                    input: '',
-                    select: '',
-                    radio: 'male',
-                    checkbox: [],
-                    switch: true,
-                    date: '',
-                    time: '',
-                    slider: [20, 50],
-                    textarea: ''
-                }
+                    roles:[]
+                },
+                roles: [
+                    "普通用户","aaa","bbb","ccc"
+                ],
             }
+        },
+        props: ['row'],
+        mounted: function() {
+            console.log("userManager", this.row)
+            this.formItem = this.row
+            get("/admin/getAllRoleNames", reponse => {
+                this.roles = []
+                this.roles = reponse.data;
+                console.log(reponse.data);
+            })
+        },
+        methods: {
+            
         }
     }
 </script>
