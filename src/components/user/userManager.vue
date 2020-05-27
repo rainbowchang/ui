@@ -7,7 +7,7 @@
            </template>
            <template slot-scope="{ row, index }" slot="action">
                <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row)">编辑</Button>
-               <Button type="error" size="small" @click="remove(index)">删除</Button>
+               <Button type="error" size="small" @click="remove(row,index)">删除</Button>
             </template>
             <template slot-scope="{ row }" slot="roles">
                <label class="c_label" @click="showRoles(row)">{{ row.roles }} </label>
@@ -108,7 +108,11 @@
 		          onOk() {
                     console.log("click ok")
                     post("/admin/modifyUser", row, reponse => {
-                        console.log("Modify reply", reponse.status);
+                        if(reponse.data.status == "fail") {
+                            alert("ModifyUser", reponse.data.status, "该用户不存在");
+                        }else {
+                            console.log("ModifyUser Reply", reponse.status);
+                        }
                     }) 
                     this.$Modal.remove()
                   },
@@ -121,8 +125,12 @@
                   }
 		        });
             },
-            remove (index) {
-                this.tableData.splice(index, 1);
+            remove (row, index) {
+                console.log("user", row)
+                post("/admin/delUser", row, reponse => {
+                    console.log("DelUser Reply", reponse.status)
+                    this.tableData.splice(index, 1);
+                })
             },
             showRoles (row){
                 this.$Modal.info({
@@ -135,9 +143,6 @@
                               Age：${row.age}<br>
                               Address：${row.address}`
             },
-            handleSubmit(){
-                
-            }
         }
     };
 </script>

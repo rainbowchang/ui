@@ -270,7 +270,7 @@ export default {
         areaPaths.push("/按区域分类/" + e)
       })
       post("/organization/getAreaPlcInfo", areaPaths, reponse => {
-        if(reponse.status == 200) {
+        if(reponse.data != "") {
           this.headlist = reponse.data;
           this.headlist.forEach(e => {
             this.statusNum[0].value += e.firstNum;
@@ -289,7 +289,7 @@ export default {
       var provincePaths = [];
       provinces.forEach(e => provincePaths.push("/按区域分类/" + getAreaByProvince(e) + "/" + e));
       post("/organization/getProvincePlcInfo", provincePaths, reponse => {
-        if(reponse.status == 200) {
+        if(reponse.data != "") {
           this.drawLine(reponse.data);
         }
       })
@@ -297,7 +297,7 @@ export default {
     
     sendWarning(){
       get("/organization/getWarningPlcInfo", reponse => {
-        if(reponse.status == 200){
+        if(reponse.data != ""){
           this.infolist = reponse.data;
         }
       })

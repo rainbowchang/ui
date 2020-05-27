@@ -34,16 +34,19 @@ new Vue({
 
 router.beforeEach((to, from, next) => {
     console.log("Enter before", from.path, to.path)
-    if(from.path == '/index'){
-        var userName = localStorage.getItem("UserName");
-        post("/admin/getUserAbilities", userName, reponse => {
-            var urls = reponse.data;
-            if(urls.includes(to.path)){
+    var userName = localStorage.getItem("UserName");
+    if(to.path == "/login" || to.path == "/register" || to.path == "/index") {
+        next()
+        return
+    }
+    post("/admin/getAllWebAbilityNames", userName, reponse => {
+        var urls = reponse.data;
+        urls.forEach(e => {
+            if(to.path == e) {
+                console.log("beforeEach", to.path, e)
                 next();
             }
-        })
-    }else {
-        next();
-    }
+        });
+    })
     
 })

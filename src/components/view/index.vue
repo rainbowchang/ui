@@ -3,7 +3,7 @@
   <div class="index bcimg">
     <div class="c_button" v-show="adminFlag">
          <Button  icon="ios-navigate" type="text" ghost size="large" 
-         @click="adminConfig">配置管理中心
+         @click="adminConfig" v-show="showConfigCenter">配置管理中心
          </Button> 
     </div>
     <div class="longcircle">
@@ -42,7 +42,8 @@ export default {
       showModalFlag: false,
       sendtimer: 5,
       contentImg: pic1,
-      adminFlag: true
+      adminFlag: true,
+      showConfigCenter: false
     };
   },
   created() {
@@ -51,6 +52,9 @@ export default {
     else
       this.closeModal();
     localStorage.setItem("Flag", false);
+    if(localStorage.getItem("UserName") == "admin-manager") {
+      this.showConfigCenter = true;
+    }
   },
   methods: {
     closeSelf() {
