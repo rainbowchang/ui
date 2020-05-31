@@ -28,41 +28,45 @@
                 </Breadcrumb>
                 <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
                     <Layout :style="{minHeight: '67vh'}">
-                        <!-- <Sider hide-trigger collapsible :collapsed-width="78">
-                         <Menu active-name="userManager" theme="dark" width="auto"  @on-select="showComponent">
-                            <MenuItem name="userManager" :style="{margin: '0px 40 '}">
-                               <Icon type="md-document" />
-                                 用户管理
-                            </MenuItem>
-                            <MenuItem name="roleManager">
-                              <Icon type="md-chatbubbles" />
-                                角色管理
-                            </MenuItem>
-                            <MenuItem name="abilityManager">
-                              <Icon type="md-chatbubbles" />
-                                能力管理
-                            </MenuItem>
-                        </Menu>
-                        </Sider> -->
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
-                            <userManager v-show="showUserManager" ref = "refUserManager"></userManager>
-                            <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>
-                             <roleManager v-show="showRoleManager" ref = "RefRoleManager"></roleManager>
+                            <div class="demo-drawer-profile">
+                        <Row>
+                            <Col span="12">
+                                Full Name: Aresn
+                            </Col>
+                            <Col span="12">
+                                Account: aresn@aresn.com
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                City: BeiJing
+                            </Col>
+                            <Col span="12">
+                                Country: China
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                Birthday: May 14, 1991
+                            </Col>
+                            <Col span="12">
+                                Website: <a href="https://dev.iviewui.com" target="_blank">https://dev.iviewui.com</a>
+                                </Col>
+                        </Row>
+                        Message: Hello, Developer
+                    </div>
+
                         </Content>
                     </Layout>
                 </Content>
             </Layout>
-            <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
         </Layout>
     </div>
 </template>
 <script>
-    import userManager from "./userManager";
-    import roleManager from "./roleManager";
-    import abilityManager from "./abilityManager";
 
     export default {
-        components:{userManager, roleManager, abilityManager},
         data () {
             return {
                 showUserManager: true,
@@ -71,22 +75,7 @@
             };
         },
         methods:{
-            showComponent(name){
-                this.setDefaultValue();
-                switch(name){
-                  case "userManager":
-                     this.showUserManager = true;
-                     break;
-                  case "abilityManager":
-                     this.showAbilityManager = true;
-                     break;
-                 case "roleManager":
-                     this.showRoleManager = true;
-                     break;
-                   default:
-                      break;
-                }
-            },
+        
             setDefaultValue(){
                 this.showUserManager = false;
                 this.showAbilityManager = false;
@@ -137,5 +126,14 @@
 }
 .layout-footer-center{
     text-align: center;
+}
+
+.demo-drawer-profile{
+    width: 78%;
+    font-size: 18px;
+    margin-left: 10%
+}
+.demo-drawer-profile .ivu-col{
+    margin-bottom: 20px;
 }
 </style>
