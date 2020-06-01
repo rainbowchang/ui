@@ -32,29 +32,29 @@
                             <div class="demo-drawer-profile">
                         <Row>
                             <Col span="12">
-                                Full Name: Aresn
+                                用户id: ui12345678
                             </Col>
                             <Col span="12">
-                                Account: aresn@aresn.com
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                City: BeiJing
-                            </Col>
-                            <Col span="12">
-                                Country: China
+                                用户名称: 宁庆机床厂
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
-                                Birthday: May 14, 1991
+                                城市: 南京
                             </Col>
                             <Col span="12">
-                                Website: <a href="https://dev.iviewui.com" target="_blank">https://dev.iviewui.com</a>
+                                国家: 中国
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                联系方式: 13458902345
+                            </Col>
+                            <Col span="12">
+                                官网: <a href="https://dev.iviewui.com" target="_blank">https://dev.iviewui.com</a>
                                 </Col>
                         </Row>
-                        Message: Hello, Developer
+                        
                     </div>
 
                         </Content>
