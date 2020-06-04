@@ -32,26 +32,26 @@
                             <div class="demo-drawer-profile">
                         <Row>
                             <Col span="12">
-                                用户id: ui12345678
+                                用户id: {{userData.customerId}}
                             </Col>
                             <Col span="12">
-                                用户名称: 宁庆机床厂
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                城市: 南京
-                            </Col>
-                            <Col span="12">
-                                国家: 中国
+                                用户名称: {{userData.name}}
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
-                                联系方式: 13458902345
+                                城市: {{userData.province}}
                             </Col>
                             <Col span="12">
-                                官网: <a href="https://dev.iviewui.com" target="_blank">https://dev.iviewui.com</a>
+                                地址: {{userData.address}}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                联系方式: {{userData.tel}}
+                            </Col>
+                            <Col span="12">
+                                角色: {{userData.roles}}
                                 </Col>
                         </Row>
                         
@@ -65,14 +65,27 @@
     </div>
 </template>
 <script>
-
+    import {post} from "@/apis/restUtils"
     export default {
         data () {
             return {
                 showUserManager: true,
                 showAbilityManager: false,
-                showRoleManager:false
+                showRoleManager:false,
+                userData: {
+                    'customerId' : "ui12345678",
+                    'name' : '宁庆机床厂',
+                    'province' : '南京',
+                    'address' : '玄武区四牌楼2号',
+                    'tel' : '13458902345',
+                    'roles' : ["ADMIN","ROOT"]
+                }
             };
+        },
+        mounted : function() {
+            post("/customer/getByName", localStorage.getItem("UserName"), reponse => {
+                this.userData = reponse.data
+            })
         },
         methods:{
         
