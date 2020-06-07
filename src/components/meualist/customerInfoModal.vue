@@ -192,7 +192,7 @@
      },
      getRemotePlcs(){
         console.log('customer key: ', this.customerNode.key);
-        post("/agent/view/plcsByCustomer", {"name":this.customerNode.key}, response=>{
+        post("/agent/view/plcsByCustomer", {"name":this.customerNode.name}, response=>{
             this.plcList = response.data;
         });
      }
