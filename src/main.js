@@ -32,7 +32,25 @@ new Vue({
     router,
 }).$mount('#app')
 
+function globalShareRoutePathes(){
+    return ["/information"];
+}
+
+function checkGlobalUrl(pageRoutePath){
+    var pathes = globalShareRoutePathes();
+    for(var i in pathes){
+        if(pathes[i] === pageRoutePath){
+            return true;
+        }
+    }
+    return false;
+}
+
 router.beforeEach((to, from, next) => {
+    if(checkGlobalUrl(to.path)){
+        next();
+        return;
+    }
     console.log("Enter before", from.path, to.path)
     var userName = localStorage.getItem("UserName");
     if(to.path == "/login" || to.path == "/register" || to.path == "/index") {

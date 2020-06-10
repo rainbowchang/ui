@@ -113,7 +113,6 @@ export default {
         this.allfalse();
         this.faraway = true;
       }
-
       this.$router.push(name);
     }
   },
