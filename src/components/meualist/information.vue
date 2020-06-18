@@ -1,16 +1,16 @@
 <template>
   <div style="display: block">
   	<div class="c_button">
-         <Button type="primary" ghost size="middle" @click="add">新增</Button>
+         <Button type="primary" ghost size="small" @click="add">新增</Button>
 
     </div>
     <div>
-        <Table size = "8px" highlight-row height="auto" width= "auto" border :columns="columns12" :data="tableData">
+        <Table highlight-row height="auto" width= "auto" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="sn">
                <strong>{{ row.sn }}</strong>
            </template>
            <template slot-scope="{ row, index }" slot="action">
-               <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row)">编辑</Button>
+               <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row, true)">编辑</Button>
                <Button type="error" size="small" @click="remove(row,index)">删除</Button>
             </template>
          </Table>
@@ -19,7 +19,7 @@
 </template>
 <script>
     import editDeviceInfoModal from "./editDeviceInfoModal";
-    import addDeviceInfoModal from "./addDeviceInfoModal";
+    // import addDeviceInfoModal from "./addDeviceInfoModal";
     import {get,post} from "@/apis/restUtils"
     export default {
         data () {
@@ -129,12 +129,12 @@
             }
         },
         mounted: function() {
-            // get("/admin/getAllUsers", reponse => {
-            //     this.tableData = reponse.data;
-            // })
+            get("/organization/deviceInfo/getDeviceInfos", reponse => {
+                this.tableData = reponse.data;
+            })
         },
         methods: {
-            edit (row) {
+            edit (row, isModify) {
 		        this.$Modal.confirm({
 		          title: '编辑设备信息',
 		          render: (h) => {
@@ -156,12 +156,30 @@
 		          cancelText: "取消",
 		          loading: true,
 		          onOk() {
-                    console.log(this.$refs.editDeviceInfoModal.formItem);
+                    console.log("click ok");
+                    if(isModify) {
+                        post("/organization/deviceInfo/modifyDeviceInfo", row, reponse => {
+                            if(reponse.data.status == "fail") {
+                                alert("ModifyDeviceInfo", reponse.data.status, "该设备不存在");
+                            }else {
+                                console.log("ModifyDeviceInfo Reply", reponse.status);
+                            }
+                        }) 
+                    }else {
+                        post("/organization/deviceInfo/addDeviceInfo", row, reponse => {
+                            if(reponse.data.status == "fail") {
+                                alert("ModifyDeviceInfo", reponse.data.status, "该设备不存在");
+                            }else {
+                                console.log("ModifyDeviceInfo Reply", reponse.status);
+                            }
+                        }) 
+                    }
+                    
                     this.$Modal.remove()
                   },
                   onCancel() {
                       console.log("click cancel")
-                      get("/admin/getAllUsers", reponse => {
+                      get("/organization/deviceInfo/getDeviceInfos", reponse => {
                         console.log("Get reply", reponse.status);
                         this.tableData = reponse.data;
                       })
@@ -169,57 +187,29 @@
 		        });
             },
             add() {
-		        this.$Modal.confirm({
-		          title: '增加设备信息',
-		          render: (h) => {
-		            return h(addDeviceInfoModal, {
-		              ref: 'addDeviceInfoModal',
-		              props: {
-                        row: "",
-		              },
-		              on:{
-		                onAddOk:(data) =>{
-		                  alert(data);
-		                }
-		              }
-		            })
-		          },
-		          width: 600,
-		          closable: false,
-		          okText: "确定",
-		          cancelText: "取消",
-		          loading: true,
-		          onOk() {
-                    console.log("click ok")
-                    
-                    this.$Modal.remove()
-                  },
-                  onCancel() {
-                      console.log("click cancel")
-                      get("/admin/getAllUsers", reponse => {
-                        console.log("Get reply", reponse.status);
-                        this.tableData = reponse.data;
-                      })
-                  }
-		        });
+		        this.tableData.unshift({
+                    sn: '',
+                    name: '',
+                    userId: '',
+                    userName: '',
+                    area: '',
+                    factory: "",
+                    shop:"",
+                    productLine:"",
+                    oemCompany:"",
+                    oemId:"",
+                    deviceModel:"",
+                    factoryNumber:"",
+                    maxSpeed:""
+                })
+                this.edit(this.tableData[0],false)
             },
             remove (row, index) {
                 console.log("user", row)
-                post("/admin/delUser", row, reponse => {
+                post("/organization/deviceInfo/delDeviceInfo", row, reponse => {
                     console.log("DelUser Reply", reponse.status)
                     this.tableData.splice(index, 1);
                 })
-            },
-            showRoles (row){
-                this.$Modal.info({
-                    title: '角色列表',
-                    content: this.getRoles(row)
-                });
-            },
-            getRoles(row){
-            	return `Name：${row.name}<br>
-                              Age：${row.age}<br>
-                              Address：${row.address}`
             },
         }
     };

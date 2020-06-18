@@ -64,7 +64,7 @@
             }
         },
         mounted: function() {
-          
+            this.formItem =  this.row
         },
         methods: {
             
