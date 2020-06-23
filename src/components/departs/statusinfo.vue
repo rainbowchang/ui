@@ -684,7 +684,7 @@ export default {
 }
 .timeshow {
   border: 0;
-  background-color: #efefef;
+  /* background-color: #efefef; */
   height: 18px;
   align-items: center;
 }

@@ -137,7 +137,7 @@ export default {
   background-color: #313131;
   color: #ffffff;
   border: 0;
-  letter-spacing: 3rem;
+  /* letter-spacing: 3rem; */
 }
 .choose {
   width: 48%;
