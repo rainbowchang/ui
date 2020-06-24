@@ -74,6 +74,7 @@ export default {
             this.isSended = false;
             this.sendtimer = 5;
             window.clearInterval(timer);
+            this.closeModal()
           }
         }, 1000);
       });
