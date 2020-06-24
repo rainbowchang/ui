@@ -300,7 +300,7 @@ export default {
         legend: {
           orient: "vertical",
           x: "left",
-          data: ["加工", "故障", "停机", "未连接"]
+          data: ["加工", "故障", "停机", "未连接", "无状态"]
         },
         series: [
           {
@@ -322,7 +322,7 @@ export default {
               }
             },
             data: pieData,
-            color: ["#089642", "#fb0200", "#fffc02", "#808080"]
+            color: ["#089642", "#fb0200", "#fffc02", "#808080", "#D3D3D3"]
           }
         ]
       };
