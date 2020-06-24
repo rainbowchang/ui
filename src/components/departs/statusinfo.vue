@@ -31,7 +31,7 @@
             <div class="listcontent">
               <div v-for="(item,index) in statuslist" :key="index">
                 <!-- 列表左侧名称 -->
-                <div class="listleft">{{item.name}}</div>
+                <div class="listleft listleft1">{{item.name}}</div>
                 <!-- 中间图表 -->
                 <div class="listmid">
                   <div>
@@ -713,6 +713,9 @@ export default {
 }
 .date {
   color: #2c86ce;
+}
+.listleft.listleft1 {
+    overflow: hidden;
 }
 </style>
 
