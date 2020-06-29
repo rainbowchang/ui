@@ -103,7 +103,7 @@
     </div>
     <div class="chartsshow">
       <div v-for="(value,index) in metalist" :key="index">
-        <div class="listleft">{{value.name}}</div>
+        <div class="listleft listleft1">{{value.name}}</div>
         <div class="headBottom">
           <div :id="value.bottom" :style="{width: '100%', height: '100%'}"></div>
         </div>
@@ -715,7 +715,9 @@ export default {
   color: #2c86ce;
 }
 .listleft.listleft1 {
-    overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
 
