@@ -591,7 +591,7 @@ export default {
 }
 /* 列表左侧 */
 .listleft {
-  width: 10%;
+  width: 15%;
   font-size: 16px;
   font-weight: bold;
   height: auto;
