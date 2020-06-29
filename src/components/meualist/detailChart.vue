@@ -184,7 +184,7 @@ export default {
       this.workPieces = val.workPieces;
       this.feedSpeed = val.feedSpeed;
       this.toolNumber=val.toolNumber;
-      this.currentProgram=val.currentProgram;
+      this.currentProgram=(val.currentProgram).trim();
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
       this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
       this.getOverrides("myChart3", this.getSpindleLoad(), 0,100, 10);
