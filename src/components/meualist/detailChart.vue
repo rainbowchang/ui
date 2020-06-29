@@ -178,7 +178,7 @@ export default {
       if(val === null || val === undefined){
         return;
       }
-      if(val.currentProgram!==null){val.currentProgram = (val.currentProgram).substring(0,(val.currentProgram).indexOf('_'))}
+      if(val.currentProgram!==null && (val.currentProgram).indexOf('_')!==-1){val.currentProgram = (val.currentProgram).substring(0,(val.currentProgram).indexOf('_'))}
       this.tableList = val.table;
       this.sn = val.sn;
       this.workPieces = val.workPieces;
