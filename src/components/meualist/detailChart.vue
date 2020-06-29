@@ -5,7 +5,7 @@
       <div class="title unread" style="margin-bottom:6px;">
         实时数据
         <span style="margin-right:0.5em;">当前刀位号：{{toolNumber}}</span>
-        <span style="margin-right:0.5em;">当前程序名：{{currentProgram}}</span>
+        <span style="margin-right:0.5em;">当前程序名：{{currentProgram.trim()}}</span>
         <span>加工件数：{{workPieces}}</span>
         <div>
           <template>
