@@ -49,12 +49,15 @@
             ],
             customerList: [
                 {
+                    key: 1,
                     label: '客户一'
                 },
                 {
+                    key: 2,
                     label: '客户二'
                 },
                 {
+                    key: 3,
                     label: '客户三'
                 }
             ],
@@ -70,7 +73,7 @@
     props: ['customerNode',"parentNode"],
     mounted: function(){
 
-        if(this.customerNode != null){
+        if(this.customerNode != null && !this.isOem(this.customerNode)){
           console.log("customer node is:" + this.customerNode.name);
           this.customerId = this.customerNode.key;
           this.nodeContentList = [
@@ -97,6 +100,16 @@
         }
     },
     methods: {  
+     isOem(customerNode){
+         if(customerNode != null && customerNode != undefined){
+             if(customerNode.children[0] != undefined && customerNode.children[1] != undefined)
+             {
+                 return (customerNode.children[0].name == "按客户分类" &&  customerNode.children[1].name == "按区域分类") ||
+                (customerNode.children[1].name == "按客户分类" &&  customerNode.children[0].name == "按区域分类")
+             }
+         }
+         return false    
+     },
      nodeTypeSelectCallback(value){
         switch(value){
             case "customer":
