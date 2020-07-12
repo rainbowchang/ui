@@ -213,13 +213,13 @@
                 this.$emit('showInfo', this.plcSn, this.inputAlias, "LEAF");
                 break;
             case "factory":
-                this.$emit('showInfo', this.inputAlias, this.inputAlias, "FACTORY");
+                this.$emit('showInfo', this.customerId + "factory" + this.inputAlias, this.inputAlias, "FACTORY");
                 break;
             case "shop":
-                this.$emit('showInfo', this.customerId + this.inputAlias, this.inputAlias, "SHOP");
+                this.$emit('showInfo', this.customerId + "shop" + this.inputAlias, this.inputAlias, "SHOP");
                 break;
             case "productLine":
-                this.$emit('showInfo', this.customerId + this.inputAlias, this.inputAlias, "PRODUCTLINE");
+                this.$emit('showInfo', this.customerId + "productLine" + this.inputAlias, this.inputAlias, "PRODUCTLINE");
                 break;
             case "other":
                 this.$emit('showInfo', this.customerId + this.inputAlias, this.inputAlias, "COMPOSITE");
