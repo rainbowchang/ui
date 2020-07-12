@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
- import {get,post} from "@/apis/restUtils";
+ import {post} from "@/apis/restUtils";
 
   export default {
     name: "customerInfos",
@@ -64,29 +64,52 @@
             nodeContentList: [],
             customerId: '',
             plcSn: '',
+            factory: '',
+            shop: '',
+            productionLine: '',
             inputAlias: "",
             customerVisible: false,
             plcVisible: false,
+            factoryVisable: false,
+            shopVisable: false,
+            productLineVisable: false,
             nodeContent: "other"
         }
     },
     props: ['customerNode',"parentNode"],
     mounted: function(){
-
-        if(this.customerNode != null && !this.isOem(this.customerNode)){
-          console.log("customer node is:" + this.customerNode.name);
-          this.customerId = this.customerNode.key;
-          this.nodeContentList = [
+        console.log("customerNode", this.customerNode);
+        console.log("parenetNode", this.parentNode);
+        this.customerId = this.customerNode.key;
+        if(this.parentNode.type == "CUSTOMER") {
+            this.nodeContentList = [
+                {
+                    value: 'factory',
+                    label: '工厂'
+                }
+            ]
+        }else if(this.parentNode.type == "FACTORY") {
+            this.nodeContentList = [
+                {
+                    value: 'shop',
+                    label: '车间'
+                }
+            ]
+        }else if(this.parentNode.type == "SHOP") {
+            this.nodeContentList = [
+                {
+                    value: 'productLine',
+                    label: '生产线',
+                }
+            ]
+        }else if(this.parentNode.type == "PRODUCTLINE") {
+            this.nodeContentList = [
                 {
                     value: 'plc',
                     label: '机器信息'
-                },
-                {
-                    value: 'other',
-                    label: '自定义'
                 }
-            ];
-        }else{
+            ]
+        }else {
             this.nodeContentList = [
                 {
                     value: 'customer',
@@ -99,33 +122,53 @@
             ];
         }
     },
-    methods: {  
-     isOem(customerNode){
-         if(customerNode != null && customerNode != undefined){
-             if(customerNode.children[0] != undefined && customerNode.children[1] != undefined)
-             {
-                 return (customerNode.children[0].name == "按客户分类" &&  customerNode.children[1].name == "按区域分类") ||
-                (customerNode.children[1].name == "按客户分类" &&  customerNode.children[0].name == "按区域分类")
-             }
-         }
-         return false    
-     },
+    methods: {
      nodeTypeSelectCallback(value){
         switch(value){
             case "customer":
-              this.customerVisible = true;
-              this.plcVisible = false;
-              this.getRemoteCustomers();
-              return;
+                this.customerVisible = true;
+                this.plcVisible = false;
+                this.shopVisable = false;
+                this.productLineVisable = false;
+                this.plcVisible = false;
+                this.getRemoteCustomers();
+                return;
             case "plc":
-              this.customerVisible = false;
-              this.plcVisible = true;
-              this.getRemotePlcs();
-              return;
+                this.plcVisible = true;
+                this.customerVisible = false;
+                this.shopVisable = false;
+                this.productLineVisable = false;
+                this.customerVisible = false;
+                this.getRemotePlcs();
+                return;
+            case 'factory':
+                this.factoryVisable = true;
+                this.shopVisable = false;
+                this.productLineVisable = false;
+                this.customerVisible = false;
+                this.plcVisible = false;
+                return;
+            case 'shop':
+                this.shopVisable = true;
+                this.factoryVisable = false;
+                this.productLineVisable = false;
+                this.customerVisible = false;
+                this.plcVisible = false;
+                return;
+            case 'productLine':
+                this.productLineVisable = true;
+                this.shopVisable = false;
+                this.factoryVisable = false;
+                this.customerVisible = false;
+                this.plcVisible = false
+                return;
             case "other":
-              this.customerVisible = false;
-              this.plcVisible = false;
-              return;
+                this.customerVisible = false;
+                this.plcVisible = false;
+                this.productLineVisable = false;
+                this.shopVisable = false;
+                this.factoryVisable = false;
+                return;
             default:
                break;
         }
@@ -153,26 +196,36 @@
         this.$emit('showInfo', key, name, "LEAF");
      },
      inputCallback(){
+         console.log("nodeConetent", this.nodeContent, "CustomerId", this.customerId)
         switch(this.nodeContent){
-          case "customer":
-             if(this.customerId == "" || this.customerId == null){
-                this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
-                return;
-             }
-             this.$emit('showInfo', this.customerId, this.inputAlias, "CUSTOMER");
-             break;
-          case "plc":
-             if(this.plcSn == "" && this.plcSn == null){
-                this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
-                return;
-             }
-             this.$emit('showInfo', this.plcSn, this.inputAlias, "LEAF");
-             break;
-          case "other":
-             this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
-             break;
-          default:
-             break;
+            case "customer":
+                if(this.customerId == "" || this.customerId == null){
+                    this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
+                    return;
+                }
+                this.$emit('showInfo', this.customerId, this.inputAlias, "CUSTOMER");
+                break;
+            case "plc":
+                if(this.plcSn == "" && this.plcSn == null){
+                    this.$emit('showInfo', this.inputAlias, this.inputAlias, "COMPOSITE");
+                    return;
+                }
+                this.$emit('showInfo', this.plcSn, this.inputAlias, "LEAF");
+                break;
+            case "factory":
+                this.$emit('showInfo', this.inputAlias, this.inputAlias, "FACTORY");
+                break;
+            case "shop":
+                this.$emit('showInfo', this.customerId + this.inputAlias, this.inputAlias, "SHOP");
+                break;
+            case "productLine":
+                this.$emit('showInfo', this.customerId + this.inputAlias, this.inputAlias, "PRODUCTLINE");
+                break;
+            case "other":
+                this.$emit('showInfo', this.customerId + this.inputAlias, this.inputAlias, "COMPOSITE");
+                break;
+            default:
+                break;
         }
      
      },
@@ -198,7 +251,7 @@
      },
      getRemoteCustomers(){
         // var customerBean = this.getCustomerFeature();
-        get("/customer/getCustomerByFeature", response=>{
+        post("/customer/getCustomerByFeature", this.customerId, response=>{
            console.log(response.data, "customerList");
            this.customerList = response.data;
         });

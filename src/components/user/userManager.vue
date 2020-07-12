@@ -10,7 +10,7 @@
                <Button type="error" size="small" @click="remove(row,index)">删除</Button>
             </template>
             <template slot-scope="{ row }" slot="roles">
-               <label class="c_label" @click="showRoles(row)">{{ row.roles }} </label>
+               <label>{{ row.roles }} </label>
            </template>
          </Table>
     </div>
@@ -132,17 +132,6 @@
                     this.tableData.splice(index, 1);
                 })
             },
-            showRoles (row){
-                this.$Modal.info({
-                    title: '角色列表',
-                    content: this.getRoles(row)
-                });
-            },
-            getRoles(row){
-            	return `Name：${row.name}<br>
-                              Age：${row.age}<br>
-                              Address：${row.address}`
-            },
         }
     };
 </script>
@@ -155,7 +144,6 @@
 .c_label{
     cursor: pointer;
     color: blue;
-    text-decoration: underline;
 }
 </style>
 

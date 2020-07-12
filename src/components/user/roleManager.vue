@@ -13,7 +13,7 @@
                <Button type="error" size="small" @click="remove(row, index)">删除</Button>
             </template>
              <template slot-scope="{ row }" slot="abilities">
-               <label class="c_label" @click="showAbilities(row)">{{ row.abilities }} </label>
+               <label>{{ row.abilities }} </label>
            </template>
          </Table>
     </div>
@@ -81,7 +81,7 @@
             })
         },
         methods: {
-            edit (row, isModify) {
+            edit (row, isModify, tableData) {
 		        this.$Modal.confirm({
 		          title: '角色信息',
 		          render: (h) => {
@@ -89,6 +89,7 @@
 		              ref: 'roleInfoModal',
 		              props: {
                         row: row,
+                        tableData: tableData
 		              },
 		              on:{
 		                onModifyOk:(key) =>{
@@ -125,10 +126,7 @@
                   },
                   onCancel() {
                       console.log("click cancel")
-                      get("/admin/getAllRoles", reponse => {
-                        console.log("Get reply", reponse.status);
-                        this.tableData = reponse.data;
-                      })
+                      tableData.splice(0,1)
                   }
 		        });
             },
@@ -137,14 +135,7 @@
                     "name" : "",
                     "abilities": []
                 })
-                this.edit(this.tableData[0],false)
-            },
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.tableData[index].name}<br>Type：${this.tableData[index].type}<br>Content：${this.tableData[index].content}`
-                });
-
+                this.edit(this.tableData[0],false, this.tableData)
             },
             remove (row, index) {
                 post("/admin/delRole", row, reponse => {
@@ -156,9 +147,6 @@
                         }
                 })
             },
-            showAbilities (row) {
-                alert(row.abilities);
-            }
         }
     };
 </script>

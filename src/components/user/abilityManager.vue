@@ -162,13 +162,6 @@
                 })
                 this.edit(this.tableData[0],false)
             },
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.tableData[index].name}<br>Type：${this.tableData[index].type}<br>Content：${this.tableData[index].content}`
-                });
-
-            },
             remove (row, index) {
                 post("/admin/delAbility", row, reponse => {
                     if(reponse.data.status == "fail") {
