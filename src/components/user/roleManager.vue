@@ -138,6 +138,16 @@
                 this.edit(this.tableData[0],false, this.tableData)
             },
             remove (row, index) {
+                if(row.name == "高级终端用户" ||
+                   row.name == "普通OEM用户" ||
+                   row.name == "高级OEM用户" ||
+                   row.name == "普通管理用户" ||
+                   row.name == "普通终端用户" ||
+                   row.name == "超级管理用户")
+                {
+                    alert("默认用户不能删除")
+                    return
+                }
                 post("/admin/delRole", row, reponse => {
                     if(reponse.data.status == "fail") {
                             alert("DelyRole " + reponse.data.status + " 该角色正在被使用");

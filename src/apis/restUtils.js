@@ -10,7 +10,7 @@ export const post = (url, param, consumer) => {
     {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
-            'userName' : localStorage.getItem("UserName"),
+            'userName' : encodeURIComponent(localStorage.getItem("UserName")),
             'url' : url
         }
     }).then(response => {
@@ -24,7 +24,7 @@ export const get = (url, consumer) => {
     {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
-            'userName' : localStorage.getItem("UserName"),
+            'userName' : encodeURIComponent(localStorage.getItem("UserName")),
             'url' : url
         }
     }).then(response => {

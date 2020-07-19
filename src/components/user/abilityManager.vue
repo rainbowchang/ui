@@ -1,8 +1,5 @@
 <template>
   <div style="display: block">
-      <div class="c_button">
-         <Button type="primary" size="small" @click="add">新增</Button>	
-    </div>
     <div>
         <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="name">
