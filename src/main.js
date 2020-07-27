@@ -59,12 +59,18 @@ router.beforeEach((to, from, next) => {
     }
     post("/admin/getAllWebAbilityNames", userName, reponse => {
         var urls = reponse.data;
-        urls.forEach(e => {
-            if(to.path == e) {
-                console.log("beforeEach", to.path, e)
+        if(urls == null){
+            next();
+            return;
+        }
+        console.log("urls", urls);
+        for(var i in urls){
+            var url = urls[i];
+            if(to.path == url) {
+                console.log("beforeEach", to.path, url)
                 next();
             }
-        });
+        }
     })
     
 })
