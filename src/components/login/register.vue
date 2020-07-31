@@ -4,7 +4,7 @@
       <Form ref="formuser" class="formlogin" :model="formuser" :rules="ruleInline" inline :label-width="80">
         <FormItem label="手机号" type="number" prop="tel" class="labelCss">
             <i-input v-model="formuser.tel" placeholder="可用于登录和找回密码">
-                <i-select :model.sync="select1" slot="prepend" style="width: 80px;height: 32px;">
+                <i-select v-model="select1" slot="prepend" style="width: 80px;height: 32px;">
                     <i-option value="+86">+86</i-option>
                 </i-select>
             </i-input>
@@ -15,8 +15,8 @@
         <FormItem label="密码" prop="password" class="labelCss">
           <i-input type="password" v-model="formuser.password" placeholder="请设置登录密码"></i-input>
         </FormItem>
-        <FormItem label="密码确认" prop="password" class="labelCss">
-          <i-input type="password" v-model="formuser.password" placeholder="请确认登录密码"></i-input>
+        <FormItem label="密码确认">
+          <i-input type="password" v-model="verifyPassword" placeholder="请确认登录密码"></i-input>
         </FormItem>
         <FormItem label="公司" prop="company" class="labelCss">
           <i-input type="text" v-model="formuser.company" placeholder="请设置公司名"></i-input>
@@ -63,6 +63,7 @@ import {post,areas, getProvinceByArea} from "@/apis/restUtils"
 export default {
   data() {
     return {
+      verifyPassword: "",
       isSended: false,
       sendtimer: 60,
       select1: '+86',
@@ -119,6 +120,9 @@ export default {
     };
   },
   methods: {
+    created() {
+      this.select1.state = "+86"
+    },
     //   发送验证码
     setArea(area){
       this.provinces = getProvinceByArea(area)
@@ -148,6 +152,10 @@ export default {
       var router = this.$router;
       var param = this.formuser;
       console.log(name)
+      if(this.verifyPassword != this.formuser.password) {
+        this.$Message.error("两次输入的密码不一致!");
+        return
+      }
       this.$refs[name].validate(valid => {
         post("/user/register",param,reponse => {
           if (valid && reponse.data.status == "success") {      
