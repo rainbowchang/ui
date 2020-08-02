@@ -30,33 +30,45 @@
                     <Layout :style="{minHeight: '67vh'}">
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                             <div class="demo-drawer-profile">
-                        <Row>
-                            <Col span="12">
-                                用户id: {{userData.customerId}}
-                            </Col>
-                            <Col span="12">
-                                用户名称: {{userData.name}}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                城市: {{userData.province}}
-                            </Col>
-                            <Col span="12">
-                                地址: {{userData.address}}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                联系方式: {{userData.tel}}
-                            </Col>
-                            <Col span="12">
-                                角色: {{userData.roles}}
-                                </Col>
-                        </Row>
-                        
-                    </div>
-
+                                <Row>
+                                    <Col span="12">
+                                        用户id: {{userData.customerId}}
+                                    </Col>
+                                    <Col span="12">
+                                        用户名称: {{userData.name}}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span="12">
+                                        城市: {{userData.province}}
+                                    </Col>
+                                    <Col span="12">
+                                        地址: {{userData.address}}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span="12">
+                                        联系方式: {{userData.tel}}
+                                    </Col>
+                                    <Col span="12">
+                                        角色: {{userData.roles}}
+                                        </Col>
+                                </Row>
+                                
+                            </div>
+                            <div style="display: block">
+                                <div>
+                                    <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
+                                        <template slot-scope="{ row }" slot="name">
+                                           <strong>{{ row.name }}</strong>
+                                       </template>
+                                       <template slot-scope="{ row, index }" slot="action">
+                                           <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row, true)">编辑</Button>
+                                           <Button type="error" size="small" @click="remove(row, index)">删除</Button>
+                                        </template>
+                                     </Table>
+                                </div>
+                              </div>
                         </Content>
                     </Layout>
                 </Content>

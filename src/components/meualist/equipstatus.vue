@@ -3,9 +3,6 @@
     <!-- 左侧区域树状菜单选择 -->
     <div class="treelist">
       <div>
-        <!-- 相关api参考 https://www.npmjs.com/package/vue-tree-list -->
-        <!-- 演示地址 http://paradeto.com/vue-tree-list/ -->
-        <!-- <button @click="addNode">新增一级类目</button> -->
         <vue-tree-list
           @click="onClick"
           @change-name="onChangeName"
@@ -16,12 +13,7 @@
           default-leaf-node-name="new leaf"
           v-bind:default-expanded="false"
         >
-          <!-- <span class="icon" slot="addTreeNode">新增</span> -->
-          <!-- <span class="icon" slot="addLeafNode">新增文件</span> -->
-          <!-- <span class="icon" slot="editNode" v-if = false>编辑</span> -->
-          <!-- <span class="icon" slot="delNode">删除</span> -->
         </vue-tree-list>
-        <!-- <button @click="getNewTree">Get new tree</button> -->
       </div>
     </div>
     <!-- 右侧table及各个功能 -->

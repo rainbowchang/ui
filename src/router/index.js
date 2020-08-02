@@ -40,6 +40,11 @@ export default new Router({
         // component: register,
         component: resolve => require(['@/components/login/register'], resolve)
     }, {
+        path: '/deviceHome',
+        name: 'deviceHome',
+        // component: register,
+        component: resolve => require(['@/components/test/deviceHome'], resolve)
+    },{
         path: '/login',
         name: 'login',
        // component: login,

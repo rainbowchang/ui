@@ -1,55 +1,17 @@
 <template>
     <div class="layout">
-        <Layout>
-            <Header>
-                <Menu mode="horizontal" theme="dark" active-name="index"  @on-select="showMenu">
-                    <div class="layout-logo">
-                       <div style="margin-top: -13px;">
-                            <Icon type="ios-boat-outline" size = "30" color="white"/>
-                       </div>
-                    </div>
-                    <div class="layout-nav">
-                        <MenuItem name="index">
-                            <Icon type="ios-navigate"></Icon>
-                            首页
-                        </MenuItem>
-                        <MenuItem name="equipstatus">
-                            <Icon type="ios-keypad"></Icon>
-                            设备平台
-                        </MenuItem>
-                        <MenuItem name="map">
-                            <Icon type="ios-analytics"></Icon>
-                            机床分布
-                        </MenuItem>
-                    </div>
-                </Menu>
-            </Header>
             <Layout :style="{padding: '0 50px'}">
-                <Breadcrumb :style="{margin: '16px 0'}">
-                    <BreadcrumbItem><h3>配置管理中心</h3></BreadcrumbItem>
-                </Breadcrumb>
                 <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
                     <Layout :style="{minHeight: '67vh'}">
-                        <Sider hide-trigger collapsible :collapsed-width="78">
-                         <Menu active-name="userManager" theme="dark" width="auto"  @on-select="showComponent">
-                            <MenuItem name="userManager" :style="{margin: '0px 40 '}">
-                               <Icon type="md-document" />
-                                 用户管理
-                            </MenuItem>
-                            <MenuItem name="roleManager">
-                              <Icon type="md-chatbubbles" />
-                                角色管理
-                            </MenuItem>
-                            <MenuItem name="abilityManager">
-                              <Icon type="md-chatbubbles" />
-                                权限管理
-                            </MenuItem>
-                            <MenuItem name="activeCodeManager">
-                              <Icon type="md-chatbubbles" />
-                                激活码管理
-                            </MenuItem>
-                        </Menu>
-                        </Sider>
+                         <Table border :columns="columns12" :data="data6">
+                            <template slot-scope="{ row }" slot="name">
+                                <strong>{{ row.name }}</strong>
+                            </template>
+                            <template slot-scope="{ row, index }" slot="action">
+                                <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+                                <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                            </template>
+                        </Table>
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                             <userManager v-show="showUserManager" ref = "refUserManager"></userManager>
                             <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>

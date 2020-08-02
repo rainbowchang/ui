@@ -21,8 +21,8 @@
             return {
                 columns12: [
                     {
-                        title: '名称',
-                        slot: 'name',
+                        title: '激活码',
+                        slot: 'activeCode',
                         resizable: true,
                         width: 180
                     },
