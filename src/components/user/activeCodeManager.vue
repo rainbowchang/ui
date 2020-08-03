@@ -1,44 +1,118 @@
 <template>
   <div style="display: block">
     <div>
-        <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
+        <Table highlight-row height="350" width= "1000" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="name">
                <strong>{{ row.name }}</strong>
            </template>
-           <template slot-scope="{ row, index }" slot="action">
-               <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row, true)">编辑</Button>
-               <Button type="error" size="small" @click="remove(row, index)">删除</Button>
+           <template slot-scope="{ row }" slot="action">
+               <Button v-show="editButtonShow" type="primary" size="small" style="margin-right: 5px" @click="edit(row)">编辑</Button>
+               <Button v-show="agreeButtonShow" type="primary" size="small" style="margin-right: 5px" @click="agree(row)">同意</Button>
+               <Button v-show="disAgreeButtonShow" type="error" size="small" @click="disAgree(row)">不同意</Button>
+              <Button v-show="cancelButtonShow" type="primary" size="small" style="margin-right: 5px" @click="cacel(row)">撤销</Button>
             </template>
          </Table>
+         <Modal v-model="agreeModal" title="是否要同意此申请"
+             @on-ok="ok"
+             @on-cancel="cancel">
+            <p>申请的信息</p>
+        </Modal>
+        <Modal v-model="disAgreeModal" title="是否确定拒绝"
+             @on-ok="ok"
+             @on-cancel="cancel">
+            <p>申请的信息</p>
+        </Modal>
     </div>
   </div>
 </template>
 <script>
-    import abilityInfoModal from "./abilityInfoModal";
-    import {post,get} from "@/apis/restUtils"
+    // import {post,get} from "@/apis/restUtils"
     export default {
         data () {
             return {
-                columns12: [
+                agreeModal: false,
+                disAgreeModal: false,
+                disAgreeButtonShow: false,
+                agreeButtonShow:true,
+                columns12: [],
+                tableData: []
+            }
+        },
+        mounted: function(){
+            this.columns12 = this.getTableColumns();
+            this.tableData = this.getTableData();
+        },
+        methods: {
+            agree (row) {
+                this.agreeModal = true;
+                console.log(row);
+            },
+            disAgree (row) {
+                this.disAgreeModal = true;
+                  console.log(row);
+            },
+            edit (row) {
+                this.agreeModal = true;
+                console.log(row);
+                alert(JSON.stringify(row));
+            },
+            cancel (row) {
+                this.disAgreeModal = true;
+                console.log(row);
+            },
+            getTableColumns(){
+                return [
                     {
                         title: '激活码',
                         slot: 'activeCode',
                         resizable: true,
-                        width: 180
+                        // width: 180
                     },
                     {
-                        title: '类型',
-                        key: 'type',
-                        resizable: true,
-                        width: 180
+                        title: '功能编码',
+                        key: 'funcCode',
+                        // resizable: true,
+                        // width: 180
                     },
                     {
-                        title: '内容',
-                        key: 'content'
+                        title: '功能',
+                        key: 'funcContent'
                     },
                     {
-                        title: '描述',
-                        key: 'description'
+                        title: '用户Id',
+                        key: 'userId'
+                    },
+                    {
+                        title: '用户名称',
+                        key: 'userName'
+                    },
+                    {
+                        title: '生成日期',
+                        key: 'startDate'
+                    },
+                    {
+                        title: '有效截止日期',
+                        key: 'endDate'
+                    },
+                    {
+                        title: '使用状态',
+                        key: 'useStatus'
+                    },
+                    {
+                        title: '获取状态',
+                        key: 'approvalState'
+                    },
+                    {
+                        title: '设备sn',
+                        key: 'sn'
+                    },
+                    {
+                        title: '设备名称',
+                        key: 'deviceName'
+                    },
+                    {
+                        title: '备注',
+                        key: 'memo'
                     },
                     {
                         title: '操作',
@@ -46,8 +120,11 @@
                         width: 150,
                         align: 'center'
                     }
-                ],
-                tableData: [
+                ];
+            },
+            getTableData(){
+
+                return [
                     {
                         name: 'John Brown',
                         type: "api",
@@ -90,89 +167,11 @@
                         content: 'Ottawa No. 2 Lake Park',
                         description: "g"
                     }
-                ]
-            }
-        },
-        mounted: function() {
-            get("/admin/getAllAbilities", reponse => {
-                this.tableData = reponse.data;
-            })
-        },
-        methods: {
-            edit (row, isModify) {
-		        this.$Modal.confirm({
-		          title: '能力信息',
-		          render: (h) => {
-		            return h(abilityInfoModal, {
-		              ref: 'abilityInfoModal',
-		              props: {
-                        row: row,
-		              },
-		              on:{
-		                onModifyOk:(key) =>{
-		                  alert(key);
-		                }
-		              }
-		            })
-		          },
-		          width: 600,
-		          closable: false,
-		          okText: "确定",
-		          cancelText: "取消",
-		          loading: true,
-		          onOk() {
-                    console.log("click ok")
-                    if(isModify) {
-                        post("/admin/modifyAbility", row, reponse => {
-                            if(reponse.data.status == "fail") {
-                                alert("ModifyAbility " + reponse.data.status + " 该能力不存在");
-                            }else {
-                                console.log("ModifyAbility Reply", reponse.data.status);
-                            }
-                        }) 
-                    }else {
-                        post("/admin/addAbility", row, reponse => {
-                            if(reponse.data.status == "fail") {
-                                alert("AddAbility " + reponse.data.status + " 该能力已存在");
-                            }else {
-                                console.log("AddAbility Reply", reponse.data.status);
-                            }
-                        }) 
-                    }
-                    this.$Modal.remove()
-                  },
-                  onCancel() {
-                      console.log("click cancel")
-                      get("/admin/getAllAbilities", reponse => {
-                        this.tableData = reponse.data;
-                        console.log("Get reply", this.tableData);
-                      })
-                  }
-		        });
-            },
-            add () {
-                this.tableData.unshift({
-                    "name" : "",
-                    "type": "",
-                    "content": "",
-                    "description": ""
-                })
-                this.edit(this.tableData[0],false)
-            },
-            remove (row, index) {
-                post("/admin/delAbility", row, reponse => {
-                    if(reponse.data.status == "fail") {
-                        alert("DelAbility " + reponse.data.status + " 该能力正在被使用");
-                    }else {
-                        this.tableData.splice(index, 1);
-                        console.log("DelAbility Reply", reponse.data.status);
-                    }
-                    
-                })
+                ];
             }
         }
-    };
+
+
+     };
 </script>
-<style>
-</style>
 

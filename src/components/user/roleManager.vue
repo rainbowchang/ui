@@ -4,7 +4,7 @@
          <Button type="primary" size="small" @click="add">新增</Button>	
     </div>
     <div>
-        <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
+        <Table highlight-row height="350" width= "1000" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="name">
                <strong>{{ row.name }}</strong>
            </template>

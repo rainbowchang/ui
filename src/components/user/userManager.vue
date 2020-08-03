@@ -1,7 +1,7 @@
 <template>
   <div style="display: block">
     <div>
-        <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
+        <Table highlight-row height="350" width= "1000" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="customerId">
                <strong>{{ row.customerId }}</strong>
            </template>

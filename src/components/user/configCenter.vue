@@ -24,11 +24,11 @@
                     </div>
                 </Menu>
             </Header>
-            <Layout :style="{padding: '0 50px'}">
+            <Layout :style="{padding: '0 20px'}">
                 <Breadcrumb :style="{margin: '16px 0'}">
                     <BreadcrumbItem><h3>配置管理中心</h3></BreadcrumbItem>
                 </Breadcrumb>
-                <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
+                <Content :style="{padding: '24px 0', minHeight: '270px', background: '#fff'}">
                     <Layout :style="{minHeight: '67vh'}">
                         <Sider hide-trigger collapsible :collapsed-width="78">
                          <Menu active-name="userManager" theme="dark" width="auto"  @on-select="showComponent">
