@@ -6,7 +6,7 @@
                <strong>{{ row.name }}</strong>
            </template>
            <template slot-scope="{ row }" slot="action">
-               <Button v-show="editButtonShow" type="primary" size="small" style="margin-right: 5px" @click="edit(row)">编辑</Button>
+               <Button v-show="editButtonShow" type="primary" size="small" style="margin-right: 5px" @click="edit(row)">修改</Button>
                <Button v-show="agreeButtonShow" type="primary" size="small" style="margin-right: 5px" @click="agree(row)">同意</Button>
                <Button v-show="disAgreeButtonShow" type="error" size="small" @click="disAgree(row)">不同意</Button>
               <Button v-show="cancelButtonShow" type="primary" size="small" style="margin-right: 5px" @click="cacel(row)">撤销</Button>
@@ -32,8 +32,9 @@
             return {
                 agreeModal: false,
                 disAgreeModal: false,
-                disAgreeButtonShow: false,
+                disAgreeButtonShow: true,
                 agreeButtonShow:true,
+                editButtonShow: true,
                 columns12: [],
                 tableData: []
             }
@@ -96,7 +97,7 @@
                     },
                     {
                         title: '使用状态',
-                        key: 'useStatus'
+                        key: 'useState'
                     },
                     {
                         title: '获取状态',

@@ -1,186 +1,171 @@
+<style scoped>
+.layout{
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+    position: relative;
+    border-radius: 4px;
+    overflow:auto;
+    display: flex;
+    flex-direction: row;
+}
+.layout-logo{
+    width: 100px;
+    height: 30px;
+    background: #5b6270;
+    border-radius: 3px;
+    float: left;
+    position: relative;
+    top: 15px;
+    left: 20px;
+}
+.layout-nav{
+    width: 420px;
+    margin: 0 auto;
+    margin-right: 20px;
+}
+</style>
 <template>
-  <div style="display: block">
-    <div>
-        <Table highlight-row height="350" width= "900" border :columns="columns12" :data="tableData">
-            <template slot-scope="{ row }" slot="name">
-               <strong>{{ row.name }}</strong>
-           </template>
-           <template slot-scope="{ row, index }" slot="action">
-               <Button type="primary" size="small" style="margin-right: 5px" @click="agree(row)">同意</Button>
-               <Button type="error" size="small" @click="remove(row, index)">拒绝</Button>
-            </template>
-         </Table>
-         <Modal v-model="agreeModal" title="是否要同意此申请"
-             @on-ok="ok"
-             @on-cancel="cancel">
-        <p>申请的信息</p>
-      </Modal>
+    <div class="layout">
+            <Layout :style="{padding: '0 24px 24px'}">
+                 <Content :style="{padding: '24px', minHeight: '100%', background: '#fff'}">
+                  <Table  width="550" height="500" border :columns="funcColumns" :data="funcData">
+                    <template slot-scope="{ row }" slot="name">
+                        <strong>{{ row.name }}</strong>
+                    </template>
+                    <template slot-scope="{ row, index }" slot="action">
+                        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+                        <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                    </template>
+                  </Table>
+               </Content>
+           </Layout>
+            <Layout :style="{padding: '0 24px 24px; minHeight:100px'}">
+                <Content :style="{padding: '24px', minHeight: '100%', background: '#fff'}">
+                    <Table width="550" height="500" border :columns="relatedColumns" :data="relatedData">
+                        <template slot-scope="{ row }" slot="name">
+                            <strong>{{ row.name }}</strong>
+                        </template>
+                        <template slot-scope="{ row, index }" slot="action">
+                            <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+                            <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                        </template>
+                      </Table>
+                </Content>
+            </Layout>
     </div>
-  </div>
 </template>
 <script>
-    import abilityInfoModal from "../user/abilityInfoModal";
-    import {post,get} from "@/apis/restUtils"
     export default {
         data () {
             return {
-                agreeModal: false,
-                disAgreeModal: false,
-                columns12: [
+                funcColumns:[],
+                funcData:[],
+                relatedColumns:[],
+                relatedData:[]
+            }
+        },
+        mounted: function(){
+            this.funcColumns = this.getFuncColumns();
+            this.funcData = this.getFuncData();
+            this.relatedColumns = this.getRelatedColumns();
+            this.relatedData = this.getRelatedData();
+        },
+        methods: {
+            show (index) {
+                this.$Modal.info({
+                    title: 'User Info',
+                    content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+                })
+            },
+            remove (index) {
+                this.data6.splice(index, 1);
+            },
+            getFuncData(){
+                return  [
                     {
-                        title: '激活码',
-                        slot: 'activeCode',
-                        resizable: true,
-                        width: 180
+                        title: 'Name',
+                        slot: 'name'
                     },
                     {
-                        title: '类型',
-                        key: 'type',
-                        resizable: true,
-                        width: 180
+                        title: 'Age',
+                        key: 'age'
                     },
                     {
-                        title: '内容',
-                        key: 'content'
+                        title: 'Address',
+                        key: 'address'
                     },
                     {
-                        title: '描述',
-                        key: 'description'
-                    },
-                    {
-                        title: '操作',
+                        title: 'Action',
                         slot: 'action',
                         width: 150,
                         align: 'center'
                     }
-                ],
-                tableData: [
+                ];
+            },
+            getFuncColumns(){
+                return  [
+                    {
+                        title: 'Name',
+                        slot: 'name'
+                    },
+                    {
+                        title: 'Age',
+                        key: 'age'
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address'
+                    },
+                    {
+                        title: 'Action',
+                        slot: 'action',
+                        width: 150,
+                        align: 'center'
+                    }
+                ];
+            },
+            getRelatedData(){
+                return[
                     {
                         name: 'John Brown',
-                        type: "api",
-                        content: 'New York No. 1 Lake Park',
-                        description: "a"
+                        age: 18,
+                        address: 'New York No. 1 Lake Park'
                     },
                     {
                         name: 'Jim Green',
-                        type: "page",
-                        content: 'London No. 1 Lake Park',
-                        description: "b"
+                        age: 24,
+                        address: 'London No. 1 Lake Park'
                     },
                     {
                         name: 'Joe Black',
-                        type: "api",
-                        content: 'Sydney No. 1 Lake Park',
-                        description: "c"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "api",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "d"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "e"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "f"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "g"
+                        age: 30,
+                        address: 'Sydney No. 1 Lake Park'
                     }
-                ]
-            }
-        },
-        methods: {
-            agree (row) {
-                this.agreeModal = true;
-                console.log(row);
+                ];
             },
-            disAgree (row) {
-                this.disAgreeModal = true;
-                  console.log(row);
-            },
-            edit (row, isModify) {
-                this.$Modal.confirm({
-                  title: '能力信息',
-                  render: (h) => {
-                    return h(abilityInfoModal, {
-                      ref: 'abilityInfoModal',
-                      props: {
-                        row: row,
-                      },
-                      on:{
-                        onModifyOk:(key) =>{
-                          alert(key);
-                        }
-                      }
-                    })
-                  },
-                  width: 600,
-                  closable: false,
-                  okText: "确定",
-                  cancelText: "取消",
-                  loading: true,
-                  onOk() {
-                    console.log("click ok")
-                    if(isModify) {
-                        post("/admin/modifyAbility", row, reponse => {
-                            if(reponse.data.status == "fail") {
-                                alert("ModifyAbility " + reponse.data.status + " 该能力不存在");
-                            }else {
-                                console.log("ModifyAbility Reply", reponse.data.status);
-                            }
-                        }) 
-                    }else {
-                        post("/admin/addAbility", row, reponse => {
-                            if(reponse.data.status == "fail") {
-                                alert("AddAbility " + reponse.data.status + " 该能力已存在");
-                            }else {
-                                console.log("AddAbility Reply", reponse.data.status);
-                            }
-                        }) 
+            getRelatedColumns(){
+                return  [
+                    {
+                        title: 'Name',
+                        slot: 'name'
+                    },
+                    {
+                        title: 'Age',
+                        key: 'age'
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address'
+                    },
+                    {
+                        title: 'Action',
+                        slot: 'action',
+                        width: 150,
+                        align: 'center'
                     }
-                    this.$Modal.remove()
-                  },
-                  onCancel() {
-                      console.log("click cancel")
-                      get("/admin/getAllAbilities", reponse => {
-                        this.tableData = reponse.data;
-                        console.log("Get reply", this.tableData);
-                      })
-                  }
-                });
-            },
-            add () {
-                this.tableData.unshift({
-                    "name" : "",
-                    "type": "",
-                    "content": "",
-                    "description": ""
-                })
-                this.edit(this.tableData[0],false)
-            },
-            remove (row, index) {
-                post("/admin/delAbility", row, reponse => {
-                    if(reponse.data.status == "fail") {
-                        alert("DelAbility " + reponse.data.status + " 该能力正在被使用");
-                    }else {
-                        this.tableData.splice(index, 1);
-                        console.log("DelAbility Reply", reponse.data.status);
-                    }
-                    
-                })
+                ];
             }
         }
-    };
+    }
 </script>
 

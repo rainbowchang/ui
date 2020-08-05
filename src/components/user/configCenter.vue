@@ -35,6 +35,7 @@
                             <MenuItem name="userManager" :style="{margin: '0px 40 '}">
                                <Icon type="md-document" />
                                  用户管理
+                                  
                             </MenuItem>
                             <MenuItem name="roleManager">
                               <Icon type="md-chatbubbles" />

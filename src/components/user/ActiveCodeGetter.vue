@@ -28,20 +28,19 @@
     <div class="layout">
             <Layout :style="{padding: '0 24px 24px'}">
                  <Content :style="{padding: '24px', minHeight: '100%', background: '#fff'}">
-                  <Table  width="550" height="500" border :columns="columns12" :data="data6">
+                  <Table  width="550" height="500" border :columns="funcColumns" :data="funcData">
                     <template slot-scope="{ row }" slot="name">
                         <strong>{{ row.name }}</strong>
                     </template>
-                    <template slot-scope="{ row, index }" slot="action">
-                        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
-                        <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                    <template slot-scope="{ row }" slot="action">
+                        <Button type="primary" size="small" style="margin-right: 5px" @click="show(row)">获取</Button>
                     </template>
                   </Table>
                </Content>
            </Layout>
             <Layout :style="{padding: '0 24px 24px; minHeight:100px'}">
                 <Content :style="{padding: '24px', minHeight: '100%', background: '#fff'}">
-                    <Table width="550" height="500" border :columns="columns12" :data="data6">
+                    <Table width="550" height="500" border :columns="relatedColumns" :data="relatedData">
                         <template slot-scope="{ row }" slot="name">
                             <strong>{{ row.name }}</strong>
                         </template>
@@ -58,27 +57,30 @@
     export default {
         data () {
             return {
-                columns12: [
-                    {
-                        title: 'Name',
-                        slot: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    },
-                    {
-                        title: 'Action',
-                        slot: 'action',
-                        width: 150,
-                        align: 'center'
-                    }
-                ],
-                data6: [
+                funcColumns:[],
+                funcData:[],
+                relatedColumns:[],
+                relatedData:[]
+            }
+        },
+        mounted: function(){
+            this.funcColumns = this.getFuncColumns();
+            this.funcData = this.getFuncData();
+            this.relatedColumns = this.getRelatedColumns();
+            this.relatedData = this.getRelatedData();
+        },
+        methods: {
+            show (row) {
+                this.$Modal.info({
+                    title: 'nihao Info',
+                    content: "hello" + JSON.stringify(row)
+                })
+            },
+            remove (index) {
+                this.data6.splice(index, 1);
+            },
+            getFuncData(){
+                return  [
                     {
                         name: 'John Brown',
                         age: 18,
@@ -93,54 +95,75 @@
                         name: 'Joe Black',
                         age: 30,
                         address: 'Sydney No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
                     }
-                ]
-            }
-        },
-        methods: {
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-                })
+                ];
             },
-            remove (index) {
-                this.data6.splice(index, 1);
+            getFuncColumns(){
+                return  [
+                    {
+                        title: '功能编号',
+                        slot: 'name'
+                    },
+                    {
+                        title: '功能',
+                        key: 'age'
+                    },
+                    {
+                        title: '功能描述',
+                        key: 'address'
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        width: 150,
+                        align: 'center'
+                    }
+                ];
+            },
+            getRelatedData(){
+                return[
+                    {
+                        name: 'John Brown',
+                        age: 18,
+                        address: 'New York No. 1 Lake Park'
+                    },
+                    {
+                        name: 'Jim Green',
+                        age: 24,
+                        address: 'London No. 1 Lake Park'
+                    },
+                    {
+                        name: 'Joe Black',
+                        age: 30,
+                        address: 'Sydney No. 1 Lake Park'
+                    }
+                ];
+            },
+            getRelatedColumns(){
+                return  [
+                    {
+                        title: '功能编码',
+                        slot: 'name'
+                    },
+                    {
+                        title: '功能名称',
+                        key: 'age'
+                    },
+                    {
+                        title: '设备sn',
+                        key: 'address'
+                    },
+                     {
+                        title: '获取结果',
+                        key: 'address'
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        width: 150,
+                        align: 'center'
+                    }
+                ];
             }
         }
     }
