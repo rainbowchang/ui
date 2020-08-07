@@ -103,7 +103,7 @@
                 this.userData = reponse.data
             })
             this.activeCodeColumns = this.getActiveCodeColumns();
-            this.activeCodeData = this.getActiveCodeData();
+            this.getActiveCodeData();
         },
         methods:{
             showMenu(name){
@@ -145,7 +145,8 @@
                 return [ 
                    {
                         title: '激活码',
-                        slot: 'activeCode'
+                        key: 'activeCode',
+                        width: 150
                     },
                     {
                         title: '功能编码',
@@ -186,44 +187,44 @@
                     {
                         title: '描述',
                         key: 'memo',
-                        width: 180
+                        width: 150
                     },
                     {
                         title: '操作',
                         slot: 'action',
-                        width: 150,
+                        width: 100,
                         align: 'center'
                     }];
             },
             getActiveCodeData(){
-                return [
-                    {
-                        activeCode: '23456792',
-                        funcCode: 'func_001',
-                        funcContent: '精细化控制',
-                        sn: 'sn-001',
-                        deviceName: '宁庆机床001',
-                        useState: '已使用',
-                        approvalState: '已获取',
-                        createDate: '2019-09-01',
-                        endDate: '2021-09-01',
-                        updateDate: '2020-03-01',
-                        memo: "获取相关的精细化数据"
-                    },
-                    {
-                        activeCode: '458456792',
-                        funcCode: 'func_002',
-                        funcContent: '机床监控',
-                        sn: 'sn-002',
-                        deviceName: '宁庆机床002',
-                        useState: '未使用',
-                        approvalState: '已拒绝',
-                        createDate: '',
-                        endDate: '',
-                        updateDate: '',
-                        memo: "获取实时的监控数据"
-                    }];
+                this.activeCodeData = [];
+                post("/license/customer/getLicenseByCustomerName", localStorage.getItem("UserName"), reponse => {
+                    reponse.data.forEach(element => {
+                        this.convertToActiveCodeData(element)   
+                    });
+                })
             },
+
+            convertToActiveCodeData(data) {
+                this.activeCodeData.push({})
+                var index = this.activeCodeData.length - 1
+                this.activeCodeData[index].activeCode = data.activeCode
+                this.activeCodeData[index].funcCode = data.facility.id
+                this.activeCodeData[index].funcContent = data.facility.name
+                this.activeCodeData[index].useState = data.usingState
+                this.activeCodeData[index].approvalState = data.acquiringState
+                this.activeCodeData[index].sn = data.sn
+                this.activeCodeData[index].createDate = data.createDate
+                this.activeCodeData[index].endDate = data.expirationDate
+                this.activeCodeData[index].updateDate = data.createDate
+                this.activeCodeData[index].memo = data.description
+                post("/organization/deviceInfo/getDeviceInfoBySn", data.sn, reponse => {
+                    console.log("AAA", index, this.activeCodeData[index])
+                    this.activeCodeData[index].deviceName = reponse.data.name
+                    this.activeCodeColumns = this.getActiveCodeColumns();
+                })
+            },
+
             cancle(row){
                 alert(JSON.stringify(row));
             },
