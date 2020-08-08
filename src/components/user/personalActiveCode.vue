@@ -12,9 +12,12 @@
                 </template>
              </Table>
               <Modal v-model="showDelayModal" title="是否要同意此申请"
-                 @on-ok="delayOk"
-                 @on-cancel="delayCancel">
-                <p>申请的信息</p>
+                 @on-ok="onOkDelay"
+                 @on-cancel="onCancelDelay">
+                <p>功能编码：{{this.delayRow.funcCode}}</p>
+                <p>功能：{{this.delayRow.funcContent}}</p>
+                <p>当前截止日期：{{this.delayRow.endDate}}</p>
+                延期至： <DatePicker type="date" multiple placeholder="Select date" style="width: 300px" @on-change="onChangeDelayDate"></DatePicker>
             </Modal>
         </div>
     </div>
@@ -26,14 +29,9 @@
     export default {
         data () {
             return {
-                userData: {
-                    'customerId' : "ui12345678",
-                    'name' : '宁庆机床厂',
-                    'province' : '南京',
-                    'address' : '玄武区四牌楼2号',
-                    'tel' : '13458902345',
-                    'roles' : ["ADMIN","ROOT"]
-                },
+                showDelayModal:false,
+                delayDateValue:"",
+                delayRow: "",
                 activeCodeColumns: [],
                 activeCodeData: []
             };
@@ -43,12 +41,23 @@
             this.activeCodeData = this.getActiveCodeData();
         },
         methods:{
+            onChangeDelayDate(date){
+                this.delayDateValue = date;
+            },
             delay(row){
-                 alert(JSON.stringify(row));
+                 this.showDelayModal = true;
+                 this.delayRow = row;
+            },
+            onOkDelay(){
+                alert(" delay date:" + this.delayDateValue);
+                alert("row:" + JSON.stringify(this.delayRow));
+            },
+            onCancelDelay(){
+
             },
             delayHistory(row){
                this.$Modal.confirm({
-                  title: '获取激活码信息',
+                  title: '延期记录信息',
                   render: (h) => {
                     return h(delayHistoryModal, {
                       ref: 'delayHistoryModal',
@@ -62,7 +71,7 @@
                       }
                     })
                   },
-                  width: 1300,
+                  width: 1050,
                   closable: false,
                   okText: "确定",
                   cancelText: "取消",
@@ -82,7 +91,7 @@
                         this.convertToActiveCodeData(element)   
                     });
                 })
-                if(this.activeCodeData.size == 0){
+                if(this.activeCodeData.length == 0){
                    return this.getDefaultActiveCodeData();
                 }
             },
