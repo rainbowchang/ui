@@ -12,6 +12,7 @@
            <template slot-scope="{ row, index }" slot="action">
                <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row, true)">编辑</Button>
                <Button type="error" size="small" @click="remove(row,index)">删除</Button>
+                <Button type="error" size="small" @click="bindActiveCode(row)">绑定激活码</Button>
             </template>
          </Table>
     </div>
@@ -211,6 +212,9 @@
                     this.tableData.splice(index, 1);
                 })
             },
+            bindActiveCode(row){
+              alert("绑定激活码：" + JSON.stringify(row));   
+            }
         }
     };
 </script>

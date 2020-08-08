@@ -9,18 +9,18 @@
                <Button v-show="editButtonShow" type="primary" size="small" style="margin-right: 5px" @click="edit(row)">修改</Button>
                <Button v-show="agreeButtonShow" type="primary" size="small" style="margin-right: 5px" @click="agree(row)">同意</Button>
                <Button v-show="disAgreeButtonShow" type="error" size="small" @click="disAgree(row)">不同意</Button>
-              <Button v-show="cancelButtonShow" type="error" size="small" style="margin-right: 5px" @click="cacel(row)">撤销</Button>
+              <Button v-show="cancelButtonShow" type="error" size="small" style="margin-right: 5px" @click="cancel(row)">撤销</Button>
             </template>
          </Table>
-         <Modal v-model="agreeModal" title="是否要同意此申请"
-             @on-ok="ok"
-             @on-cancel="cancel">
-            <p>申请的信息</p>
+         <Modal v-model="agreeModal" title="审批"
+             @on-ok="onAgreeok"
+             @on-cancel="OnAgreeCancel">
+            <p>是否要同意此申请</p>
         </Modal>
-        <Modal v-model="disAgreeModal" title="是否确定拒绝"
-             @on-ok="ok"
-             @on-cancel="cancel">
-            <p>申请的信息</p>
+        <Modal v-model="disAgreeModal" title="审批"
+             @on-ok="onDisAgreeOk"
+             @on-cancel="onDisAgreeCancel">
+            <p>是否确定拒绝</p>
         </Modal>
     </div>
   </div>
@@ -35,6 +35,7 @@
                 disAgreeButtonShow: true,
                 agreeButtonShow:true,
                 editButtonShow: true,
+                rowData:"",
                 columns12: [],
                 tableData: []
             }
@@ -46,26 +47,38 @@
         methods: {
             agree (row) {
                 this.agreeModal = true;
-                console.log(row);
+                this.rowData = row;
             },
             disAgree (row) {
                 this.disAgreeModal = true;
-                  console.log(row);
+                this.rowData = row;
             },
             edit (row) {
                 this.agreeModal = true;
-                console.log(row);
+                this.rowData = row;
                 alert(JSON.stringify(row));
             },
             cancel (row) {
                 this.disAgreeModal = true;
-                console.log(row);
+                this.rowData = row;
+            },
+            onAgreeok(){
+                 alert(JSON.stringify(this.rowData));
+            },
+            OnAgreeCancel(){
+                alert(JSON.stringify(this.rowData));
+            },
+            onDisAgreeOk(){
+               alert(JSON.stringify(this.rowData));
+            },
+            onDisAgreeCancel(){
+                alert(JSON.stringify(this.rowData));
             },
             getTableColumns(){
                 return [
                     {
                         title: '激活码',
-                        slot: 'activeCode',
+                        key: 'activeCode',
                         resizable: true,
                         // width: 180
                     },
@@ -127,46 +140,18 @@
 
                 return [
                     {
-                        name: 'John Brown',
-                        type: "api",
-                        content: 'New York No. 1 Lake Park',
-                        description: "a"
-                    },
-                    {
-                        name: 'Jim Green',
-                        type: "page",
-                        content: 'London No. 1 Lake Park',
-                        description: "b"
-                    },
-                    {
-                        name: 'Joe Black',
-                        type: "api",
-                        content: 'Sydney No. 1 Lake Park',
-                        description: "c"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "api",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "d"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "e"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "f"
-                    },
-                    {
-                        name: 'Jon Snow',
-                        type: "tree",
-                        content: 'Ottawa No. 2 Lake Park',
-                        description: "g"
+                        activeCode: '123456',
+                        funcCode: "funct_001",
+                        funcContent: '机床细节',
+                        userId: "user-002",
+                        userName: "张三",
+                        startDate: "2020-09-08",
+                        endDate: "2020-09-08",
+                        useState: "使用中",
+                        approvalState: "已获取",
+                        sn: "sn-001",
+                        deviceName: "device-002",
+                        memo: ""
                     }
                 ];
             }

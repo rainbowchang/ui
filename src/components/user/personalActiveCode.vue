@@ -14,9 +14,9 @@
               <Modal v-model="showDelayModal" title="是否要同意此申请"
                  @on-ok="onOkDelay"
                  @on-cancel="onCancelDelay">
-                <p>功能编码：{{this.delayRow.funcCode}}</p>
-                <p>功能：{{this.delayRow.funcContent}}</p>
-                <p>当前截止日期：{{this.delayRow.endDate}}</p>
+                <p>功能编码：{{this.rowData.funcCode}}</p>
+                <p>功能：{{this.rowData.funcContent}}</p>
+                <p>当前截止日期：{{this.rowData.endDate}}</p>
                 延期至： <DatePicker type="date" multiple placeholder="Select date" style="width: 300px" @on-change="onChangeDelayDate"></DatePicker>
             </Modal>
         </div>
@@ -31,7 +31,7 @@
             return {
                 showDelayModal:false,
                 delayDateValue:"",
-                delayRow: "",
+                rowData: "",
                 activeCodeColumns: [],
                 activeCodeData: []
             };
@@ -46,14 +46,14 @@
             },
             delay(row){
                  this.showDelayModal = true;
-                 this.delayRow = row;
+                 this.rowData = row;
             },
             onOkDelay(){
                 alert(" delay date:" + this.delayDateValue);
-                alert("row:" + JSON.stringify(this.delayRow));
+                alert("row:" + JSON.stringify(this.rowData));
             },
             onCancelDelay(){
-
+                
             },
             delayHistory(row){
                this.$Modal.confirm({
