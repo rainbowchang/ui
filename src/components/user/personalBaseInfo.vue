@@ -1,30 +1,32 @@
 <template>
+    
     <div class="layout">
-        <Layout>
-            <Layout :style="{padding: '0 50px'}">  
-             <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
-                <div style="display: block">
-                    <div style="margin-left:2%; margin-top:3%">
-                       <h3>激活码：</h3>
-                        <Table highlight-row height="350" width= "1100" border :columns="activeCodeColumns" :data="activeCodeData">
-                            <template slot-scope="{ row }" slot="name">
-                               <strong>{{ row.name }}</strong>
-                           </template>
-                           <template slot-scope="{ row }" slot="action">
-                               <Button type="primary" size="small" style="margin-right: 5px" @click="delay(row)">延期</Button>
-                                <Button type="primary" size="small" style="margin-right: 5px" @click="delayHistory(row)">延期历史</Button>
-                            </template>
-                         </Table>
-                          <Modal v-model="showDelayModal" title="是否要同意此申请"
-                             @on-ok="delayOk"
-                             @on-cancel="delayCancel">
-                            <p>申请的信息</p>
-                        </Modal>
-                    </div>
-                  </div>
-                </Content>
-            </Layout>
-        </Layout>
+        <div class="baseInfo">
+            <Row>
+                <Col span="12">
+                    用户id: {{userData.customerId}}
+                </Col>
+                <Col span="12">
+                    用户名称: {{userData.name}}
+                </Col>
+            </Row>
+            <Row>
+                <Col span="12">
+                    城市: {{userData.province}}
+                </Col>
+                <Col span="12">
+                    地址: {{userData.address}}
+                </Col>
+            </Row>
+            <Row>
+                <Col span="12">
+                    联系方式: {{userData.tel}}
+                </Col>
+                <Col span="12">
+                    角色: {{userData.roles}}
+                </Col>
+            </Row>                                
+        </div>
     </div>
 </template>
 <script>
@@ -185,43 +187,18 @@
 
 <style scoped>
 .layout{
-    border: 1px solid #d7dde4;
+    border: 0px solid #d7dde4;
     background: #f5f7f9;
     position: relative;
     border-radius: 4px;
-    overflow: hidden;
+    height: auto;
 }
-.layout-logo{
-    width: 50px;
-    height: 30px; 
-    float: left;
-    position: absolute;
-    top: 15px;
-    left: 10px;
-    text-align: left;
-}
-.layout-title{
-    width: 200px;
-    margin: 0 auto;
-    text-align: center;
-}
-.layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    text-align: right;
-    margin-left: 90%;
-}
-.layout-footer-center{
-    text-align: center;
-}
-
-.demo-drawer-profile{
+.baseInfo{
     width: 78%;
     font-size: 15px;
-    margin-left: 10%
-}
-.demo-drawer-profile .ivu-col{
-    margin-bottom: 20px;
+    margin-left: 10%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 .c_button{
      display: flex; 

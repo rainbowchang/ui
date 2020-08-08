@@ -1,171 +1,125 @@
+<template>
+    <div class="layout">
+        <Layout>
+            <Header>
+                <Menu mode="horizontal" theme="dark" active-name="index"  @on-select="showMenu">
+                    <div class="layout-logo">
+                       <div style="margin-top: -13px;">
+                            <Icon type="ios-boat-outline" size = "30" color="white"/>
+                       </div>
+                    </div>
+                    <div class="layout-nav">
+                        <MenuItem name="index">
+                            <Icon type="ios-navigate"></Icon>
+                            首页
+                        </MenuItem>
+                        <MenuItem name="equipstatus">
+                            <Icon type="ios-keypad"></Icon>
+                            设备平台
+                        </MenuItem>
+                        <MenuItem name="map">
+                            <Icon type="ios-analytics"></Icon>
+                            机床分布
+                        </MenuItem>
+                    </div>
+                </Menu>
+            </Header>
+            <Layout :style="{padding: '0 20px'}">
+                <Breadcrumb :style="{margin: '16px 0'}">
+                    <BreadcrumbItem><h3>配置管理中心</h3></BreadcrumbItem>
+                </Breadcrumb>
+                <Content :style="{padding: '24px 0', minHeight: '270px', background: '#fff'}">
+                    <Layout :style="{minHeight: '67vh'}">
+                        <Sider hide-trigger collapsible :collapsed-width="78">
+                         <Menu active-name="personalBaseInfo" theme="dark" width="auto"  @on-select="showComponent">
+                            <MenuItem name="personalBaseInfo" :style="{margin: '0px 40 '}">
+                               <Icon type="md-document" />
+                                 用户基本信息  
+                            </MenuItem>
+                            <MenuItem name="personalActiveCode">
+                              <Icon type="md-chatbubbles" />
+                                激活码
+                            </MenuItem>
+                        </Menu>
+                        </Sider>
+                        <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
+                            <personalBaseInfo v-show="showPersonalBaseInfo" ref = "refPersonalBaseInfo"></personalBaseInfo>
+                            <personalActiveCode v-show="showPersonalActiveCode" ref = "refPersonalActiveCode"></personalActiveCode>
+                        </Content>
+                    </Layout>
+                </Content>
+            </Layout>
+            <Footer class="layout-footer-center"></Footer>
+        </Layout>
+    </div>
+</template>
+<script>
+    import personalBaseInfo from "../user/personalBaseInfo";
+    import personalActiveCode from "../user/personalActiveCode";
+
+    export default {
+        components:{personalBaseInfo, personalActiveCode},
+        data () {
+            return {
+                showPersonalBaseInfo: true,
+                showPersonalActiveCode: false
+            };
+        },
+        methods:{
+            showComponent(name){
+                this.setDefaultValue();
+                switch(name){
+                  case "personalBaseInfo":
+                     this.showPersonalBaseInfo = true;
+                     break;
+                  case "personalActiveCode":
+                     this.showPersonalActiveCode = true;
+                     break;
+                   default:
+                      break;
+                }
+            },
+            setDefaultValue(){
+                this.showPersonalBaseInfo = false;
+                this.showPersonalActiveCode = false;
+            },
+            showMenu(name){
+                this.$router.push(name);
+            },
+            showDeviceInfo(){
+                this.$router.push("equipstatus");
+            },
+            showMapInfo(){
+                this.$router.push("map");
+            }
+        }
+
+    };
+</script>
+
 <style scoped>
 .layout{
     border: 1px solid #d7dde4;
     background: #f5f7f9;
     position: relative;
     border-radius: 4px;
-    overflow:auto;
-    display: flex;
-    flex-direction: row;
+    overflow: hidden;
 }
 .layout-logo{
-    width: 100px;
-    height: 30px;
-    background: #5b6270;
-    border-radius: 3px;
+    width: 50px;
+    height: 30px; 
     float: left;
-    position: relative;
+    position: absolute;
     top: 15px;
-    left: 20px;
+    left: 10px;
+    text-align: left;
 }
 .layout-nav{
     width: 420px;
     margin: 0 auto;
-    margin-right: 20px;
+    text-align: center;
+}
+.layout-footer-center{
+    text-align: center;
 }
 </style>
-<template>
-    <div class="layout">
-            <Layout :style="{padding: '0 24px 24px'}">
-                 <Content :style="{padding: '24px', minHeight: '100%', background: '#fff'}">
-                  <Table  width="550" height="500" border :columns="funcColumns" :data="funcData">
-                    <template slot-scope="{ row }" slot="name">
-                        <strong>{{ row.name }}</strong>
-                    </template>
-                    <template slot-scope="{ row, index }" slot="action">
-                        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
-                        <Button type="error" size="small" @click="remove(index)">Delete</Button>
-                    </template>
-                  </Table>
-               </Content>
-           </Layout>
-            <Layout :style="{padding: '0 24px 24px; minHeight:100px'}">
-                <Content :style="{padding: '24px', minHeight: '100%', background: '#fff'}">
-                    <Table width="550" height="500" border :columns="relatedColumns" :data="relatedData">
-                        <template slot-scope="{ row }" slot="name">
-                            <strong>{{ row.name }}</strong>
-                        </template>
-                        <template slot-scope="{ row, index }" slot="action">
-                            <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
-                            <Button type="error" size="small" @click="remove(index)">Delete</Button>
-                        </template>
-                      </Table>
-                </Content>
-            </Layout>
-    </div>
-</template>
-<script>
-    export default {
-        data () {
-            return {
-                funcColumns:[],
-                funcData:[],
-                relatedColumns:[],
-                relatedData:[]
-            }
-        },
-        mounted: function(){
-            this.funcColumns = this.getFuncColumns();
-            this.funcData = this.getFuncData();
-            this.relatedColumns = this.getRelatedColumns();
-            this.relatedData = this.getRelatedData();
-        },
-        methods: {
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-                })
-            },
-            remove (index) {
-                this.data6.splice(index, 1);
-            },
-            getFuncData(){
-                return  [
-                    {
-                        title: 'Name',
-                        slot: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    },
-                    {
-                        title: 'Action',
-                        slot: 'action',
-                        width: 150,
-                        align: 'center'
-                    }
-                ];
-            },
-            getFuncColumns(){
-                return  [
-                    {
-                        title: 'Name',
-                        slot: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    },
-                    {
-                        title: 'Action',
-                        slot: 'action',
-                        width: 150,
-                        align: 'center'
-                    }
-                ];
-            },
-            getRelatedData(){
-                return[
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park'
-                    }
-                ];
-            },
-            getRelatedColumns(){
-                return  [
-                    {
-                        title: 'Name',
-                        slot: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    },
-                    {
-                        title: 'Action',
-                        slot: 'action',
-                        width: 150,
-                        align: 'center'
-                    }
-                ];
-            }
-        }
-    }
-</script>
-

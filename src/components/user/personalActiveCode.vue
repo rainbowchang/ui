@@ -1,34 +1,26 @@
 <template>
-    <div class="layout">
-        <Layout>
-            <Layout :style="{padding: '0 50px'}">  
-             <Content :style="{padding: '24px 0', minHeight: '280px', background: '#fff'}">
-                <div style="display: block">
-                    <div style="margin-left:2%; margin-top:3%">
-                       <h3>激活码：</h3>
-                        <Table highlight-row height="350" width= "1100" border :columns="activeCodeColumns" :data="activeCodeData">
-                            <template slot-scope="{ row }" slot="name">
-                               <strong>{{ row.name }}</strong>
-                           </template>
-                           <template slot-scope="{ row }" slot="action">
-                               <Button type="primary" size="small" style="margin-right: 5px" @click="delay(row)">延期</Button>
-                                <Button type="primary" size="small" style="margin-right: 5px" @click="delayHistory(row)">延期历史</Button>
-                            </template>
-                         </Table>
-                          <Modal v-model="showDelayModal" title="是否要同意此申请"
-                             @on-ok="delayOk"
-                             @on-cancel="delayCancel">
-                            <p>申请的信息</p>
-                        </Modal>
-                    </div>
-                  </div>
-                </Content>
-            </Layout>
-        </Layout>
+    <div style="display: block">
+         <h3>激活码</h3>
+        <div style="margin-top:3%">  
+            <Table highlight-row height="390" width= "1000" border :columns="activeCodeColumns" :data="activeCodeData">
+                <template slot-scope="{ row }" slot="name">
+                   <strong>{{ row.name }}</strong>
+               </template>
+               <template slot-scope="{ row }" slot="action">
+                   <Button type="primary" size="small" style="margin-right: 5px" @click="delay(row)">延期</Button>
+                    <Button type="primary" size="small" style="margin-right: 5px" @click="delayHistory(row)">延期历史</Button>
+                </template>
+             </Table>
+              <Modal v-model="showDelayModal" title="是否要同意此申请"
+                 @on-ok="delayOk"
+                 @on-cancel="delayCancel">
+                <p>申请的信息</p>
+            </Modal>
+        </div>
     </div>
 </template>
 <script>
-    // import {post} from "@/apis/restUtils"
+    import {post} from "@/apis/restUtils"
     import delayHistoryModal from "./delayHistoryModal";
 
     export default {
@@ -51,15 +43,6 @@
             this.activeCodeData = this.getActiveCodeData();
         },
         methods:{
-            showMenu(name){
-                this.$router.push(name);
-            },
-            showDeviceInfo(){
-                this.$router.push("equipstatus");
-            },
-            showMapInfo(){
-                this.$router.push("map");
-            },
             delay(row){
                  alert(JSON.stringify(row));
             },
@@ -92,9 +75,37 @@
                   }
                 });
             },
-            getActiveCode(){
-               
+            getActiveCodeData(){
+                this.activeCodeData = [];
+                post("/license/customer/getLicenseByCustomerName", localStorage.getItem("UserName"), reponse => {
+                    reponse.data.forEach(element => {
+                        this.convertToActiveCodeData(element)   
+                    });
+                })
+                if(this.activeCodeData.size == 0){
+                   return this.getDefaultActiveCodeData();
+                }
             },
+            convertToActiveCodeData(data) {
+                this.activeCodeData.push({})
+                var index = this.activeCodeData.length - 1
+                this.activeCodeData[index].activeCode = data.activeCode
+                this.activeCodeData[index].funcCode = data.facility.id
+                this.activeCodeData[index].funcContent = data.facility.name
+                this.activeCodeData[index].useState = data.usingState
+                this.activeCodeData[index].approvalState = data.acquiringState
+                this.activeCodeData[index].sn = data.sn
+                this.activeCodeData[index].createDate = data.createDate
+                this.activeCodeData[index].endDate = data.expirationDate
+                this.activeCodeData[index].updateDate = data.createDate
+                this.activeCodeData[index].memo = data.description
+                post("/organization/deviceInfo/getDeviceInfoBySn", data.sn, reponse => {
+                    console.log("AAA", index, this.activeCodeData[index])
+                    this.activeCodeData[index].deviceName = reponse.data.name
+                    this.activeCodeColumns = this.getActiveCodeColumns();
+                })
+            },
+
             getActiveCodeColumns(){
                 return [ 
                    {
@@ -140,7 +151,7 @@
                     {
                         title: '描述',
                         key: 'memo',
-                        width: 180
+                        width: 120
                     },
                     {
                         title: '操作',
@@ -149,7 +160,7 @@
                         align: 'center'
                     }];
             },
-            getActiveCodeData(){
+            getDefaultActiveCodeData(){
                 return [
                     {
                         activeCode: '23456792',
@@ -184,45 +195,6 @@
 </script>
 
 <style scoped>
-.layout{
-    border: 1px solid #d7dde4;
-    background: #f5f7f9;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-}
-.layout-logo{
-    width: 50px;
-    height: 30px; 
-    float: left;
-    position: absolute;
-    top: 15px;
-    left: 10px;
-    text-align: left;
-}
-.layout-title{
-    width: 200px;
-    margin: 0 auto;
-    text-align: center;
-}
-.layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    text-align: right;
-    margin-left: 90%;
-}
-.layout-footer-center{
-    text-align: center;
-}
-
-.demo-drawer-profile{
-    width: 78%;
-    font-size: 15px;
-    margin-left: 10%
-}
-.demo-drawer-profile .ivu-col{
-    margin-bottom: 20px;
-}
 .c_button{
      display: flex; 
      justify-content: flex-end; 

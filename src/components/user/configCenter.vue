@@ -49,6 +49,10 @@
                               <Icon type="md-chatbubbles" />
                                 激活码管理
                             </MenuItem>
+                            <MenuItem name="funcListManager">
+                              <Icon type="md-chatbubbles" />
+                                功能列表
+                            </MenuItem>
                         </Menu>
                         </Sider>
                         <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
@@ -56,6 +60,7 @@
                             <abilityManager v-show="showAbilityManager" ref = "refAbilityManager"></abilityManager>
                              <roleManager v-show="showRoleManager" ref = "RefRoleManager"></roleManager>
                              <activeCodeManager v-show="showActiveCodeManager" ref = "RefActiveCodeManager"></activeCodeManager>
+                             <funcListManager v-show="showFuncListManager" ref = "RefFuncListManager"></funcListManager>
                         </Content>
                     </Layout>
                 </Content>
@@ -69,15 +74,18 @@
     import roleManager from "./roleManager";
     import abilityManager from "./abilityManager";
     import activeCodeManager from "./activeCodeManager";
+    import funcListManager from "./funcListManager";
 
     export default {
-        components:{userManager, roleManager, abilityManager, activeCodeManager},
+        components:{userManager, roleManager, abilityManager, activeCodeManager,
+        funcListManager},
         data () {
             return {
                 showUserManager: true,
                 showAbilityManager: false,
                 showRoleManager:false,
-                showActiveCodeManager: false
+                showActiveCodeManager: false,
+                showFuncListManager: false
             };
         },
         methods:{
@@ -96,6 +104,9 @@
                  case "activeCodeManager":
                      this.showActiveCodeManager = true;
                      break;
+                 case "funcListManager":
+                     this.showFuncListManager = true;
+                     break;
                    default:
                       break;
                 }
@@ -105,6 +116,7 @@
                 this.showAbilityManager = false;
                 this.showRoleManager = false;
                 this.showActiveCodeManager = false;
+                this.showFuncListManager = false;
             },
             showMenu(name){
                 this.$router.push(name);
@@ -115,7 +127,6 @@
             showMapInfo(){
                 this.$router.push("map");
             }
-
         }
 
     };
