@@ -18,6 +18,14 @@
                     地址: {{userData.address}}
                 </Col>
             </Row>
+             <Row>
+                <Col span="12">
+                    注册时间: {{userData.registerDate}}
+                </Col>
+                <Col span="12">
+                    有效截止日期: {{userData.endDate}}
+                </Col>
+            </Row>  
             <Row>
                 <Col span="12">
                     联系方式: {{userData.tel}}

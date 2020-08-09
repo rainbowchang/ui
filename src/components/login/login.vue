@@ -23,6 +23,11 @@
           <Button @click="handleSubmit('formInline')">登录</Button>
         </FormItem>
       </Form>
+       <Modal v-model="checkEndDate" title="用户超期提醒"
+             @on-ok="onAgreeok"
+             @on-cancel="OnAgreeCancel">
+            <p>是否要同意此申请</p>
+      </Modal>
     </div>
   </div>
 </template>
@@ -32,6 +37,7 @@ import {post} from "@/apis/restUtils"
 export default {
   data() {
     return {
+      checkEndDate:false,
       single: false,
       formInline: {
         username: "",

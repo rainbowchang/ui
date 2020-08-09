@@ -2,13 +2,21 @@
     <div style="display: block">
          <h3>激活码</h3>
         <div style="margin-top:3%">  
+            <Input v-model="snSvalue" placeholder="设备sn" style="width: auto">
+            </Input>
+             <Select v-model="userStateSvalue" style="width:200px" placeholder="使用状态">
+                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+             <Button type="primary" icon="ios-search">搜索</Button>
             <Table highlight-row height="390" width= "1000" border :columns="activeCodeColumns" :data="activeCodeData">
                 <template slot-scope="{ row }" slot="name">
                    <strong>{{ row.name }}</strong>
                </template>
                <template slot-scope="{ row }" slot="action">
-                   <Button type="primary" size="small" style="margin-right: 5px" @click="delay(row)">延期</Button>
-                    <Button type="primary" size="small" style="margin-right: 5px" @click="delayHistory(row)">延期历史</Button>
+                   <div style="display: flex">
+                       <Button type="primary" size="small" style="margin-right: 5px" @click="delay(row)">延期申请</Button>
+                        <Button type="primary" size="small" style="margin-right: 5px" @click="delayHistory(row)">延期记录查询</Button>
+                    </div>
                 </template>
              </Table>
               <Modal v-model="showDelayModal" title="是否要同意此申请"
@@ -29,6 +37,8 @@
     export default {
         data () {
             return {
+                snSvalue:"",
+                userStateSvalue:"",
                 showDelayModal:false,
                 delayDateValue:"",
                 rowData: "",
@@ -53,7 +63,7 @@
                 alert("row:" + JSON.stringify(this.rowData));
             },
             onCancelDelay(){
-                
+
             },
             delayHistory(row){
                this.$Modal.confirm({
@@ -119,7 +129,7 @@
                 return [ 
                    {
                         title: '激活码',
-                        slot: 'activeCode'
+                        key: 'activeCode'
                     },
                     {
                         title: '功能编码',
@@ -165,7 +175,7 @@
                     {
                         title: '操作',
                         slot: 'action',
-                        width: 150,
+                        width: 180,
                         align: 'center'
                     }];
             },

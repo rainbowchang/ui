@@ -1,6 +1,12 @@
 <template>
   <div style="display: block">
     <div>
+        <Input v-model="snSvalue" placeholder="设备sn" style="width: auto">
+        </Input>
+        <Select v-model="userStateSvalue" style="width:200px" placeholder="使用状态">
+            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+        <Button type="primary" icon="ios-search">搜索</Button>
         <Table highlight-row height="350" width= "1000" border :columns="columns12" :data="tableData">
             <template slot-scope="{ row }" slot="name">
                <strong>{{ row.name }}</strong>
@@ -12,12 +18,12 @@
               <Button v-show="cancelButtonShow" type="error" size="small" style="margin-right: 5px" @click="cancel(row)">撤销</Button>
             </template>
          </Table>
-         <Modal v-model="agreeModal" title="审批"
+         <Modal v-model="agreeModal" title="同意审批"
              @on-ok="onAgreeok"
              @on-cancel="OnAgreeCancel">
             <p>是否要同意此申请</p>
         </Modal>
-        <Modal v-model="disAgreeModal" title="审批"
+        <Modal v-model="disAgreeModal" title="拒绝审批"
              @on-ok="onDisAgreeOk"
              @on-cancel="onDisAgreeCancel">
             <p>是否确定拒绝</p>

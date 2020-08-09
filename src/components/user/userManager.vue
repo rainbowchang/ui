@@ -48,6 +48,14 @@
                         key: 'company'
                     },
                     {
+                        title: '注册时间',
+                        key: 'registerDate'
+                    },
+                    {
+                        title: '有效截止日期',
+                        key: 'endDate'
+                    },
+                    {
                         title: '角色列表',
                         slot: 'roles'
                     },
