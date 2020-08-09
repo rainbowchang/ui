@@ -26,7 +26,8 @@
        <Modal v-model="checkEndDate" title="用户超期提醒"
              @on-ok="onAgreeok"
              @on-cancel="OnAgreeCancel">
-            <p>是否要同意此申请</p>
+            <p>你的用户注册时间是：{this.userInfo.registerDate}</p>
+            <p>你的截止时间是：{this.userInfo.endDate}</p>
       </Modal>
     </div>
   </div>
@@ -38,6 +39,7 @@ export default {
   data() {
     return {
       checkEndDate:false,
+      userInfo:{},
       single: false,
       formInline: {
         username: "",
@@ -73,9 +75,15 @@ export default {
       var parameter = this.formInline;  
       this.$refs[name].validate(valid => {
           post("/user/login",parameter,reponse => {
-            if (valid && reponse.data.status == "success") {
+            let data = reponse.data
+            if (valid && data.status == "success") {
               localStorage.setItem("UserName", parameter.username);
               localStorage.setItem("Flag", true);
+              this.userInfo.registerDate = data.registerDate;
+              this.userInfo.endDate = data.endDate;
+              if(!this.checkValidDate(this.userInfo)){
+                  return;
+              }
               this.$Message.success("登录成功!");
               router.push({path: "/index"});  
           } else {
@@ -83,6 +91,18 @@ export default {
           }
         });
       });
+    },
+    checkValidDate(userInfo){
+      let registerDate = userInfo.registerDate;
+      let endDate = userInfo.endDate;
+       if(registerDate == null || endDate == null){
+         return true;
+       }
+        if(endDate > new Date()){
+          return true;
+        }
+        this.checkEndDate = true;
+        return false;
     },
     register(){
       this.$router.push("register")

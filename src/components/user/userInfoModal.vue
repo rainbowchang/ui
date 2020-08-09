@@ -19,7 +19,7 @@
             <Input v-model="formItem.registerDate" placeholder="Enter something..."/>
         </FormItem>
         <FormItem label="有效截止日期">
-            <Input v-model="formItem.endDate" placeholder="Enter something..."/>
+            <DatePicker type="date" multiple placeholder="选择日期" style="width: 300px" @on-change="onEndDate"></DatePicker>
         </FormItem>
         <FormItem label="roles">
             <CheckboxGroup v-model="formItem.roles">
@@ -44,7 +44,9 @@
         props: ['row'],
         mounted: function() {
             console.log("userManager", this.row)
-            this.formItem = this.row
+            if(this.row != null){
+                this.formItem = this.row    
+            }
             get("/admin/getAllRoleNames", reponse => {
                 this.roles = []
                 this.roles = reponse.data;
@@ -52,7 +54,9 @@
             })
         },
         methods: {
-            
+            onEndDate(date){
+                this.formItem.endDate = date;
+            }
         }
     }
 </script>
