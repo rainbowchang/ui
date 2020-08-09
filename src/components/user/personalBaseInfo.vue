@@ -38,7 +38,7 @@
     </div>
 </template>
 <script>
-    // import {post} from "@/apis/restUtils"
+    import {get} from "@/apis/restUtils"
     import delayHistoryModal from "./delayHistoryModal";
 
     export default {
@@ -59,6 +59,7 @@
         mounted: function() {
             this.activeCodeColumns = this.getActiveCodeColumns();
             this.activeCodeData = this.getActiveCodeData();
+            this.getUserData();
         },
         methods:{
             showMenu(name){
@@ -72,6 +73,11 @@
             },
             delay(row){
                  alert(JSON.stringify(row));
+            },
+            getUserData() {
+                get("/admin/getCurrentUser", reponse => {
+                    this.userData = reponse.data
+                })
             },
             delayHistory(row){
                this.$Modal.confirm({
