@@ -74,10 +74,6 @@
                       <div class="stop"></div>
                       <span>停机：{{item.timeStop}}</span>
                     </div>
-                    <div>
-                      <div class="interrupt"></div>
-                      <span>未连接：{{item.timeShutdown}}</span>
-                    </div>
                   </div>
                 </div>
                 <!-- 右侧环装图 -->
@@ -138,39 +134,33 @@ export default {
         {
           timeWork: "",
           timeAlarm: "",
-          timeShutdown: "",
           timeStop: "",
           list: [
             { percent: "18%", status: 1 },
-            { percent: "12%", status: 2 },
-            { percent: "34%", status: 3 },
-            { percent: "36%", status: 5 }
+            { percent: "66%", status: 2 },
+            { percent: "36%", status: 3 }
           ],
           name: "ZHUGANGZHI-1",
         },
         {
           timeWork: "",
           timeAlarm: "",
-          timeShutdown: "",
           timeStop: "",
           list: [
             { percent: "10%", status: 2 },
-            { percent: "28%", status: 3 },
-            { percent: "12%", status: 1 },
-            { percent: "50%", status: 5 }
+            { percent: "40%", status: 3 },
+            { percent: "50%", status: 1 }
           ],
           name: "ZHUGANGZHI-2"
         },
         {
           timeWork: "",
           timeAlarm: "",
-          timeShutdown: "",
           timeStop: "",
           list: [
             { percent: "10%", status: 2 },
             { percent: "28%", status: 3 },
-            { percent: "12%", status: 1 },
-            { percent: "50%", status: 5 }
+            { percent: "62%", status: 1 },
           ],
           name: "ZHUGANGZHI-3"
         }
@@ -300,7 +290,7 @@ export default {
         legend: {
           orient: "vertical",
           x: "left",
-          data: ["加工", "故障", "停机", "未连接", "无状态"]
+          data: ["加工", "故障", "停机", "无状态"]
         },
         series: [
           {
