@@ -88,8 +88,8 @@ export default {
           post("/user/login",parameter,reponse => {
             let data = reponse.data
             if(data != null){
-              this.userInfo.registerDate = data.registerDate;
-              this.userInfo.endDate = data.endDate;
+              this.userInfo.registerDate = new Date(data.registerDate);
+              this.userInfo.endDate = new Date(data.endDate);
               if(!this.checkValidDate(this.userInfo)){
                     return;
               }
