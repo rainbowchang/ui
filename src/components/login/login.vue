@@ -24,10 +24,11 @@
         </FormItem>
       </Form>
        <Modal v-model="checkEndDate" title="用户超期提醒"
-             @on-ok="onAgreeok"
-             @on-cancel="OnAgreeCancel">
-            <p>你的用户注册时间是：{this.userInfo.registerDate}</p>
-            <p>你的截止时间是：{this.userInfo.endDate}</p>
+             @on-ok="onok"
+             @on-cancel="OnCancel">
+            <p>你的用户注册时间是：{{formatDate(this.userInfo.registerDate, "yyyy-MM-dd")}}</p>
+            <p>你的截止时间是：{{formatDate(this.userInfo.endDate,"yyyy-MM-dd")}}</p>
+            <p>{{this.checkResult}}</p>
       </Modal>
     </div>
   </div>
@@ -39,7 +40,11 @@ export default {
   data() {
     return {
       checkEndDate:false,
-      userInfo:{},
+      checkResult:"",
+      userInfo:{
+        registerDate: new Date("2020-09-09"),
+        endDate: new Date("2020-08-19")
+      },
       single: false,
       formInline: {
         username: "",
@@ -70,20 +75,28 @@ export default {
     };
   },
   methods: {
+    onok(){
+
+    },
+    OnCancel(){
+
+    },
     handleSubmit(name) {
       var router = this.$router;
       var parameter = this.formInline;  
       this.$refs[name].validate(valid => {
           post("/user/login",parameter,reponse => {
             let data = reponse.data
-            if (valid && data.status == "success") {
-              localStorage.setItem("UserName", parameter.username);
-              localStorage.setItem("Flag", true);
+            if(data != null){
               this.userInfo.registerDate = data.registerDate;
               this.userInfo.endDate = data.endDate;
               if(!this.checkValidDate(this.userInfo)){
-                  return;
+                    return;
               }
+            }
+            if (valid && data.status == "success") {
+              localStorage.setItem("UserName", parameter.username);
+              localStorage.setItem("Flag", true);
               this.$Message.success("登录成功!");
               router.push({path: "/index"});  
           } else {
@@ -95,17 +108,60 @@ export default {
     checkValidDate(userInfo){
       let registerDate = userInfo.registerDate;
       let endDate = userInfo.endDate;
-       if(registerDate == null || endDate == null){
+      if(registerDate == null || endDate == null){
          return true;
-       }
-        if(endDate > new Date()){
+      }
+      let now = new Date();
+      if(endDate > now){
+          let leftDays = this.getDays(now, endDate);
+          if( leftDays <= 10){
+              this.checkResult = "友好提醒： 您的账户在" + leftDays 
+                                  + "天后过期， 请您及时续费，以便继续使用，谢谢。";
+              this.checkEndDate = true;
+          }
           return true;
-        }
-        this.checkEndDate = true;
-        return false;
+      } 
+      this.checkResult = "对不起，您的账户已经到期，请您尽快续费，以便继续使用，谢谢。";
+      this.checkEndDate = true;
+      return false;
     },
     register(){
       this.$router.push("register")
+    },
+    getDays(date, other){
+      var t1 = date.getTime();
+      var t2 = other.getTime();
+      var dayTime = 1000*60*60*24; 
+      var minusDays = Math.floor(((t2-t1)/dayTime));
+      var days = Math.abs(minusDays);
+      return days;
+    },
+    formatDate(date, fmt){
+      if(date == null){
+        return "";
+      }
+       var o = {
+          "M+" : date.getMonth()+1,                 //月份
+          "d+" : date.getDate(),                    //日
+          "h+" : date.getHours(),                   //小时
+          "m+" : date.getMinutes(),                 //分
+          "s+" : date.getSeconds(),                 //秒
+          "q+" : Math.floor((date.getMonth()+3)/3), //季度
+          "S"  : date.getMilliseconds()             //毫秒
+        };
+
+        if(/(y+)/.test(fmt)){
+          fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+              
+        for(var k in o){
+          if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(
+              RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));  
+          }       
+        }
+
+        return fmt;
     }
   }
 };
