@@ -41,6 +41,7 @@ export default {
     return {
       checkEndDate:false,
       checkResult:"",
+      canLogin:false,
       userInfo:{
         registerDate: new Date("2020-09-09"),
         endDate: new Date("2020-08-19")
@@ -74,15 +75,21 @@ export default {
       }
     };
   },
+  mounted:function(){
+      this.canLogin = false;
+  },
   methods: {
     onok(){
-
+      if(this.canLogin){
+        var router = this.$router;
+        this.$Message.success("登录成功!");
+        router.push({path: "/index"});  
+      }
     },
     OnCancel(){
-
+      
     },
     handleSubmit(name) {
-      var router = this.$router;
       var parameter = this.formInline;  
       this.$refs[name].validate(valid => {
           post("/user/login",parameter,reponse => {
@@ -90,18 +97,25 @@ export default {
             if(data != null){
               this.userInfo.registerDate = new Date(data.registerDate);
               this.userInfo.endDate = new Date(data.endDate);
-              if(!this.checkValidDate(this.userInfo)){
-                    return;
+              //alert("userInfo:" + JSON.stringify(this.userInfo));
+              let validResult = this.checkValidDate(this.userInfo);
+              if(!validResult){
+                  return;
               }
             }
             if (valid && data.status == "success") {
-              localStorage.setItem("UserName", parameter.username);
-              localStorage.setItem("Flag", true);
-              this.$Message.success("登录成功!");
-              router.push({path: "/index"});  
-          } else {
-              this.$Message.error("用户名或密码错误!");
-          }
+                 this.canLogin = true;
+                 localStorage.setItem("UserName", parameter.username);
+                 localStorage.setItem("Flag", true);
+                 if(!this.checkEndDate){
+                    var router = this.$router;
+                    this.$Message.success("登录成功!");
+                    router.push({path: "/index"});  
+                 }
+            } else {
+                this.canLogin = false;
+                this.$Message.error("用户名或密码错误!");
+            }
         });
       });
     },
@@ -112,7 +126,9 @@ export default {
          return true;
       }
       let now = new Date();
-      if(endDate > now){
+      // let now = new Date("2020-11-11");
+      let result = endDate >= now;
+      if(result){
           let leftDays = this.getDays(now, endDate);
           if( leftDays <= 10){
               this.checkResult = "友好提醒： 您的账户在" + leftDays 
