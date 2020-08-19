@@ -45,11 +45,11 @@
         <FormItem label="紧急联系人" prop="linkman" class="labelCss">
           <i-input type="text" v-model="formuser.linkman" placeholder="请设置紧急联系人"></i-input>
         </FormItem>
-        <FormItem label="验证码" prop="sessionCode" class="labelCss">
+     <!--    <FormItem label="验证码" prop="sessionCode" class="labelCss">
           <i-input  style="width: 30%;" type="number" v-model="formuser.sessionCode" placeholder="请输入验证码" ></i-input>
-          <Button v-show="isSended" class="btn-default">{{sendtimer+'秒后获取'}}</Button>
-          <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formuser.tel)">获取短信验证码</i-button>
-        </FormItem>
+          <Button v-show="isSended" class="btn-default">{{sendtimer+'秒后获取'}}</Button> -->
+        <!--   <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formuser.tel)">获取短信验证码</i-button> -->
+        <!-- </FormItem> -->
         <FormItem class="loginbtn">
           <Button @click="handleSubmit('formuser')"><span style="margin-left: 45px;">注册</span></Button>
         </FormItem>

@@ -16,7 +16,7 @@
         </FormItem>
         <div class="choose">
           <Checkbox v-model="single">记住密码</Checkbox>
-          <span>找回密码</span>
+          <!-- <span>找回密码</span> -->
           <span @click="register">用户注册</span>
         </div>
         <FormItem class="loginbtn">
