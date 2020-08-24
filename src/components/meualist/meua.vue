@@ -41,7 +41,7 @@
         <MenuItem name="exit">
           <span>退出</span>
         </MenuItem>
-        <MenuItem name="personalUser">
+        <MenuItem name="/personalUser">
           <span>个人中心</span>
         </MenuItem>
       </Submenu>
@@ -112,6 +112,11 @@ export default {
       if (name == "/faraway") {
         this.allfalse();
         this.faraway = true;
+      }
+      if (name == "exit") {
+        this.allfalse();
+        this.$router.push("/login");
+        return;
       }
       this.$router.push(name);
     }
