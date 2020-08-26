@@ -2,9 +2,9 @@
   <!-- 箭头椭圆 -->
   <div class="index bcimg">
     <div class="c_button" v-show="adminFlag">
-         <Button  icon="ios-navigate" type="text" ghost size="large" 
+         <Button  icon="ios-navigate" type="text" ghost size="large"
          @click="adminConfig" v-show="showConfigCenter">配置管理中心
-         </Button> 
+         </Button>
     </div>
     <div class="longcircle">
       <div class="bcimg arrowimg">
@@ -107,7 +107,7 @@ export default {
 .index {
   width: 100%;
   height: 100%;
-  background-image: url("../../assets/imgs/01.png");
+  background-image: url("../../assets/imgs/01.jpg");
 }
 .longcircle {
   width: 900px;
@@ -153,8 +153,8 @@ export default {
   cursor: pointer;
 }
 .c_button{
-     display: flex; 
-     justify-content: flex-end; 
+     display: flex;
+     justify-content: flex-end;
      width: 95%;
 }
 .spread {

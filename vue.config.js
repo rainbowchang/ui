@@ -7,9 +7,13 @@ module.exports = {
         //     'BMap': 'BMap',
         //     'BMap_Symbol_SHAPE_POINT': 'BMap_Symbol_SHAPE_POINT',
 
-        //     'axios': 'axios',
-        //     'iView': 'iview',
-        //     'echarts': 'echarts',
+            // 'iview': 'iView',
+            'iView': 'iview',
+            'element-ui': 'ELEMENT',
+            'vue': 'Vue',
+            'axios': 'axios',
+            'echarts': 'echarts',
+            'vue-router': 'VueRouter'
         },
     },
     pages: {
