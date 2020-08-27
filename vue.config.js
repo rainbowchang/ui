@@ -1,18 +1,13 @@
 module.exports = {
     configureWebpack: {
         externals: {
-            // 'vue': "vue",
-            // 'vue-router': 'vue-router',
-            // 'vuex': 'Vuex',
-        //     'BMap': 'BMap',
-        //     'BMap_Symbol_SHAPE_POINT': 'BMap_Symbol_SHAPE_POINT',
 
-            // 'iview': 'iView',
-            'iView': 'iview',
-            'element-ui': 'ELEMENT',
             'vue': 'Vue',
             'axios': 'axios',
             'echarts': 'echarts',
+            'iview': 'iview',
+            // 'iView': 'iview',
+            'element-ui': 'ELEMENT',
             'vue-router': 'VueRouter'
         },
     },
