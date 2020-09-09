@@ -22,17 +22,23 @@
         </div>
       </div>
       <div class="title unread" style="margin-bottom:6px;">
-        负载
+        温度
         <div style="margin-bottom:2px;">
           <template>
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}</td>
-                <td style="width:78%;">
+                <!-- <td style="width:78%;">
                   <Progress :percent="item.percent" hide-info :stroke-width="20"></Progress>
+                </td> -->
+                 <td style="width:78%;">
+                  <Progress :percent="item.temperaturePercent" hide-info :stroke-width="20"></Progress>
                 </td>
-                 <td>
+                <!--  <td>
                   <span>{{item.load + "%"}}</span>
+                </td> -->
+                <td>
+                  <span>{{item.temperature}}</span>
                 </td>
                 <td style="width:45px;">
                   <button v-if="item.showFlag" @click="handleSubmit(item,i, false)" class="bottonStyle">隐藏</button>
@@ -111,6 +117,8 @@ export default {
           number: "100000.0000",
           name: "X",
           percent: 50,
+          temperature: 120,
+          temperaturePercent: 10,
           load: 100,
           showFlag: true
         },
@@ -118,26 +126,33 @@ export default {
           number: "100000.0000",
           name: "Y",
           percent: 30,
+          temperature: 430,
+          temperaturePercent: 50,
           load: 60,
           showFlag: true
         },
         {
           number: "100000.0000",
           name: "Z",
+          temperaturePercent: 30,
           percent: 90,
           load: 190,
+          temperature: 230,
           showFlag: true
         },
         {
           number: "100000.0000",
           name: "A",
           percent: 60,
+          temperaturePercent: 50,
           load: 120,
+          temperature: 230,
           showFlag: true
         },
         {
           number: null,
           name: "B",
+          temperaturePercent: 50,
           percent: 80,
           load: 160,
           showFlag: true
@@ -145,22 +160,28 @@ export default {
         {
           number: null,
           name: "C",
+          temperaturePercent: 50,
           percent: 80,
           load: 160,
+          temperature: 230,
           showFlag: true
         },
         {
           number: null,
           name: "SP1",
+          temperaturePercent: 50,
           percent: 80,
           load: 160,
+          temperature: 230,
           showFlag: true
         },
         {
           number: null,
           name: "SP2",
+          temperaturePercent: 50,
           percent: 80,
           load: 160,
+          temperature: 230,
           showFlag: true
         }
       ]

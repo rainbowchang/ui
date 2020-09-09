@@ -97,6 +97,11 @@ export default {
           }
         },
         {
+          title: "加工时间",
+          key: "workTime",
+          sortable: true
+        },
+        {
           title: "报警标记",
           key: "warning",
           sortable: true
