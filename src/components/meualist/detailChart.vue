@@ -22,23 +22,17 @@
         </div>
       </div>
       <div class="title unread" style="margin-bottom:6px;">
-        温度
+          {{getAxisContentType()}}
         <div style="margin-bottom:2px;">
           <template>
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}</td>
-                <!-- <td style="width:78%;">
-                  <Progress :percent="item.percent" hide-info :stroke-width="20"></Progress>
-                </td> -->
                  <td style="width:78%;">
-                  <Progress :percent="item.temperaturePercent" hide-info :stroke-width="20"></Progress>
+                  <Progress :percent="getAxisContentPercent(item)" hide-info :stroke-width="20"></Progress>
                 </td>
-                <!--  <td>
-                  <span>{{item.load + "%"}}</span>
-                </td> -->
                 <td>
-                  <span>{{item.temperature}}</span>
+                  <span>{{getAxisContentValue(item)}}</span>
                 </td>
                 <td style="width:45px;">
                   <button v-if="item.showFlag" @click="handleSubmit(item,i, false)" class="bottonStyle">隐藏</button>
@@ -119,6 +113,7 @@ export default {
           percent: 50,
           temperature: 120,
           temperaturePercent: 10,
+          temperatureFlag:1,
           load: 100,
           showFlag: true
         },
@@ -138,6 +133,7 @@ export default {
           percent: 90,
           load: 190,
           temperature: 230,
+          temperatureFlag: 1,
           showFlag: true
         },
         {
@@ -214,6 +210,30 @@ export default {
     }
   },
   methods: {
+    getAxisContentType(){
+        let firstItem = null;
+        if(this.tableList != null && this.tableList.length > 0){
+            firstItem = this.tableList[0];
+        }
+        if(firstItem != null && firstItem.temperatureFlag === 1){
+            return "温度";
+        }
+        return "负载";
+    },
+    getAxisContentPercent(item){
+        let temperatureFlag = item.temperatureFlag;
+        if(temperatureFlag === 1){
+            return item.temperaturePercent;
+        }
+        return item.percent;
+    },
+    getAxisContentValue(item){
+        let temperatureFlag = item.temperatureFlag;
+        if(temperatureFlag === 1){
+            return item.temperaturePercent;
+        }
+        return item.load + "%"
+    },
     getSpindleLoad(){
       return this.tableList[6].load;
     },
