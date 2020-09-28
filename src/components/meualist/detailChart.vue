@@ -215,20 +215,25 @@ export default {
         if(this.tableList != null && this.tableList.length > 0){
             firstItem = this.tableList[0];
         }
+        console.log("FirstItem: ", firstItem)
         if(firstItem != null && firstItem.temperatureFlag === 1){
             return "温度";
         }
         return "负载";
     },
     getAxisContentPercent(item){
+      console.log("getAxisContentPercent item", item)
         let temperatureFlag = item.temperatureFlag;
+        console.log("getAxisContentPercent if", temperatureFlag === 1)
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
         return item.percent;
     },
     getAxisContentValue(item){
+      console.log("getAxisContentValue item", item)
         let temperatureFlag = item.temperatureFlag;
+        console.log("getAxisContentValue if", temperatureFlag === 1)
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
