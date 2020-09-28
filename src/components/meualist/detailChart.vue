@@ -207,11 +207,11 @@ export default {
       this.getOverrides("myChart3", this.getSpindleLoad(), 0,100, 10);
       this.getSpindleSpeed(val.spindleSpeed, val.maxSpindleSpeed);
       this.getfeedSpeed(val.feedSpeed);
-    }
+    },
+    deep: true
   },
   methods: {
     getAxisContentType(){
-        this.sleep(3000).then(function(){
           let firstItem = null;
           if(this.tableList != null && this.tableList.length > 0){
               firstItem = this.tableList[0];
@@ -220,31 +220,21 @@ export default {
               return "温度";
           }
           return "负载";
-        })
     },
     getAxisContentPercent(item){
-      this.sleep(3000).then(function(){
-        this.sleep(3000)
         let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
         return item.percent;
-      })
     },
     getAxisContentValue(item){
-      this.sleep(3000).then(function(){
         let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
         return item.load + "%"
-      })
     },
-    sleep(time){
-      return new Promise(function(resolve){
-      setTimeout(resolve, time);
-    })},
     getSpindleLoad(){
       return this.tableList[6].load;
     },
