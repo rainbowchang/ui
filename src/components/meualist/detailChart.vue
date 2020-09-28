@@ -211,6 +211,7 @@ export default {
   },
   methods: {
     getAxisContentType(){
+          console.log("getAxisContentType: ", item)
           let firstItem = null;
           if(this.tableList != null && this.tableList.length > 0){
               firstItem = this.tableList[0];
@@ -221,6 +222,7 @@ export default {
           return "负载";
     },
     getAxisContentPercent(item){
+        console.log("getAxisContentPercent: ", item)
         let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
@@ -228,6 +230,7 @@ export default {
         return item.percent;
     },
     getAxisContentValue(item){
+        console.log("getAxisContentValue: ", item)
         let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
