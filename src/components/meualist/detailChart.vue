@@ -208,7 +208,6 @@ export default {
       this.getSpindleSpeed(val.spindleSpeed, val.maxSpindleSpeed);
       this.getfeedSpeed(val.feedSpeed);
     },
-    deep: true
   },
   methods: {
     getAxisContentType(){
