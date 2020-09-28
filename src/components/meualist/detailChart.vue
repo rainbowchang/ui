@@ -211,40 +211,43 @@ export default {
   },
   methods: {
     getAxisContentType(){
-        this.sleep(3000)
-        let firstItem = null;
-        if(this.tableList != null && this.tableList.length > 0){
-            firstItem = this.tableList[0];
-        }
-        if(firstItem != null && firstItem.temperatureFlag === 1){
-            return "温度";
-        }
-        return "负载";
-        
+        this.sleep(3000).then(function(){
+          let firstItem = null;
+          if(this.tableList != null && this.tableList.length > 0){
+              firstItem = this.tableList[0];
+          }
+          if(firstItem != null && firstItem.temperatureFlag === 1){
+              return "温度";
+          }
+          return "负载";
+        })
     },
     getAxisContentPercent(item){
+      this.sleep(3000).then(function(){
         this.sleep(3000)
         let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
         return item.percent;
+      })
     },
     getAxisContentValue(item){
-        this.sleep(3000)
+      this.sleep(3000).then(function(){
         let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
         return item.load + "%"
-    },
-    getSpindleLoad(){
-      return this.tableList[6].load;
+      })
     },
     sleep(time){
       return new Promise(function(resolve){
       setTimeout(resolve, time);
-    });
+    })},
+    getSpindleLoad(){
+      return this.tableList[6].load;
+    },
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
       console.log("overides:", overrides);
