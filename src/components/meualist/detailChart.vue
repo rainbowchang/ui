@@ -211,7 +211,7 @@ export default {
   },
   methods: {
     getAxisContentType(){
-          console.log("getAxisContentType: ", item)
+          console.log("getAxisContentType: ", this.tableList)
           let firstItem = null;
           if(this.tableList != null && this.tableList.length > 0){
               firstItem = this.tableList[0];
