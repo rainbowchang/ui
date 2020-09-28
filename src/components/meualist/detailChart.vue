@@ -211,29 +211,28 @@ export default {
   },
   methods: {
     getAxisContentType(){
+        this.sleep(3000)
         let firstItem = null;
         if(this.tableList != null && this.tableList.length > 0){
             firstItem = this.tableList[0];
         }
-        console.log("FirstItem: ", firstItem)
         if(firstItem != null && firstItem.temperatureFlag === 1){
             return "温度";
         }
         return "负载";
+        
     },
     getAxisContentPercent(item){
-      console.log("getAxisContentPercent item", item)
+        this.sleep(3000)
         let temperatureFlag = item.temperatureFlag;
-        console.log("getAxisContentPercent if", temperatureFlag === 1)
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
         return item.percent;
     },
     getAxisContentValue(item){
-      console.log("getAxisContentValue item", item)
+        this.sleep(3000)
         let temperatureFlag = item.temperatureFlag;
-        console.log("getAxisContentValue if", temperatureFlag === 1)
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
@@ -242,6 +241,10 @@ export default {
     getSpindleLoad(){
       return this.tableList[6].load;
     },
+    sleep(time){
+      return new Promise(function(resolve){
+      setTimeout(resolve, time);
+    });
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
       console.log("overides:", overrides);
