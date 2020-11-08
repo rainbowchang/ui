@@ -41,7 +41,7 @@
                         v-for="(value,index) in item.list"
                         :key="index"
                         :style="{width:value.percent}"
-                        :class="value.status==1?'process':value.status==2?'breakdown':value.status==3?'stop':value.status==4?'none':'interrupt'"
+                        :class="value.status=='work'?'process':value.status=='alarm'?'breakdown':value.status=='stop'?'stop':value.status=='none'?'none':'interrupt'"
                       ></div>
                     </div>
                    <!--  <div class="timeline">
