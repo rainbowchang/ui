@@ -136,9 +136,9 @@ export default {
           timeAlarm: "",
           timeStop: "",
           list: [
-            { percent: "18%", status: 1 },
-            { percent: "66%", status: 2 },
-            { percent: "36%", status: 3 }
+            { percent: "18%", status: 'work' },
+            { percent: "66%", status: 'alarm' },
+            { percent: "36%", status: 'stop' }
           ],
           name: "ZHUGANGZHI-1",
         },
@@ -147,9 +147,9 @@ export default {
           timeAlarm: "",
           timeStop: "",
           list: [
-            { percent: "10%", status: 2 },
-            { percent: "40%", status: 3 },
-            { percent: "50%", status: 1 }
+            { percent: "10%", status: 'alarm' },
+            { percent: "40%", status: 'stop' },
+            { percent: "50%", status: 'work' }
           ],
           name: "ZHUGANGZHI-2"
         },
@@ -158,9 +158,9 @@ export default {
           timeAlarm: "",
           timeStop: "",
           list: [
-            { percent: "10%", status: 2 },
-            { percent: "28%", status: 3 },
-            { percent: "62%", status: 1 },
+            { percent: "10%", status: 'alarm' },
+            { percent: "28%", status: 'stop' },
+            { percent: "62%", status: 'work' },
           ],
           name: "ZHUGANGZHI-3"
         }
