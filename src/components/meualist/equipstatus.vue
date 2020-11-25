@@ -47,7 +47,7 @@ export default {
       factory: false,
       showDetail: false,
       detailinfo:null,//标尺页面传递信息
-      statustable: true,
+      statustable: false,
       dateChoose: "", //table选择开始结束时间
       currentPage: 1, //分页当前页数,
       treeParam: {},
