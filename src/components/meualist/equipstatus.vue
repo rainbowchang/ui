@@ -47,7 +47,7 @@ export default {
       factory: false,
       showDetail: false,
       detailinfo:null,//标尺页面传递信息
-      statustable: false,
+      statustable: true,
       dateChoose: "", //table选择开始结束时间
       currentPage: 1, //分页当前页数,
       treeParam: {},
@@ -131,11 +131,18 @@ export default {
       }
       if(!nodeInfo.isLeaf){
         this.showDetail= false;
+        nodeInfo.pageNo = 1;
+        nodeInfo.pageSize = 10;
         this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-          var statusInfos = reponse.data;
-          this.$refs.statustable.content = statusInfos;
-          this.$refs.statustable.totalCount = statusInfos.length;
+          var replyStatus = reponse.data;
+          if(replyStatus == null){
+            return;
+          }
+          this.$refs.statustable.content = replyStatus.plcInfoBeans;
+          this.$refs.statustable.totalCount = replyStatus.total;
+          this.$refs.statustable.nodeKey = nodeInfo.key; 
           this.statustable = true;
+          
           // console.log(this.$refs.statustable.content);
         });
         return;
