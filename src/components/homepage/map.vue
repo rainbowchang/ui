@@ -286,9 +286,7 @@ export default {
     },
 
     sendProvince(){
-      var provincePaths = [];
-      provinces.forEach(e => provincePaths.push("/按区域分类/" + getAreaByProvince(e) + "/" + e));
-      post("/organization/getProvincePlcInfo", provincePaths, reponse => {
+      get("/organization/getProvincePlcInfo", reponse => {
         if(reponse.data != "") {
           this.drawLine(reponse.data);
         }
