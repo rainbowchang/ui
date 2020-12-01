@@ -131,12 +131,12 @@ export default {
       }
       if(!nodeInfo.isLeaf){
         this.showDetail= false;
-        this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-          var replyStatus = reponse.data;
+        this.sendNodeContent("/organization/node/trigger", nodeInfo, response => {
+          var replyStatus = response.data;
           if(replyStatus == null){
             return;
           }
-          this.$refs.statustable.content = replyStatus.statusInfos;
+          this.$refs.statustable.content = replyStatus.plcInfoBeans;
           this.$refs.statustable.totalCount = replyStatus.total;
           this.$refs.statustable.nodeKey = nodeInfo.key; 
           this.statustable = true;
