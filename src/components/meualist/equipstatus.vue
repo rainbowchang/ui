@@ -132,9 +132,13 @@ export default {
       if(!nodeInfo.isLeaf){
         this.showDetail= false;
         this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-          var statusInfos = reponse.data;
-          this.$refs.statustable.content = statusInfos;
-          this.$refs.statustable.totalCount = statusInfos.length;
+          var replyStatus = reponse.data;
+          if(replyStatus == null){
+            return;
+          }
+          this.$refs.statustable.content = replyStatus.statusInfos;
+          this.$refs.statustable.totalCount = replyStatus.total;
+          this.$refs.statustable.nodeKey = nodeInfo.key; 
           this.statustable = true;
           // console.log(this.$refs.statustable.content);
         });

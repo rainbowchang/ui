@@ -21,8 +21,7 @@
           :max-height="540"
         ></Table>
         <Button type="primary" icon="ios-search" class="searchbtn" @click="tostatusInfo">按时间序列查询</Button>
-        <!-- page-sizes分页数组，page-size分页当前一页的条数，total总条数 -->
-        <Page style="position:absolute;bottom:0em; margin-top: 10%" :total="100" show-elevator show-sizer />
+           <Page style="position:absolute;bottom:0em; margin-top: 10%" :total="totalCount" :current="pageNum" :page-size="10" show-elevator show-sizer show-total placement="top" @on-change="handlePage"></Page>
       </div>
       <Modal v-model="statusinfoshow" class="statusstyle" fullscreen footer-hide>
         <statusinfo :statusinfo="{selections,statusinfoshow}" @modelshow="modelshow"></statusinfo>
@@ -32,11 +31,14 @@
 </template>
 <script>
 import statusinfo from "../departs/statusinfo";
+import {post} from "@/apis/restUtils";
 export default {
   components: { statusinfo },
   data() {
     return {
-      totalCount: 0,
+      nodeKey:"",
+      pageNum: 1,
+      totalCount: 11,
       statusinfoshow: false, //详情弹窗是否展示
       dateChoose: "", //table选择开始结束时间
       currentPage: 1, //分页当前页数,
@@ -173,6 +175,16 @@ export default {
     };
   },
   methods: {
+    handlePage(value){
+      post("/organization/node/trigger", {key:this.nodeKey,pageNo:value, pageSize: 10}, reponse => {
+          var replyStatus = reponse.data;
+          if(replyStatus == null){
+            return;
+          }
+          this.content = replyStatus.plcInfoBeans;
+          this.totalCount = replyStatus.total;
+      });
+    },
     // table导出表格
     exportData() {
       this.$refs.table.exportCsv({
