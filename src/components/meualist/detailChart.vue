@@ -202,6 +202,7 @@ export default {
       this.feedSpeed = val.feedSpeed;
       this.toolNumber=val.toolNumber;
       this.currentProgram=(val.currentProgram).trim();
+      this.spindleIndex = val.spindleIndex;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
       this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
       this.getOverrides("myChart3", this.getSpindleLoad(), 0,100, 10);
@@ -238,7 +239,7 @@ export default {
         return item.load + "%"
     },
     getSpindleLoad(){
-      return this.tableList[6].load;
+      return this.tableList[this.spindleIndex].load;
     },
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
