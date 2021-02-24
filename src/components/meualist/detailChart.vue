@@ -195,7 +195,10 @@ export default {
       if(val === null || val === undefined){
         return;
       }
-      if(val.currentProgram!==null && (val.currentProgram).indexOf('_')!==-1){val.currentProgram = (val.currentProgram).substring(0,(val.currentProgram).indexOf('_')).trim()}
+      //if(val.currentProgram!==null && (val.currentProgram).indexOf('_')!==-1){val.currentProgram = (val.currentProgram).substring(0,(val.currentProgram).indexOf('_')).trim()}
+      val.currentProgram = fileNameSiemens(val.currentProgram, '/_N_');
+      val.currentProgram = fileNameSiemens(val.currentProgram, '/N');
+
       this.tableList = val.table;
       this.sn = val.sn;
       this.workPieces = val.workPieces;
@@ -623,7 +626,27 @@ export default {
       console.log(this.itemParam);
     }
   }
+
 };
+
+//针对西门子的文件名结构做些特殊处理，但是建议在西门子的agent做适配，如果以后第三种控制器再有调整，这个前端跟着适配是不合适的。
+let fileNameSiemens = function  (input, channelPrefix){
+  console.log('input = ' + input + 'channelPrefix' + channelPrefix.length);
+  let flag = true;
+  let result = input;
+  while(flag){
+    let i = result.indexOf(channelPrefix);
+    console.log('i = ' + i);
+    if(i>=0){
+      result= (result).substring(i+channelPrefix.length).trim();
+      console.log(result);
+    } else {
+      flag = false;
+    }
+  }
+  return result;
+}
+
 </script>
 <style scoped lang="less">
 .center-warp {
