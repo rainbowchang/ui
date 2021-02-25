@@ -8,6 +8,7 @@
         </FormItem>
         <FormItem label="地址">
             <Input v-model="formItem.address" placeholder="Enter something..."/>
+            
         </FormItem>
         <FormItem label="联系方式">
             <Input v-model="formItem.tel" placeholder="Enter something..."/>

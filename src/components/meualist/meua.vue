@@ -9,7 +9,7 @@
       style="background:#595959;"
     >
       <div class="logo">
-        <span>NINGQING</span>
+        <span>YUANKONG</span>
         <span style="font-size:4px">®</span>
       </div>
       <MenuItem name="/index" :class="index?'red':''">首页</MenuItem>

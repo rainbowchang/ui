@@ -98,9 +98,15 @@ export default {
             ]);
           }
         },
+
         {
           title: "加工时间",
           key: "workTime",
+          sortable: true
+        },
+        {
+          title: "加工件数",
+          key: "workPieces",
           sortable: true
         },
         {
@@ -123,6 +129,7 @@ export default {
           CNC: "VC1480G",
           productionDate: "2019.7.28",
           status: "加工",
+          workTime: "2小时",
           warning: "..."
         },
         {

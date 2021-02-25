@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <!-- 弹框 -->
+    <!-- 弹框 
     <Modal v-model="modal1" fullscreen title-hide footer-hide>
       <div>
         <div class="tips">
@@ -29,6 +29,7 @@
         <img :src="contentImg" class="backImg" />
       </div>
     </Modal>
+   -->
   </div>
 </template>
 

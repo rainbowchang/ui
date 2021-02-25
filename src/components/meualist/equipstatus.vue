@@ -140,9 +140,9 @@ export default {
           }
           this.$refs.statustable.content = replyStatus.plcInfoBeans;
           this.$refs.statustable.totalCount = replyStatus.total;
-          this.$refs.statustable.nodeKey = nodeInfo.key; 
+          this.$refs.statustable.nodeKey = nodeInfo.key;
           this.statustable = true;
-          
+
           // console.log(this.$refs.statustable.content);
         });
         return;
