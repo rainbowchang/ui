@@ -90,6 +90,7 @@
 <script>
 // import ruleLine from "./ruleLine";
 import {post} from "@/apis/restUtils";
+const indexOfSpindle = 6;
 
 export default {
   components: {
@@ -240,8 +241,14 @@ export default {
         }
         return item.load + "%"
     },
-    getSpindleLoad(){
-      return this.tableList[6].load;
+    getSpindleLoad(){  //val === null || val === undefined
+      if(this.tableList.length >indexOfSpindle && this.tableList[indexOfSpindle].load !== undefined && this.tableList[indexOfSpindle].load !== null) {
+        console.log('getSpindleLoad = ' + this.tableList[indexOfSpindle].load);
+        return this.tableList[indexOfSpindle].load;
+      } else {
+        console.log('getSpindleLoad = 0');
+        return 0;  //防止越界，暂时做个临时处理。zch
+      }
     },
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
@@ -631,15 +638,15 @@ export default {
 
 //针对西门子的文件名结构做些特殊处理，但是建议在西门子的agent做适配，如果以后第三种控制器再有调整，这个前端跟着适配是不合适的。
 let fileNameSiemens = function  (input, channelPrefix){
-  console.log('input = ' + input + 'channelPrefix' + channelPrefix.length);
+  // console.log('input = ' + input + 'channelPrefix' + channelPrefix.length);
   let flag = true;
   let result = input;
   while(flag){
     let i = result.indexOf(channelPrefix);
-    console.log('i = ' + i);
+    // console.log('i = ' + i);
     if(i>=0){
       result= (result).substring(i+channelPrefix.length).trim();
-      console.log(result);
+      // console.log(result);
     } else {
       flag = false;
     }
