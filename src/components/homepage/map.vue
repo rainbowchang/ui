@@ -117,6 +117,7 @@
 </template>
 <script>
 import "echarts/map/js/china.js";
+// eslint-disable-next-line no-unused-vars
 import {post, get, areas, provinces, getAreaByProvince} from "@/apis/restUtils";
 // import Heatmap from "heatmap.js";
 export default {
