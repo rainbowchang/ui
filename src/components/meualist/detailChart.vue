@@ -22,21 +22,23 @@
         </div>
       </div>
       <div id="axisContentDiv" class="title unread" style="margin-bottom:6px;">
-        <span id="axisContentTypeSpan" @click="axisContentTypeSpanClicked()">{{getAxisContentType()}}</span>
+        <span>{{getAxisContentType()}}</span>
+<!--        id="axisContentTypeSpan" @click="axisContentTypeSpanClicked()"-->
         <div style="margin-bottom:2px;">
           <template>
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
               <tr v-for="(item,i) in tableList" :key="i" :class="item.showFlag ? '' : 'backopt'">
                 <td style="width:20px;">{{ item.name }}</td>
-                 <td style="width:78%;">
+                 <td style="width:70%;">
                   <Progress :percent="getAxisContentPercent(item)" hide-info :stroke-width="20"></Progress>
                 </td>
                 <td>
-                  <span>{{getAxisContentValue(item)}}</span>
+                  <span :style="{width:'240px'}">{{getAxisContentValue(item)}}</span>
                 </td>
-                <td style="width:45px;">
-                  <button v-if="item.showFlag" @click="handleSubmit(item,i, false)" class="bottonStyle">隐藏</button>
-                  <button v-if="!item.showFlag" @click="handleSubmit(item,i, true)" class="bottonStyle">显示</button>
+                <td>
+<!--                  <button v-if="item.showFlag" @click="handleSubmit(item,i, false)" class="bottonStyle">隐藏</button>-->
+<!--                  <button v-if="!item.showFlag" @click="handleSubmit(item,i, true)" class="bottonStyle">显示</button>-->
+                  <span style="text-align: right">{{getTemperature(item)}}</span>
                 </td>
               </tr>
             </table>
@@ -88,8 +90,6 @@
   </div>
 </template>
 <script>
-
-let temperatureFlag = 1;
 
 // import ruleLine from "./ruleLine";
 import {post} from "@/apis/restUtils";
@@ -224,26 +224,34 @@ export default {
           // if(this.tableList != null && this.tableList.length > 0){
           //     firstItem = this.tableList[0];
           // }
-          if(temperatureFlag === 1){
-              return "温度";
-          }
-          return "负载";
+          // if(temperatureFlag === 1){
+          //     return "温度";
+          // }
+          return "负载/温度";
     },
     getAxisContentPercent(item){
         console.log("getAxisContentPercent: ", item)
         // let temperatureFlag = item.temperatureFlag;
-        if(temperatureFlag === 1){
-            return item.temperaturePercent;
-        }
+        // if(temperatureFlag === 1){
+        //     return item.temperaturePercent;
+        // }
         return item.percent;
     },
     getAxisContentValue(item){
         console.log("getAxisContentValue: ", item)
         // let temperatureFlag = item.temperatureFlag;
-        if(temperatureFlag === 1){
-            return item.temperature;
-        }
+        // if(temperatureFlag === 1){
+        //     return item.temperature;
+        // }
         return item.load + "%"
+    },
+    getTemperature(item){
+      let temper = item.temperature;
+      if(temper === 'undefined' || temper=== null ||temper === ''){
+        return '';
+      } else {
+        return item.temperature + "℃";
+      }
     },
     getSpindleLoad(){
       return this.tableList[this.spindleIndex].load;
@@ -629,15 +637,15 @@ export default {
     },
     handleClose() {
       console.log(this.itemParam);
-    },
-    async axisContentTypeSpanClicked(){
-      console.log("++++++++++++++++++++++++axisContentTypeSpanClicked()++++++++++++++++++++++++++++++++");
-      if(temperatureFlag === 1){
-        temperatureFlag = 0;
-      } else {
-        temperatureFlag = 1;
-      }
     }
+    // async axisContentTypeSpanClicked(){
+    //   console.log("++++++++++++++++++++++++axisContentTypeSpanClicked()++++++++++++++++++++++++++++++++");
+    //   if(temperatureFlag === 1){
+    //     temperatureFlag = 0;
+    //   } else {
+    //     temperatureFlag = 1;
+    //   }
+    // }
   }
 };
 
