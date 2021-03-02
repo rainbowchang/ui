@@ -88,6 +88,9 @@
   </div>
 </template>
 <script>
+
+// let temperatureFlag = 0;
+
 // import ruleLine from "./ruleLine";
 import {post} from "@/apis/restUtils";
 // const indexOfSpindle = 6;
@@ -431,7 +434,7 @@ export default {
       };
       let option = {
         tooltip: {
-          formatter: "{a} <br/>{b} : {c}%"
+          formatter: "{a} {b} :<br/> {c}"
         },
         series: [
           {
@@ -440,7 +443,7 @@ export default {
             color: ["gray", "transparent"],
             splitNumber: 10,
             center: ["50%", "50%"], // 仪表盘位置(圆心坐标)
-            name: "业务指标",
+            name: "主轴转速",
             type: "gauge",
             //仪表盘轴线相关配置。
             axisLine: {
@@ -475,32 +478,32 @@ export default {
               fontSize: 10,
               padding: 2,
               distance: -65,
-              formatter: function(value) {
-                switch (value) {
-                  case 1500:
-                    return ""; //隐藏
-                  case 4500:
-                    return ""; //隐藏
-                  case 7500:
-                    return ""; //隐藏
-                  case 10500:
-                    return ""; //隐藏
-                  case 13500:
-                    return ""; //隐藏
-                  case 16500:
-                    return ""; //隐藏
-                  case 19500:
-                    return ""; //隐藏
-                  case 22500:
-                    return ""; //隐藏
-                  case 25500:
-                    return ""; //隐藏
-                  case 28500:
-                    return ""; //隐藏
-                  default:
-                    return value;
-                }
-              }
+              // formatter: function(value) {  为什么这些数字不显示？？？  代码屏蔽  zch 变更主轴转速显示问题
+              //   switch (value) {
+              //     case 1500:
+              //       return ""; //隐藏
+              //     case 4500:
+              //       return ""; //隐藏
+              //     case 7500:
+              //       return ""; //隐藏
+              //     case 10500:
+              //       return ""; //隐藏
+              //     case 13500:
+              //       return ""; //隐藏
+              //     case 16500:
+              //       return ""; //隐藏
+              //     case 19500:
+              //       return ""; //隐藏
+              //     case 22500:
+              //       return ""; //隐藏
+              //     case 25500:
+              //       return ""; //隐藏
+              //     case 28500:
+              //       return ""; //隐藏
+              //     default:
+              //       return value;
+              //   }
+              // }
             },
             detail: {
               formatter: "",
@@ -648,6 +651,8 @@ let fileNameSiemens = function  (input, channelPrefix){
   }
   return result;
 }
+
+
 
 </script>
 <style scoped lang="less">

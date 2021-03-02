@@ -198,7 +198,7 @@ export default {
       console.log("当前确认的日期", this.currentdate);
       this.statuslist = [];
       for(let i = 0; i < this.selections.length; i++){
-        post("/organization/customer/getOneDayStatus", {"serial":this.selections[i].serial,"date":this.currentdate}, 
+        post("/organization/customer/getOneDayStatus", {"serial":this.selections[i].serial,"date":this.currentdate},
           reponse => {
             this.statuslist.splice(i,0,reponse.data);
         });
@@ -466,8 +466,8 @@ export default {
 
         this.statuslist = [];
         for(let i = 0; i < this.selections.length; i++){  
-          let serial = this.selections[i].serial; 
-          post("/organization/customer/getOneDayStatus", 
+          let serial = this.selections[i].serial;
+          post("/organization/customer/getOneDayStatus",
             {"serial":serial,"date":""}, 
             reponse => {
               this.statuslist.splice(i,0,reponse.data);
