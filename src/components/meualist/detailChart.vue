@@ -21,8 +21,8 @@
           </template>
         </div>
       </div>
-      <div class="title unread" style="margin-bottom:6px;">
-          {{getAxisContentType()}}
+      <div id="axisContentDiv" class="title unread" style="margin-bottom:6px;">
+        <span id="axisContentTypeSpan" @click="axisContentTypeSpanClicked()">{{getAxisContentType()}}</span>
         <div style="margin-bottom:2px;">
           <template>
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
@@ -89,7 +89,7 @@
 </template>
 <script>
 
-// let temperatureFlag = 0;
+let temperatureFlag = 1;
 
 // import ruleLine from "./ruleLine";
 import {post} from "@/apis/restUtils";
@@ -220,18 +220,18 @@ export default {
   methods: {
     getAxisContentType(){
           console.log("getAxisContentType: ", this.tableList)
-          let firstItem = null;
-          if(this.tableList != null && this.tableList.length > 0){
-              firstItem = this.tableList[0];
-          }
-          if(firstItem != null && firstItem.temperatureFlag === 1){
+          // let firstItem = null;
+          // if(this.tableList != null && this.tableList.length > 0){
+          //     firstItem = this.tableList[0];
+          // }
+          if(temperatureFlag === 1){
               return "温度";
           }
           return "负载";
     },
     getAxisContentPercent(item){
         console.log("getAxisContentPercent: ", item)
-        let temperatureFlag = item.temperatureFlag;
+        // let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
             return item.temperaturePercent;
         }
@@ -239,9 +239,9 @@ export default {
     },
     getAxisContentValue(item){
         console.log("getAxisContentValue: ", item)
-        let temperatureFlag = item.temperatureFlag;
+        // let temperatureFlag = item.temperatureFlag;
         if(temperatureFlag === 1){
-            return item.temperaturePercent;
+            return item.temperature;
         }
         return item.load + "%"
     },
@@ -595,14 +595,14 @@ export default {
     },
     handleSubmit(item, index, show) {
       this.tableList[index].showFlag = show;
-      var param = {
+      let param = {
           currentName: item.name,
           sn: this.sn,
           show: show
       }
       post("/plcInfo/updateAxis", param,response=>{
-         var result = response.data;
-         if(result.status == "fail"){
+         let result = response.data;
+         if(result.status === "fail"){
            alert(result.message);
          }
       });
@@ -620,7 +620,7 @@ export default {
       this.itemParam.newName = name;
       this.itemParam.sn = this.sn;
       post("/plcInfo/updateAxis", this.itemParam,response=>{
-         var result = response.data;
+         let result = response.data;
          if(result.status == "fail"){
            alert(result.message);
          }
@@ -629,9 +629,16 @@ export default {
     },
     handleClose() {
       console.log(this.itemParam);
+    },
+    async axisContentTypeSpanClicked(){
+      console.log("++++++++++++++++++++++++axisContentTypeSpanClicked()++++++++++++++++++++++++++++++++");
+      if(temperatureFlag === 1){
+        temperatureFlag = 0;
+      } else {
+        temperatureFlag = 1;
+      }
     }
   }
-
 };
 
 //针对西门子的文件名结构做些特殊处理，但是建议在西门子的agent做适配，如果以后第三种控制器再有调整，这个前端跟着适配是不合适的。
