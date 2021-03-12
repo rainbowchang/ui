@@ -208,6 +208,8 @@ export default {
   border-radius: 50%;
   overflow: hidden;
   background-color: aliceblue;
+  background-image: url("../../assets/imgs/icon001.png");
+  background-position: -18px 0;
 }
 .formlogin {
   display: flex;
