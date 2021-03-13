@@ -1,6 +1,7 @@
 <template>
 <!-- 登录 -->
   <div class="wrapper">
+    <div class="qrbox"></div>
     <div class="loginbox">
       <div class="imgbox"></div>
       <Form ref="formInline" class="formlogin" :model="formInline" :rules="ruleInline" inline>
@@ -210,6 +211,18 @@ export default {
   background-color: aliceblue;
   background-image: url("../../assets/imgs/icon001.png");
   background-position: -18px 0;
+}
+.qrbox {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 90px;
+  height: 90px;
+  /*border-radius: 50%;*/
+  overflow: hidden;
+  background-color: aliceblue;
+  background-image: url("../../assets/imgs/QRCode.png");
+  background-size: 90px  90px;
 }
 .formlogin {
   display: flex;
