@@ -74,6 +74,10 @@
                       <div class="stop"></div>
                       <span>停机：{{item.timeStop}}</span>
                     </div>
+                    <div>
+                      <div class="none"></div>
+                      <span>离线：{{item.timeStop}}</span>
+                    </div>
                   </div>
                 </div>
                 <!-- 右侧环装图 -->
@@ -640,7 +644,7 @@ export default {
 }
 
 .none{
-  background-color: #C0C0C0
+  background-color: #808080
 }
 
 .interrupt {
