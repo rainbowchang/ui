@@ -4,7 +4,7 @@
       远控移动APP<br>
     </div>
     <div class="url_text">
-      <a href="https://yuankongit.app/release/app/yk.apk">点击下载</a>
+      <a href="https://yuankongit.cn/release/app/yk.apk">点击下载</a>
     </div>
   </div>
 </template>
