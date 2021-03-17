@@ -50,6 +50,11 @@ export default new Router({
        // component: login,
         component: resolve => require(['@/components/login/login'], resolve)
     }, {
+        path: '/qrhome',
+        name: 'qrhome',
+        // component: login,
+        component: resolve => require(['@/components/qrcode/qrhome'], resolve)
+    }, {
         path: '/configCenter',
         name: 'configCenter',
         // component: configCenter,
