@@ -211,7 +211,7 @@ export default {
       this.currentProgram=(val.currentProgram).trim();
       this.spindleIndex = val.spindleIndex;
       this.getOverrides("myChart1", val.spindleOverrides, 50,120, 14);
-      this.getOverrides("myChart2", val.feedOverrides, 0,120, 12);
+      this.getOverrides("myChart2", val.feedOverrides.toFixed(1), 0,120, 12);
       this.getOverrides("myChart3", this.getSpindleLoad(), 0,100, 10);
       this.getSpindleSpeed(val.spindleSpeed, val.maxSpindleSpeed);
       this.getfeedSpeed(val.feedSpeed);
