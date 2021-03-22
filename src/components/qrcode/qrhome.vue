@@ -1,3 +1,4 @@
+<!--二维码下载adroid接口页面-->
 <template>
   <div class="center">
     <div class="center_text">

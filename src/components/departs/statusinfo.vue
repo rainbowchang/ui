@@ -76,7 +76,7 @@
                     </div>
                     <div>
                       <div class="none"></div>
-                      <span>离线：{{item.timeStop}}</span>
+                      <span>离线：{{item.timeNoneOffline}}</span>
                     </div>
                   </div>
                 </div>
@@ -204,7 +204,9 @@ export default {
       for(let i = 0; i < this.selections.length; i++){
         post("/organization/customer/getOneDayStatus", {"serial":this.selections[i].serial,"date":this.currentdate},
           reponse => {
+
             this.statuslist.splice(i,0,reponse.data);
+            console.log("status list" , this.statuslist);
         });
       }  
     },

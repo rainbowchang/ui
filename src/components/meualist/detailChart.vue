@@ -254,7 +254,12 @@ export default {
       }
     },
     getSpindleLoad(){
-      return this.tableList[this.spindleIndex].load;
+      try{
+        return this.tableList[this.spindleIndex].load;
+      } catch(e){
+        return 0;
+      }
+
     },
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
