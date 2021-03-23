@@ -1,11 +1,8 @@
 <!--Agent下载的短信接口页面-->
 <template>
   <div class="center">
-    <div class="center_text">
-      远控机床通讯Agent<br>
-    </div>
     <div class="url_text">
-      <a href="">点击下载</a>
+      <a href="https://yuankongit.cn/release/release/Agent.zip">https://yuankongit.cn/release/release/Agent.zip</a>
     </div>
   </div>
 </template>
