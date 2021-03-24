@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
     }
     console.log("Enter before", from.path, to.path)
     var userName = localStorage.getItem("UserName");
-    if(to.path == "/login" || to.path == "/register" || to.path == "/index" || to.path == "/qrhome" || to.path == "/download_sms") {
+    if(to.path === "/login" || to.path === "/register" || to.path === "/index" || to.path === "/qrhome" || to.path === "/download_sms" || to.path === "/qrdownload" || to.path === "/download_home") {
         next()
         return
     }

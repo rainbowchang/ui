@@ -26,6 +26,7 @@
 <script>
 import download_form from "./download_form";
 import {post} from "@/apis/restUtils"
+const smsInterval = 120; //senconds
 
 let myReg = /^[1][3-9][0-9]{9}$/;
 export default {
@@ -104,13 +105,13 @@ export default {
             } else {
               this.dis = true;
 
-              this.sendtimer = 120
+              this.sendtimer = smsInterval
               setTimeout(() => {
                 let timer = window.setInterval(() => {
                   if (this.sendtimer-- <= 1) {
                     this.dis = false
                     this.title= '发送验证码';
-                    this.sendtimer = 120
+                    this.sendtimer = smsInterval
                     window.clearInterval(timer)
                   } else {
                     this.title= '发送验证码(' + this.sendtimer + 's)';
@@ -129,6 +130,11 @@ export default {
 .center {
   position: relative;
   height: 100%;
+  background: -webkit-linear-gradient(white, #ff3232);
+  background: -o-linear-gradient(white, #ff3232);
+  background: -moz-linear-gradient(white, #ff3232);
+  background: -mos-linear-gradient(white, #ff3232);
+  background: linear-gradient(white, #ff3232);
 }
 
 .center_text {
@@ -136,7 +142,7 @@ export default {
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 14px;
+  font-size: 2rem;
   /*width: 300px;*/
   /*height: 600px;*/
 }

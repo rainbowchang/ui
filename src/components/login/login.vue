@@ -1,7 +1,11 @@
 <template>
 <!-- 登录 -->
   <div class="wrapper">
-    <div class="qrbox"></div>
+
+    <div class="linkPage">
+      <a class="link1" @click="linkGzhClick"><span>微信公众号</span></a>  <a class="link2" @click="linkDownloadClick"><span>应用下载</span></a>
+      <div class="qrbox" v-show="showFlag"></div>
+    </div>
     <div class="loginbox">
       <div class="imgbox"></div>
       <Form ref="formInline" class="formlogin" :model="formInline" :rules="ruleInline" inline>
@@ -73,7 +77,8 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      showFlag: false
     };
   },
   mounted:function(){
@@ -179,6 +184,12 @@ export default {
         }
 
         return fmt;
+    },
+    linkGzhClick(){
+      this.showFlag = !this.showFlag;
+    },
+    linkDownloadClick(){
+      this.$router.push("download_home");
     }
   }
 };
@@ -212,18 +223,42 @@ export default {
   background-image: url("../../assets/imgs/icon001.png");
   background-position: -18px 0;
 }
-.qrbox {
+
+.linkPage{
   position: absolute;
   right: 5px;
-  bottom: 5px;
+  top: 5px;
+  width: 210px;
+  height: 30px;
+}
+
+.link1{
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  font-size: 1rem;
+}
+
+.link2{
+  position: absolute;
+  left: 100px;
+  top: 5px;
+  font-size: 1rem;
+}
+
+.qrbox {
+  position: absolute;
+  left: 1px;
+  top: 30px;
   width: 90px;
   height: 90px;
   /*border-radius: 50%;*/
   overflow: hidden;
   background-color: aliceblue;
-  background-image: url("../../assets/imgs/QRCode.png");
+  background-image: url("../../assets/imgs/QRGZH.jpg");
   background-size: 90px  90px;
 }
+
 .formlogin {
   display: flex;
   flex-direction: column;

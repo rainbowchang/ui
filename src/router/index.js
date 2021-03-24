@@ -65,6 +65,10 @@ export default new Router({
         // component: login,
         component: resolve => require(['@/components/qrcode/download_form'], resolve)
     },{
+        path: '/download_home',
+        name: 'download_home',
+        component: resolve => require(['@/components/qrcode/download_home'], resolve)
+    },{
         path: '/configCenter',
         name: 'configCenter',
         // component: configCenter,
