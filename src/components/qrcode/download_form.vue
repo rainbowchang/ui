@@ -2,7 +2,7 @@
 <template>
   <div class="center">
     <div class="url_text">
-      <a href="https://yuankongit.cn/release/release/Agent.zip">https://yuankongit.cn/release/release/Agent.zip</a>
+      <a href="https://yuankongit.cn/release/release/Agent.zip">点击下载</a>
     </div>
   </div>
 </template>

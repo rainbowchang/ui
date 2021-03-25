@@ -116,7 +116,7 @@ export default {
                     this.sendtimer = smsInterval
                     window.clearInterval(timer)
                   } else {
-                    this.title= '发送验证码(' + this.sendtimer + 's)';
+                    this.title= '(' + this.sendtimer + 's)';
                   }
                 }, 1000)
               })
