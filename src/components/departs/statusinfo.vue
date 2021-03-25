@@ -36,7 +36,7 @@
                 <div class="listmid">
                   <div>
                     <div class="statusline" style=" margin-bottom: -1.4%">
-                      <!-- status:  1加工，2故障，3停机，4无状态，5断开 -->
+                      <!-- status:  1加工，2故障，3停机，4未连接，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
                         :key="index"
@@ -76,7 +76,7 @@
                     </div>
                     <div>
                       <div class="none"></div>
-                      <span>离线：{{item.timeNoneOffline}}</span>
+                      <span>未连接：{{item.timeNoneOffline}}</span>
                     </div>
                   </div>
                 </div>
@@ -296,7 +296,7 @@ export default {
         legend: {
           orient: "vertical",
           x: "left",
-          data: ["加工", "故障", "停机", "无状态"]
+          data: ["加工", "故障", "停机", "未连接"]
         },
         series: [
           {

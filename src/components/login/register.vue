@@ -45,11 +45,11 @@
         <FormItem label="紧急联系人" prop="linkman" class="labelCss">
           <i-input type="text" v-model="formuser.linkman" placeholder="请设置紧急联系人"></i-input>
         </FormItem>
-     <!--    <FormItem label="验证码" prop="sessionCode" class="labelCss">
-          <i-input  style="width: 30%;" type="number" v-model="formuser.sessionCode" placeholder="请输入验证码" ></i-input>
-          <Button v-show="isSended" class="btn-default">{{sendtimer+'秒后获取'}}</Button> -->
-        <!--   <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formuser.tel)">获取短信验证码</i-button> -->
-        <!-- </FormItem> -->
+        <FormItem label="验证码" prop="sessionCode" class="labelCss">
+          <i-input style="width: 30%;" type="number" v-model="formuser.sessionCode" placeholder="请输入验证码"></i-input>
+          <Button v-show="isSended" class="btn-default">{{ sendtimer + '秒后获取' }}</Button>
+          <i-button v-show="!isSended" style="margin-left: 10px;" @click="sendMoblie(formuser.tel)">获取短信验证码</i-button>
+        </FormItem>
         <FormItem class="loginbtn">
           <Button @click="handleSubmit('formuser')"><span style="margin-left: 45px;">注册</span></Button>
         </FormItem>
@@ -128,29 +128,51 @@ export default {
       this.provinces = getProvinceByArea(area)
     },
     sendMoblie(mobile) {
-        if (!mobile) {
-            this.$Message.error('请输入手机号！')
-            return
-        } else {
-            // 倒计时60秒
-            this.sendtimer = 60
-            this.isSended = true
-            setTimeout(() => {
+      if (!mobile) {
+        this.$Message.error('请输入手机号！')
+        return
+      }
+      post("/sms/getyzm",
+          {"phoneNo":mobile},
+          response=>{
+            console.log(response);
+            if (response.data.status !== 'success'){
+              // this.yzmCheckMsg = response.data.result;
+            } else {
+              // 倒计时120秒
+              this.sendtimer = 120
+              this.isSended = true
+              setTimeout(() => {
                 let timer = window.setInterval(() => {
-                    if (this.sendtimer-- <= 1) {
-                        this.isSended = false
-                        this.sendtimer = 60
-                        window.clearInterval(timer)
-                    }
+                  if (this.sendtimer-- <= 1) {
+                    this.isSended = false
+                    this.sendtimer = 120
+                    window.clearInterval(timer)
+                  }
                 }, 1000)
-            })
-        }
-        // console.log(mobile)
+              })
+            }
+          }
+      );
+      console.log(mobile)
     },
     // 注册
     handleSubmit(name) {
-      var router = this.$router;
-      var param = this.formuser;
+      post("/sms/checkyzm",
+          {"phoneNo":this.formuser.tel, "yzm": this.formuser.sessionCode},
+          response=>{
+            console.log(response);
+            if (response.data.status === 'success'){
+              this.postYzm(name)
+            } else {
+              this.$Message.error(response.data.result);
+            }
+          });
+    },
+
+    postYzm(name){
+      let router = this.$router;
+      let param = this.formuser;
       console.log(name)
       if(this.verifyPassword != this.formuser.password) {
         this.$Message.error("两次输入的密码不一致!");
@@ -158,7 +180,7 @@ export default {
       }
       this.$refs[name].validate(valid => {
         post("/user/register",param,reponse => {
-          if (valid && reponse.data.status == "success") {      
+          if (valid && reponse.data.status == "success") {
             this.$Message.success("注册成功，请登录!");
             router.push({ path: "/login" })
           } else {
@@ -167,9 +189,10 @@ export default {
         });
       });
     },
+
     register(){
         this.$router.push("register")
-    }
+    },
   }
 };
 </script>

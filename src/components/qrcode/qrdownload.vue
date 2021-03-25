@@ -2,23 +2,23 @@
 <template>
   <div class="center">
     <div class="center_text">
-      远控机床通讯Agent<br>
+      机床Agent下载<br>
     </div>
     <div class="url_text">
       <div>
-        <label>姓&emsp;名：</label><input placeholder="姓名" type="text" v-model="personName"> <br>
-        <div id="personMsg" >{{personMsg}}</div><br>
-        <label>公&emsp;司：</label><input placeholder="公司" type="text" v-model="corporation"> <br>
-        <div id="corpMsg" >{{corpMsg}}</div><br>
+        <label>{{personname}}</label><input placeholder="姓名" type="text" v-model="personName"> <br>
+        <div id="personMsg" class="errormsg">{{personMsg}}</div>
+        <label>{{corpname}}</label><input placeholder="公司" type="text" v-model="corporation"> <br>
+        <div id="corpMsg" class="errormsg">{{corpMsg}}</div>
         <label>手机号：</label><input placeholder="手机号" type="text" v-model="phoneNo"> &nbsp;&nbsp;
-        <button @click="sendYzm()" v-bind:disabled="dis">{{title}}</button><br>
-        <div id="phoneNoMsg" >{{yzmmsg}}</div><br>
-        <label>验证码：</label><input placeholder="验证码" type="text" v-model="yzm">
+        <button @click="sendYzm()" v-bind:disabled="dis" style="width: 100px">{{title}}</button><br>
+        <div id="phoneNoMsg" class="errormsg">{{yzmmsg}}</div>
+        <label>验证码：</label><input placeholder="六位验证码" type="text" v-model="yzm">
       </div>
       <br>
-      <button @click="downClick">确定</button>
+      <button @click="downClick" class="btnConfirm">确定</button>
       <download_form v-show="showDetail" ref="showDetail"></download_form>
-      <div id="yzmCheckMsg" >{{yzmCheckMsg}}</div><br>
+      <div id="yzmCheckMsg" class="errormsg">{{yzmCheckMsg}}</div>
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@
 import download_form from "./download_form";
 import {post} from "@/apis/restUtils"
 const smsInterval = 120; //senconds
+const emptyChar = '\u2003';
 
 let myReg = /^[1][3-9][0-9]{9}$/;
 export default {
@@ -40,13 +41,15 @@ export default {
       phoneNo: '',
       personName: '',
       corporation: '',
-      personMsg: '',
-      corpMsg: '',
-      yzmmsg: '',
+      personMsg: emptyChar,
+      corpMsg: emptyChar,
+      yzmmsg: emptyChar,
       yzm: '',
-      yzmCheckMsg: '',
+      yzmCheckMsg: emptyChar,
       dis: false,
       title: '发送验证码',
+      personname: '姓\u2003名：',
+      corpname: '公\u2003司：'
     }
   },
   methods: {
@@ -56,9 +59,8 @@ export default {
           response=>{
             console.log(response);
             if (response.data.status === 'success'){
-              this.yzmCheckMsg = '';
+              this.yzmCheckMsg = emptyChar;
               this.showDetail = true;
-
             } else {
               this.yzmCheckMsg = response.data.result;
             }
@@ -71,7 +73,7 @@ export default {
         this.personMsg = '姓名不能为空';
         return;
       } else{
-        this.personMsg = '';
+        this.personMsg = emptyChar;
       }
 
       let corporation = this.corporation;
@@ -79,7 +81,7 @@ export default {
         this.corpMsg = '公司名称不能为空';
         return;
       } else {
-        this.corpMsg = '';
+        this.corpMsg = emptyChar;
       }
 
       let val = this.phoneNo;
@@ -87,14 +89,14 @@ export default {
         this.yzmmsg = "移动电话号码不能为空";
         return;
       } else {
-        this.yzmmsg = '';
+        this.yzmmsg = emptyChar;
       }
 
       if (!myReg.test(val)) {
         this.yzmmsg = '手机号格式不正确';
         return;
       } else {
-        this.yzmmsg = '';
+        this.yzmmsg = emptyChar;
       }
       post("/sms/getyzm",
           {"personName": this.personName, "corporation":this.corporation, "phoneNo":this.phoneNo},
@@ -140,7 +142,7 @@ export default {
 .center_text {
   position: absolute;
   top: 20%;
-  left: 50%;
+  left: 48%;
   transform: translate(-50%, -50%);
   font-size: 2rem;
   /*width: 300px;*/
@@ -152,5 +154,13 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 14px;
+}
+.btnConfirm{
+  position: relative;
+  left: 32%;
+  width: 20%;
+}
+.errormsg{
+  color:red;
 }
 </style>

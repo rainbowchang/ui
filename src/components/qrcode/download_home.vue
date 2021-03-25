@@ -7,20 +7,21 @@
       <a href="itms-services://?action=download-manifest&url=https://loc.tdlbs.com/release/yk/yk.plist">
         <div class="qriosbox"></div>
       </a><br>
-      <span class="span_foot">iOS</span>
+      <span class="span_foot leftios">iOS</span>
     </div>
     <div class="tab_item tab2">
       <a href="https://yuankongit.cn/release/app/yk.apk">
         <div class="qrbox"></div>
       </a><br>
-      <span class="span_foot">Android</span>
+      <span class="span_foot leftandroid">Android</span>
     </div>
     <div class="tab_item tab3">
       <a target="_blank">
         <div class="agentbox" @click="toAgentDownload"></div>
       </a><br>
-      <span class="span_foot">Windows Agent</span>
+      <span class="span_foot leftagent">Windows Agent</span>
     </div>
+    <div class="declaration">声明：本页部分图片来源于http://icons8.com/</div>
   </div>
 </template>
 
@@ -110,11 +111,26 @@ export default {
   top: 0%;
   overflow: hidden;
   background-color: aliceblue;
-  background-image: url("../../assets/imgs/CaptalA.png");
+  background-image: url("../../assets/imgs/machine128.png");
   background-size: 90px  90px;
 }
 .span_foot{
   position: relative;
   top: 50%;
+}
+.leftios{
+  left: 30px;
+}
+.leftandroid{
+  left: 20px;
+}
+.leftagent{
+  left: -3px;
+}
+.declaration{
+  position: absolute;
+  right:0px;
+  bottom: 0px;
+  font-size: 10px;
 }
 </style>
