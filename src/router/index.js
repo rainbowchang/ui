@@ -54,6 +54,11 @@ export default new Router({
         name: 'qrhome',
         // component: login,
         component: resolve => require(['@/components/qrcode/qrhome'], resolve)
+    },{
+        path: '/qrioshome',
+        name: 'qrioshome',
+        // component: login,
+        component: resolve => require(['@/components/qrcode/qrioshome'], resolve)
     }, {
         path: '/qrdownload',
         name: 'qrdownload',

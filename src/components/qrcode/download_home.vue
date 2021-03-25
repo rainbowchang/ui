@@ -98,7 +98,7 @@ export default {
   top: 0%;
   overflow: hidden;
   background-color: aliceblue;
-  background-image: url("../../assets/imgs/QRiOS.png");
+  background-image: url("../../assets/imgs/qrioshome.png");
   background-size: 90px  90px;
 }
 .agentbox{
