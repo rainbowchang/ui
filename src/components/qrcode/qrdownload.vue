@@ -98,7 +98,7 @@ export default {
       } else {
         this.yzmmsg = emptyChar;
       }
-      post("/sms/getyzm",
+      post("/sms/getyzmsms",
           {"personName": this.personName, "corporation":this.corporation, "phoneNo":this.phoneNo},
           response=>{
             console.log(response);

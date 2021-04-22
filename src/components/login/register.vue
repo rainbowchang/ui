@@ -132,7 +132,7 @@ export default {
         this.$Message.error('请输入手机号！')
         return
       }
-      post("/sms/getyzm",
+      post("/sms/getregsms",
           {"phoneNo":mobile},
           response=>{
             console.log(response);

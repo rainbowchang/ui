@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="title unread" style="display: flex;white-space: nowrap;">
-        <span style="width:30%">主轴负载/转速</span>
+        <span style="width:30%">主轴</span>
         <div style="width: 310px;height: 200px;">
           <div id="myChart3" style="width: 250px;height: 300px;margin-right:1em;"></div>
           <div class="myChart2Title">负载</div>

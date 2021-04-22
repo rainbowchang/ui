@@ -158,6 +158,7 @@ export default {
       });
       this.timer = setInterval(() => {
           this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response =>{
+            console.log("UserName= " + localStorage.getItem("UserName"));
           this.detailinfo=response.data;
         });
       }, 3000);
