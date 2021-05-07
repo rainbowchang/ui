@@ -6,8 +6,8 @@
     </div>
     <div>
         <Table highlight-row height="auto" width= "auto" border :columns="columns12" :data="tableData">
-            <template slot-scope="{ row }" slot="sn">
-               <strong>{{ row.sn }}</strong>
+            <template slot-scope="{ row }" slot="id">
+               <strong>{{ row.id }}</strong>
            </template>
            <template slot-scope="{ row, index }" slot="action">
                <Button type="primary" size="small" style="margin-right: 5px" @click="edit(row, true)">编辑</Button>
@@ -27,8 +27,15 @@
             return {
                 columns12: [
                     {
+                        title: '设备ID',
+                        slot: 'id',
+                        resizable: true,
+                        visible: false,
+                        // width: 180
+                    },
+                    {
                         title: '设备SN',
-                        slot: 'sn',
+                        key: 'sn',
                         resizable: true,
                         // width: 180
                     },
@@ -62,7 +69,7 @@
                     },
                     {
                         title: '车间',
-                        key: 'shop'
+                        key: 'workshop'
                     },
                     {
                         title: '生产线',
@@ -78,7 +85,7 @@
                     },
                     {
                         title: '机床型号',
-                        key: 'deviceModel'
+                        key: 'model'
                     },
                     {
                         title: '出厂编号',
@@ -86,7 +93,7 @@
                     },
                     {
                         title: '最大主轴转速',
-                        key: 'maxSpeed'
+                        key: 'maxSpindleSpeed'
                     },
                     {
                         title: '操作',
@@ -96,36 +103,36 @@
                     }
                 ],
                 tableData: [
-                    {
-                        sn: 'sn-001',
-                        name: '南京设备001',
-                        userId: '0002345',
-                        userName: '章三',
-                        area: '东南区域',
-                        factory: "工厂",
-                        shop:"车间",
-                        productLine:"生产线",
-                        oemCompany:"宁庆机床厂",
-                        oemId:"000034567",
-                        deviceModel:"plc-009123",
-                        factoryNumber:"f-001234",
-                        maxSpeed:"300000"
-                    },
-                     {
-                        sn: 'sn-002',
-                        name: '南京设备002',
-                        userId: '0004566',
-                        userName: '李四',
-                        area: '东南区域',
-                        factory: "工厂",
-                        shop:"车间",
-                        productLine:"生产线",
-                        oemCompany:"海天机床厂",
-                        oemId:"000034567",
-                        deviceModel:"plc-009123",
-                        factoryNumber:"f-001234",
-                        maxSpeed:"300000"
-                    }
+                    // {
+                    //     sn: 'sn-001',
+                    //     name: '南京设备001',
+                    //     userId: '0002345',
+                    //     userName: '章三',
+                    //     area: '东南区域',
+                    //     factory: "工厂",
+                    //     shop:"车间",
+                    //     productLine:"生产线",
+                    //     oemCompany:"宁庆机床厂",
+                    //     oemId:"000034567",
+                    //     deviceModel:"plc-009123",
+                    //     factoryNumber:"f-001234",
+                    //     maxSpeed:"300000"
+                    // },
+                    //  {
+                    //     sn: 'sn-002',
+                    //     name: '南京设备002234234',
+                    //     userId: '0004566',
+                    //     userName: '李四',
+                    //     area: '东南区域',
+                    //     factory: "工厂",
+                    //     shop:"车间",
+                    //     productLine:"生产线",
+                    //     oemCompany:"海天机床厂",
+                    //     oemId:"000034567",
+                    //     deviceModel:"plc-009123",
+                    //     factoryNumber:"f-001234",
+                    //     maxSpeed:"300000"
+                    // }
                 ]
             }
         },
@@ -195,13 +202,13 @@
                     userName: '',
                     area: '',
                     factory: "",
-                    shop:"",
+                    workshop:"",
                     productLine:"",
                     oemCompany:"",
                     oemId:"",
-                    deviceModel:"",
+                    model:"",
                     factoryNumber:"",
-                    maxSpeed:""
+                    maxSpindleSpeed:""
                 })
                 this.edit(this.tableData[0],false)
             },

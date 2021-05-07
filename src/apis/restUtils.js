@@ -110,3 +110,24 @@ export const getAreaByProvince = (province) => {
             return "";
     }
 }
+
+export const NodeType={
+    "ROOT":"ROOT",
+    "OEM_ROOT":"OEM_ROOT",
+    "USER_ROOT":"USER_ROOT",
+    "COMPOSITE":"COMPOSITE",
+    "LEAF":"LEAF",
+    "AREA":"AREA",
+    "PROVINCE":"PROVINCE",
+    "CUSTOMER":"CUSTOMER",
+    "FACTORY":"FACTORY",
+    "SHOP":"SHOP",
+    "PRODUCTLINE":"PRODUCTLINE",
+    "NODE":"NODE"
+}
+
+export const OrgTypeCategory = {
+    "ROOT": "0",
+    "ORGANIZATION": "1",
+    "MACHINETOOL": "2"
+}

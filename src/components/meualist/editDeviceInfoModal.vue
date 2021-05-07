@@ -19,7 +19,7 @@
             <Input v-model="formItem.factory" placeholder="Enter something..."/>
         </FormItem>
          <FormItem label="车间">
-            <Input v-model="formItem.shop" placeholder="Enter something..."/>
+            <Input v-model="formItem.workshop" placeholder="Enter something..."/>
         </FormItem>
          <FormItem label="生产线">
             <Input v-model="formItem.productLine" placeholder="Enter something..."/>
@@ -31,13 +31,13 @@
             <Input v-model="formItem.oemId" placeholder="Enter something..."/>
         </FormItem>
          <FormItem label="机床型号">
-            <Input v-model="formItem.deviceModel" placeholder="Enter something..."/>
+            <Input v-model="formItem.model" placeholder="Enter something..."/>
         </FormItem>
          <FormItem label="出厂编号">
             <Input v-model="formItem.factoryNumber" placeholder="Enter something..."/>
         </FormItem>
          <FormItem label="最大主轴转速">
-            <Input v-model="formItem.maxSpeed" placeholder="Enter something..."/>
+            <Input v-model="formItem.maxSpindleSpeed" placeholder="Enter something..."/>
         </FormItem>
     </Form>
 </template>
@@ -53,13 +53,13 @@
                     userName:"",
                     area:"",
                     factory:"",
-                    shop:"",
+                    workshop:"",
                     productLine:"",
                     oemCompany:"",
                     oemId:"",
-                    deviceModel:"",
+                    model:"",
                     factoryNumber:"",
-                    maxSpeed:""
+                    maxSpindleSpeed:""
                 }
             }
         },
