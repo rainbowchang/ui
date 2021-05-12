@@ -41,7 +41,7 @@
                         v-for="(value,index) in item.list"
                         :key="index"
                         :style="{width:value.percent}"
-                        :class="value.status=='work'?'process':value.status=='alarm'?'breakdown':value.status=='stop'?'stop':value.status=='none'?'none':'interrupt'"
+                        :class="value.status==='加工'?'process':value.status==='故障'?'breakdown':value.status==='停机'?'stop':value.status==='未连接'?'none':'interrupt'"
                       ></div>
                     </div>
                    <!--  <div class="timeline">
