@@ -71,7 +71,7 @@ export default {
       formuser: {
         username: '',
         password: '',
-        tel: 0,
+        tel: 1,
         area: '',
         province: '',
         address: '',

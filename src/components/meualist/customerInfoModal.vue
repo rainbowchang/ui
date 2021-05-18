@@ -291,13 +291,13 @@ export default {
             }
             return customerBean;
         },
-        getRemoteCustomers() {//TODO 作废  --zch
-            // var customerBean = this.getCustomerFeature();
-            post("/customer/getCustomerByFeature", this.customerId, response => {
-                console.log(response.data, "customerList");
-                this.customerList = response.data;
-            });
-        },
+        // getRemoteCustomers() {//TODO 作废  --zch
+        //     // var customerBean = this.getCustomerFeature();
+        //     post("/customer/getCustomerByFeature", this.customerId, response => {
+        //         console.log(response.data, "customerList");
+        //         this.customerList = response.data;
+        //     });
+        // },
         getRemotePlcs() {
             console.log('customer: ', this.customerNode);
             post("/agent/view/getAllMachinetool", {},response => {

@@ -137,7 +137,7 @@
             }
         },
         mounted: function() {
-            get("/organization/deviceInfo/getDeviceInfos", reponse => {
+            get("", reponse => {
                 this.tableData = reponse.data;
             })
         },
