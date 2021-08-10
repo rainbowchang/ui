@@ -147,6 +147,10 @@ export default new Router({
             path: 'statusinfo',
             // component: statusinfo
             component: resolve => require(['@/components/departs/statusinfo'], resolve)
+        }, {
+            path: '/productqualiticate',
+            // component: statusinfo
+            component: resolve => require(['@/components/meualist/componentCheck'], resolve)
         }]
     }]
 })

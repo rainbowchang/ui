@@ -20,7 +20,7 @@
 <script>
 import editDeviceInfoModal from "./editDeviceInfoModal";
 // import addDeviceInfoModal from "./addDeviceInfoModal";
-import {get, post} from "@/apis/restUtils"
+import {post} from "@/apis/restUtils"
 
 export default {
     data() {
@@ -113,7 +113,7 @@ export default {
         })
     },
     methods: {
-        edit(row, isModify) {
+        edit(row, isModify, tableData) {
             this.$Modal.confirm({
                 title: '编辑设备信息',
                 render: (h) => {
@@ -157,11 +157,9 @@ export default {
                     this.$Modal.remove()
                 },
                 onCancel() {
-                    console.log("click cancel")
-                    get("/organization/deviceInfo/getDeviceInfos", reponse => {
-                        console.log("Get reply", reponse.status);
-                        this.tableData = reponse.data;
-                    })
+                    if (!(tableData === undefined || tableData == null)) {
+                        tableData.shift();
+                    }
                 }
             });
         },
@@ -181,7 +179,7 @@ export default {
                 factoryNumber: "",
                 maxSpindleSpeed: ""
             })
-            this.edit(this.tableData[0], false)
+            this.edit(this.tableData[0], false, this.tableData)
         },
         remove(row, index) {
             console.log("user", row)
@@ -192,7 +190,7 @@ export default {
         },
         bindActiveCode(row) {
             alert("绑定激活码：" + JSON.stringify(row));
-        }
+        },
     }
 };
 </script>

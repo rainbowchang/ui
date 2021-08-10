@@ -34,6 +34,14 @@
       <MenuItem name="/faraway" :class="faraway?'red':''">
         <span>远程操作</span>
       </MenuItem>
+      <Submenu name="4">
+        <template slot="title">
+          <span>生产管理</span>
+        </template>
+        <MenuItem name="/productqualiticate">
+          <span>产品质检</span>
+        </MenuItem>
+      </Submenu>
       <Submenu name="3">
         <template slot="title">
           <span>你好，{{username}}</span>
@@ -66,7 +74,8 @@ export default {
       debugging: false,
       management: false,
       history: false,
-      faraway: false
+      faraway: false,
+      productqualiticate:false
     };
   },
   methods: {
@@ -78,7 +87,8 @@ export default {
         (this.debugging = false),
         (this.management = false),
         (this.history = false),
-        (this.faraway = false);
+        (this.faraway = false),
+        (this.productqualiticate = false);
     },
     selectMenu(name) {
       if (name == "/index") {
@@ -112,6 +122,10 @@ export default {
       if (name == "/faraway") {
         this.allfalse();
         this.faraway = true;
+      }
+      if (name == "/productqualiticate") {
+        this.allfalse();
+        this.productqualiticate = true;
       }
       if (name == "exit") {
         this.allfalse();
