@@ -35,7 +35,7 @@
                 <!-- 中间图表 -->
                 <div class="listmid">
                   <div>
-                    <div class="statusline" style=" margin-bottom: -1.4%">
+                    <div class="statusline" style=" margin-bottom: -1.4%" @mousemove="onmousemove($event)">
                       <!-- status:  1加工，2故障，3停机，4未连接，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
@@ -182,7 +182,8 @@ export default {
           bottom: "myChartBottom3",
           name: "ZHUGANGZHI-2"
         }
-      ]
+      ],
+      flagOfTimeAxis: true,
     };
   },
   methods: {
@@ -202,7 +203,7 @@ export default {
       console.log("当前确认的日期", this.currentdate);
       this.statuslist = [];
       for(let i = 0; i < this.selections.length; i++){
-        post("/organization/customer/getOneDayStatus", {"serial":this.selections[i].serial,"date":this.currentdate},
+        post("/organization/customer/getOneDayStatus", {"id":this.selections[i].id,"date":this.currentdate},
           reponse => {
 
             this.statuslist.splice(i,0,reponse.data);
@@ -442,6 +443,23 @@ export default {
       // var myChart = echarts.init(document.getElementById('myChart2'))
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+    },
+    onmousemove(event){
+      if(this.flagOfTimeAxis) {
+        this.flagOfTimeAxis = false;
+        let el = event.currentTarget;
+        let pointX = event.x - el.getBoundingClientRect().left;
+        let width = el.getBoundingClientRect().width;
+        let perc = pointX / width * 100.0;
+        console.log("所占百分比" + perc);
+        setTimeout(()=>{
+          let timer = window.setInterval(() => {
+            this.flagOfTimeAxis = true;
+            window.clearInterval(timer);
+          }, 300)
+        })
+      }
+
     }
   },
   watch: {
@@ -472,9 +490,9 @@ export default {
 
         this.statuslist = [];
         for(let i = 0; i < this.selections.length; i++){  
-          let serial = this.selections[i].serial;
+          let id = this.selections[i].id;
           post("/organization/customer/getOneDayStatus",
-            {"serial":serial,"date":""}, 
+            {"id":id,"date":""},
             reponse => {
               this.statuslist.splice(i,0,reponse.data);
               console.log("status list" , this.statuslist);
