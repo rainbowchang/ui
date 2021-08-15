@@ -35,7 +35,7 @@
                 <!-- 中间图表 -->
                 <div class="listmid">
                   <div>
-                    <div class="statusline" style=" margin-bottom: -1.4%">
+                    <div class="statusline" style=" margin-bottom: -1.4%" @mousemove="onmousemove($event)">
                       <!-- status:  1加工，2故障，3停机，4未连接，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
@@ -182,7 +182,8 @@ export default {
           bottom: "myChartBottom3",
           name: "ZHUGANGZHI-2"
         }
-      ]
+      ],
+      flagOfTimeAxis: true,
     };
   },
   methods: {
@@ -442,6 +443,23 @@ export default {
       // var myChart = echarts.init(document.getElementById('myChart2'))
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+    },
+    onmousemove(event){
+      if(this.flagOfTimeAxis) {
+        this.flagOfTimeAxis = false;
+        let el = event.currentTarget;
+        let pointX = event.x - el.getBoundingClientRect().left;
+        let width = el.getBoundingClientRect().width;
+        let perc = pointX / width * 100.0;
+        console.log("所占百分比" + perc);
+        setTimeout(()=>{
+          let timer = window.setInterval(() => {
+            this.flagOfTimeAxis = true;
+            window.clearInterval(timer);
+          }, 300)
+        })
+      }
+
     }
   },
   watch: {
