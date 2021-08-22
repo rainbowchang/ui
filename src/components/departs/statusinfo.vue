@@ -1,5 +1,13 @@
 <template>
   <div class="wrappers">
+    <div style="display:none;background-color:#ffffff" class="flowkit" id="flowkit"
+         @mouseleave="onflowkitmouseout()"
+         @mouseover="onflowkitmouseenter()">
+      <div class="flowtime" id="flowtime"  >
+        <img :src="'data:image/png;base64,'+pictureString" alt="" />
+      </div>
+      <div class="workIndicatorsDiv" id="workIndicatorsDiv" > </div>
+    </div>
     <div class="top">
       <el-button type="primary" icon="el-icon-arrow-left" @click="back">上一层</el-button>
       <span>时间作业状态</span>
@@ -35,7 +43,9 @@
                 <!-- 中间图表 -->
                 <div class="listmid">
                   <div>
-                    <div class="statusline" style=" margin-bottom: -1.4%" @mousemove="onmousemove($event)">
+                    <div class="statusline" style=" margin-bottom: -1.4%"
+                         @mousemove="onmousemove($event, item.id)" @mouseleave="onmouseout()"
+                         @mouseover="onmouseenter($event)">
                       <!-- status:  1加工，2故障，3停机，4未连接，5断开 -->
                       <div
                         v-for="(value,index) in item.list"
@@ -136,6 +146,7 @@ export default {
       selections: [],
       statuslist: [
         {
+          id: "",
           timeWork: "",
           timeAlarm: "",
           timeStop: "",
@@ -147,6 +158,7 @@ export default {
           name: "ZHUGANGZHI-1",
         },
         {
+          id: "",
           timeWork: "",
           timeAlarm: "",
           timeStop: "",
@@ -158,6 +170,7 @@ export default {
           name: "ZHUGANGZHI-2"
         },
         {
+          id: "",
           timeWork: "",
           timeAlarm: "",
           timeStop: "",
@@ -183,7 +196,11 @@ export default {
           name: "ZHUGANGZHI-2"
         }
       ],
-      flagOfTimeAxis: true,
+      flagOfMoveTimeAxis: true,     //flagOfMoveTimeAxis: 鼠标在时间轴上移动
+      flagOfMouseOverFlowkit: false,  //flagOfFlowBox: 鼠标位于弹出框里面
+      flagOfMouseOverTimeAxis: false, //flagOfMouseOverTimeAxis: 鼠标位于时间轴上
+      timeAxisPercent: 0,
+      pictureString: "",
     };
   },
   methods: {
@@ -444,23 +461,148 @@ export default {
       // // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    onmousemove(event){
-      if(this.flagOfTimeAxis) {
-        this.flagOfTimeAxis = false;
+    onmousemove(event, machinetooleid){
+      if(this.flagOfMoveTimeAxis) {
+        this.flagOfMoveTimeAxis = false;
         let el = event.currentTarget;
         let pointX = event.x - el.getBoundingClientRect().left;
         let width = el.getBoundingClientRect().width;
-        let perc = pointX / width * 100.0;
-        console.log("所占百分比" + perc);
+        this.timeAxisPercent = pointX / width * 100.0;
+        console.log("所占百分比: " + this.timeAxisPercent + " machinetooleid: " + machinetooleid);
+        post("/statistics/getMachineStatus",
+            {"timeAxisPercent":this.timeAxisPercent, "machinetooleid":machinetooleid, "date":this.currentdate, },
+            reponse => {
+              console.log(reponse.data.result);
+              this.pictureString = reponse.data.result;
+            });
+          {
+              let myChart = this.$echarts.init(document.getElementById("workIndicatorsDiv"));
+              let option = {
+                  title: {
+                      text: "主轴倍率及进给",
+                      left: 'center'
+                  },
+                  color: ["#3398DB"],
+                  tooltip: {
+                      trigger: "axis",
+                      formatter: "{c}%",
+                      axisPointer: {
+                          // 坐标轴指示器，坐标轴触发有效
+                          type: "shadow" // 默认直线，可选为：'line' | 'shadow'为
+                      }
+                  },
+                  grid: {
+                      left: "-15%",
+                      right: "-10%",
+                      bottom: "3%",
+                      containLabel: true
+                  },
+                  xAxis: [
+                      {
+                          type: "category",
+                          data: ['13:41:56', '13:41:57', '13:41:58', '13:41:59', '13:42:00', '13:42:01'],
+                          axisTick: {
+                              alignWithLabel: true
+                          },
+                          axisLabel: {
+                              interval: 0,
+                              rotate: 0
+                          }
+                      }
+                  ],
+                  yAxis: [
+                      {
+                          name: '利用率占比',
+                          type: "value",
+                          max: 120,
+                          axisLabel: {formatter: "{value} %"}
+                      }
+                  ],
+                  series: [
+                      {
+                          name: "百分比",
+                          type: "line",
+                          data: [1,20,35,90,10,110],
+                          itemStyle: {
+                              normal: {
+                                  color: "#009a44"
+                              }
+                          }
+                      },
+                      {
+                          name: "百分比",
+                          type: "line",
+                          data: [57,10,35,62,10,70],
+                          itemStyle: {
+                              normal: {
+                                  color: "#dd9a44"
+                              }
+                          }
+                      },
+                  ]
+
+              };
+
+
+              myChart.setOption(option);
+
+          }
+
+
         setTimeout(()=>{
           let timer = window.setInterval(() => {
-            this.flagOfTimeAxis = true;
+            this.flagOfMoveTimeAxis = true;
             window.clearInterval(timer);
           }, 300)
-        })
+        });
       }
+    },
+    onmouseout(){
+      this.flagOfMouseOverTimeAxis = false;
+      let box = document.getElementById("flowkit");
+      setTimeout(()=>{
+        let timer = window.setInterval(() => {
+          if(!this.flagOfMouseOverTimeAxis && !this.flagOfMouseOverFlowkit) {
+            box.style.display="none";
+          }
+          window.clearInterval(timer);
+        }, 600)
+      });
+    },
+    onflowkitmouseout(){
+      this.flagOfMouseOverFlowkit = false;
+      let box = document.getElementById("flowkit");
+      setTimeout(()=>{
+        let timer = window.setInterval(() => {
+          if(!this.flagOfMouseOverTimeAxis && !this.flagOfMouseOverFlowkit) {
+            box.style.display = "none";
+          }
+          window.clearInterval(timer);
+        }, 600)
+      });
+    },
 
+    onmouseenter(event){
+      this.flagOfMouseOverTimeAxis = true;
+      let el = event.currentTarget;
+      let box = document.getElementById("flowkit");
+      box.style.left = (el.getBoundingClientRect().left-50) + 'px';
+      box.style.top = el.getBoundingClientRect().top +  'px';
+      if('none' === box.style.display) {
+        setTimeout(() => {
+          let timer = window.setInterval(() => {
+            if (this.flagOfMouseOverTimeAxis) {
+              box.style.display = "";
+            }
+            window.clearInterval(timer);
+          }, 600)
+        });
+      }
+    },
+    onflowkitmouseenter(){
+      this.flagOfMouseOverFlowkit = true;
     }
+
   },
   watch: {
     statusinfo(val) {
@@ -732,6 +874,35 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.flowkit {
+  width: 1000px;
+  height: 300px;
+  box-shadow: darkgrey 10px 10px 30px 5px;
+  z-index: 1;
+  position: absolute;
+}
+
+.flowtime {
+  top: 30px;
+  left: 50px;
+  width: 900px;
+  height: 20px;
+  /*border: 1px solid #000c17;*/
+  position: relative
+}
+
+.workIndicatorsDiv {
+    top: 60px;
+    left: 50px;
+    width: 900px;
+    height: 200px;
+    /* min-height: 860px; */
+    border-radius: 3px;
+    background-color: lightgray;
+    position: relative;
+    /*overflow: hidden;*/
 }
 </style>
 
