@@ -207,9 +207,11 @@ export default {
       for(let i = 0; i < this.selections.length; i++){
         post("/organization/customer/getOneDayStatus", {"id":this.selections[i].id,"date":this.currentdate},
             reponse => {
-
               this.statuslist.splice(i,0,reponse.data);
+              this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
               console.log("status list" , this.statuslist);
+              // this.statuslist.splice(i,0,reponse.data);
+              // console.log("status list" , this.statuslist);
             });
       }
     },
@@ -329,36 +331,46 @@ export default {
       myChart.setOption(option);
     },
 
-    getTimeAxis(data, chart){
+    getTimeAxis(input, chart){
       console.log("chart:", chart);
       let chartDom = document.getElementById(chart);
       console.log("chartDom:", chartDom);
       let myChart = this.$echarts.init(chartDom);
       let option;
 
-      let dataCount = 10;
-      let startTime = +new Date();
-      let categories = ['categoryA'];
+      let dataCount = input.workStatusSegmentList.length;
+      let startTime = input.beginTime;
+      let endTime = input.endTime;
+      let categories = [];
+      categories.push(input.name);
       let types = [
         {name: '加工', color: '#089642'},
         {name: '停机', color: '#fffc02'},
         {name: '未连接', color: '#808080'},
-
       ];
-      data = [];
+      let data = [];
       let thisEcharts = this.$echarts;
+      console.log("input: ", input);
 // Generate mock data
       categories.forEach(function (category, index) {
-        let baseTime = startTime;
         for (let i = 0; i < dataCount; i++) {
-          let typeItem = types[Math.round(Math.random() * (types.length - 1))];
-          let duration = Math.round(Math.random() * 10000);
+          let status = input.workStatusSegmentList[i].status;
+          let typeItem;
+          if(status === 'WORKING'){
+            typeItem = types[0];
+          } else if(status === 'IDLE'){
+            typeItem = types[1];
+          } else {
+            typeItem = types[2];
+          }
+
+          let duration = input.workStatusSegmentList[i].endTimeStamp - input.workStatusSegmentList[i].beginTimeStamp;
           data.push({
             name: typeItem.name,
             value: [
               index,
-              baseTime,
-              baseTime += duration,
+              input.workStatusSegmentList[i].beginTimeStamp,
+              input.workStatusSegmentList[i].endTimeStamp,
               duration
             ],
             itemStyle: {
@@ -367,7 +379,6 @@ export default {
               }
             }
           });
-
         }
       });
 
@@ -396,6 +407,10 @@ export default {
         };
       }
 
+      function getDateFromTime(time) {
+        let date = new Date(time * 1000);
+        return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+      }
 
       option = {
         tooltip: {
@@ -424,10 +439,12 @@ export default {
         },
         xAxis: {
           min: startTime,
+          max: endTime,
           scale: true,
           axisLabel: {
             formatter: function (val) {
-              return Math.max(0, val - startTime) + ' ms';
+              let d =  getDateFromTime(val);
+              return d;
             }
           }
         },
@@ -449,7 +466,7 @@ export default {
       };
 
       option && myChart.setOption(option);
-    }
+    },
 
   },
   watch: {
@@ -488,7 +505,7 @@ export default {
               {"id":id,"date":""},
               reponse => {
                 this.statuslist.splice(i,0,reponse.data);
-                this.getTimeAxis([], this.timeAxisList[i].chart);
+                this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
                 console.log("status list" , this.statuslist);
               });
         }
