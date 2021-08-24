@@ -42,7 +42,7 @@
                   <div class="colorline">
                     <div>
                       <div class="process"></div>
-                      <span>加工：{{statuslist[index].workTime}}</span>
+                      <span>加工：{{item.workTime}}</span>
                     </div>
 <!--                    <div>-->
 <!--                      <div class="breakdown"></div>-->
@@ -50,11 +50,11 @@
 <!--                    </div>-->
                     <div>
                       <div class="stop"></div>
-                      <span>停机：{{statuslist[index].stopTime}}</span>
+                      <span>停机：{{item.stopTime}}</span>
                     </div>
                     <div>
                       <div class="none"></div>
-                      <span>未连接：{{statuslist[index].offlineTime}}</span>
+                      <span>未连接：{{item.offlineTime}}</span>
                     </div>
                   </div>
                 </div>
@@ -112,41 +112,6 @@ export default {
       currentdate: "",
       currentPage: 1, //分页当前页数,
       selections: [],
-      statuslist: [
-        {
-          timeWork: "",
-          timeAlarm: "",
-          timeStop: "",
-          list: [
-            { percent: "18%", status: 'work' },
-            { percent: "66%", status: 'alarm' },
-            { percent: "36%", status: 'stop' }
-          ],
-          name: "ZHUGANGZHI-1",
-        },
-        {
-          timeWork: "",
-          timeAlarm: "",
-          timeStop: "",
-          list: [
-            { percent: "10%", status: 'alarm' },
-            { percent: "40%", status: 'stop' },
-            { percent: "50%", status: 'work' }
-          ],
-          name: "ZHUGANGZHI-2"
-        },
-        {
-          timeWork: "",
-          timeAlarm: "",
-          timeStop: "",
-          list: [
-            { percent: "10%", status: 'alarm' },
-            { percent: "28%", status: 'stop' },
-            { percent: "62%", status: 'work' },
-          ],
-          name: "ZHUGANGZHI-3"
-        }
-      ], //状态数组status状态，percent百分比
       metalist: [
         {
           func: function(){},
@@ -180,13 +145,10 @@ export default {
     //确认日期
     suredata() {
       console.log("当前确认的日期", this.currentdate);
-      this.statuslist = [];
       for(let i = 0; i < this.selections.length; i++){
         post("/organization/customer/getOneDayStatus", {"id":this.selections[i].id,"date":this.currentdate},
             reponse => {
-              this.statuslist.splice(i,0,reponse.data);
               this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
-              console.log("status list" , this.statuslist);
             });
       }
     },
@@ -448,15 +410,20 @@ export default {
     statusinfo(val) {
       console.log("表格选中的行信息", val.selections);
       if (val.statusinfoshow) {
-        // this.getBottom();
-        // this.getpie();
-        // this.getBottom2();
-        // this.getpie2();
         this.selections = val.selections;
         this.metalist = [];
         this.timeAxisList = [];
         for(let selection of this.selections){
-          this.timeAxisList.push({"chart": "timeAxis-" + selection.id, "name": selection.alias})
+          this.timeAxisList.push({
+                "chart": "timeAxis-" + selection.id,
+                "name": selection.alias,
+                "status": {
+                  "workTime":"0",
+                  "stopTime":"0",
+                  "offlineTime":"0",
+                  "workStatusSegmentList":[]
+                }
+              })
         }
         for(let selection of this.selections){
           let serial = selection.serial;
@@ -473,15 +440,12 @@ export default {
             }})
         }
 
-        this.statuslist = [];
         for(let i = 0; i < this.selections.length; i++){
           let id = this.selections[i].id;
           post("/organization/customer/getOneDayStatus",
               {"id":id,"date":""},
               reponse => {
-                this.statuslist.splice(i,0,reponse.data);
                 this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
-                console.log("status list" , this.statuslist);
               });
         }
 
