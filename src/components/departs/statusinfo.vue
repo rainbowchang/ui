@@ -354,7 +354,7 @@ export default {
       option = {
         tooltip: {
           formatter: function (params) {
-            return params.marker + params.name + ': ' + params.value[3] + ' ms';
+            return params.marker + params.name + ': ' + params.value[3] + ' s';
           }
         },
         title: {
