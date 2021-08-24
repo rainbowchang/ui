@@ -36,36 +36,13 @@
                 <div class="listmid">
                   <div>
                     <div :id="item.chart" class="timeAxis" style=" margin-bottom: -1.4%" >
-                      <!-- status:  1加工，2故障，3停机，4未连接，5断开 -->
-<!--                      <div-->
-<!--                          v-for="(value,index) in item.list"-->
-<!--                          :key="index"-->
-<!--                          :style="{width:value.percent}"-->
-<!--                          :class="value.status==='加工'?'process':value.status==='故障'?'breakdown':value.status==='停机'?'stop':value.status==='未连接'?'none':'interrupt'"-->
-<!--                      ></div>-->
 
                     </div>
-                    <!--  <div class="timeline">
-                       <div></div>
-                       <div></div>
-                       <div></div>
-                       <div></div>
-                       <div></div>
-                       <div></div>
-                     </div> -->
-<!--                    <div class="timeline timeshow">-->
-<!--                      <div>04:00</div>-->
-<!--                      <div>08:00</div>-->
-<!--                      <div>12:00</div>-->
-<!--                      <div>16:00</div>-->
-<!--                      <div>20:00</div>-->
-<!--                      <div>24:00</div>-->
-<!--                    </div>-->
                   </div>
                   <div class="colorline">
                     <div>
                       <div class="process"></div>
-                      <span>加工：{{item.timeWork}}</span>
+                      <span>加工：{{statuslist[index].workTime}}</span>
                     </div>
 <!--                    <div>-->
 <!--                      <div class="breakdown"></div>-->
@@ -73,11 +50,11 @@
 <!--                    </div>-->
                     <div>
                       <div class="stop"></div>
-                      <span>停机：{{item.timeStop}}</span>
+                      <span>停机：{{statuslist[index].stopTime}}</span>
                     </div>
                     <div>
                       <div class="none"></div>
-                      <span>未连接：{{item.timeNoneOffline}}</span>
+                      <span>未连接：{{statuslist[index].offlineTime}}</span>
                     </div>
                   </div>
                 </div>
@@ -210,8 +187,6 @@ export default {
               this.statuslist.splice(i,0,reponse.data);
               this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
               console.log("status list" , this.statuslist);
-              // this.statuslist.splice(i,0,reponse.data);
-              // console.log("status list" , this.statuslist);
             });
       }
     },
