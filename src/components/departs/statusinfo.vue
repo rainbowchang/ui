@@ -42,7 +42,7 @@
                   <div class="colorline">
                     <div>
                       <div class="process"></div>
-                      <span>加工：{{item.workTime}}</span>
+                      <span>加工：{{item.status.workTime}}</span>
                     </div>
 <!--                    <div>-->
 <!--                      <div class="breakdown"></div>-->
@@ -50,11 +50,11 @@
 <!--                    </div>-->
                     <div>
                       <div class="stop"></div>
-                      <span>停机：{{item.stopTime}}</span>
+                      <span>停机：{{item.status.stopTime}}</span>
                     </div>
                     <div>
                       <div class="none"></div>
-                      <span>未连接：{{item.offlineTime}}</span>
+                      <span>未连接：{{item.status.offlineTime}}</span>
                     </div>
                   </div>
                 </div>
@@ -148,6 +148,8 @@ export default {
       for(let i = 0; i < this.selections.length; i++){
         post("/organization/customer/getOneDayStatus", {"id":this.selections[i].id,"date":this.currentdate},
             reponse => {
+              this.timeAxisList[i].status = reponse.data;
+              console.log("timeAxisList: ", this.timeAxisList[i]);
               this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
             });
       }
@@ -445,6 +447,8 @@ export default {
           post("/organization/customer/getOneDayStatus",
               {"id":id,"date":""},
               reponse => {
+                this.timeAxisList[i].status = reponse.data;
+                console.log("timeAxisList: ", this.timeAxisList[i]);
                 this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
               });
         }
