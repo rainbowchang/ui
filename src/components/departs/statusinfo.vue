@@ -40,14 +40,15 @@
                     </div>
                   </div>
                   <div class="colorline">
+                                        <div>
+                                          <div class="breakdown"></div>
+                                          <span></span>
+                                        </div>
                     <div>
                       <div class="process"></div>
                       <span>加工：{{item.status.workTime}}</span>
                     </div>
-<!--                    <div>-->
-<!--                      <div class="breakdown"></div>-->
-<!--                      <span>故障：{{item.timeAlarm}}</span>-->
-<!--                    </div>-->
+
                     <div>
                       <div class="stop"></div>
                       <span>停机：{{item.status.stopTime}}</span>
@@ -57,19 +58,25 @@
                       <span>未连接：{{item.status.offlineTime}}</span>
                     </div>
                   </div>
+                  <div>
+                    <div :id="item.lineChart" class="lineChartClass" style=" margin-bottom: -1.4%">
+
+                    </div>
+                  </div>
+
                 </div>
                 <!-- 右侧环装图 -->
                 <div class="listright">
-                  <div>
-                    <span>故障占比</span>
-                    <i-circle :percent="item.alarmWeight" stroke-color="#ff5500" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">{{Math.round(item.alarmWeight)}}%</span>
-                    </i-circle>
-                  </div>
+<!--                  <div>-->
+<!--                    <span>故障占比</span>-->
+<!--                    <i-circle :percent="item.alarmWeight" stroke-color="#ff5500" :size="80">-->
+<!--                      <span class="demo-Circle-inner" style="font-size:16px">{{Math.round(item.alarmWeight)}}%</span>-->
+<!--                    </i-circle>-->
+<!--                  </div>-->
                   <div>
                     <span>加工占比</span>
-                    <i-circle :percent="item.workWeight" stroke-color="#089642" :size="80">
-                      <span class="demo-Circle-inner" style="font-size:16px">{{Math.round(item.workWeight)}}%</span>
+                    <i-circle :percent="item.status.workWeight" stroke-color="#089642" :size="80">
+                      <span class="demo-Circle-inner" style="font-size:16px">{{Math.round(item.status.workWeight)}}%</span>
                     </i-circle>
                   </div>
                 </div>
@@ -151,6 +158,7 @@ export default {
               this.timeAxisList[i].status = reponse.data;
               console.log("timeAxisList: ", this.timeAxisList[i]);
               this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
+              this.getLineChar(reponse.data, this.timeAxisList[i].lineChart)
             });
       }
     },
@@ -290,7 +298,6 @@ export default {
       let data = [];
       let thisEcharts = this.$echarts;
       console.log("input: ", input);
-// Generate mock data
       categories.forEach(function (category, index) {
         for (let i = 0; i < dataCount; i++) {
           let status = input.workStatusSegmentList[i].status;
@@ -354,7 +361,7 @@ export default {
       option = {
         tooltip: {
           formatter: function (params) {
-            return params.marker + params.name + ': ' + params.value[3] + ' s';
+            return params.marker + params.name + ': ' + params.value[3] + ' 秒';
           }
         },
         title: {
@@ -407,6 +414,68 @@ export default {
       option && myChart.setOption(option);
     },
 
+    getLineChar(input, chart){
+      console.log("chart:", chart);
+      let chartDom = document.getElementById(chart);
+      console.log("chartDom:", chartDom);
+      let myChart = this.$echarts.init(chartDom);
+      let option;
+      function getDateFromTime(time) {
+        let date = new Date(time * 1000);
+        return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+      }
+      option = {
+        legend: {
+          data: ['进给' , '主轴']
+        },
+        toolbox: {
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        dataZoom: [{
+          type: 'slider',
+
+          height: 14,
+          labelFormatter: ''
+        }, {
+          type: 'inside',
+          filterMode: 'weakFilter'
+        }],
+        xAxis: {
+          type: 'category',
+          data: input.timeStampList,
+          axisLabel: {
+            formatter: function (val) {
+              let d =  getDateFromTime(val);
+              return d;
+            }
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: '{value} %'
+          },
+        },
+        series: [{
+          name: '进给',
+          data: input.feedOverridesList,
+          type: 'line'
+        },
+          {
+          name: '主轴',
+          data: input.spindleOverridesList,
+          type: 'line'
+        }
+        ]
+      };
+      option && myChart.setOption(option);
+    }
   },
   watch: {
     statusinfo(val) {
@@ -418,12 +487,16 @@ export default {
         for(let selection of this.selections){
           this.timeAxisList.push({
                 "chart": "timeAxis-" + selection.id,
+                "lineChart": "lineChart-" + selection.id,
                 "name": selection.alias,
                 "status": {
                   "workTime":"0",
                   "stopTime":"0",
                   "offlineTime":"0",
-                  "workStatusSegmentList":[]
+                  "workStatusSegmentList":[],
+                  "feedOverridesList":[],
+                  "spindleOverridesList": [],
+                  "timeStampList": []
                 }
               })
         }
@@ -450,6 +523,7 @@ export default {
                 this.timeAxisList[i].status = reponse.data;
                 console.log("timeAxisList: ", this.timeAxisList[i]);
                 this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
+                this.getLineChar(reponse.data, this.timeAxisList[i].lineChart)
               });
         }
 
@@ -569,7 +643,7 @@ export default {
   width: 70%;
 }
 .colorline {
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: row;
 }
@@ -604,14 +678,15 @@ export default {
 .stop,
 .none,
 .interrupt {
-  width: 64px;
+  width: 50px;
   height: 12px;
   border-radius: 12px;
   background-color: #089642;
   margin-right: 0.5em;
 }
 .breakdown {
-  background-color: #fb0200;
+  width: 0px;
+  background-color: #ffffff;
 }
 .stop {
   background-color: #fffc02;
@@ -650,6 +725,20 @@ export default {
   border-radius: 0;
   margin: 0;
 }
+.lineChartClass{
+  width: 100%;
+  height: 280px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.lineChartClass > div {
+  height: -1%;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
 .timeline {
   width: 100%;
   height: 4%;
