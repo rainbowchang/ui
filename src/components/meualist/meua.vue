@@ -16,30 +16,33 @@
       <MenuItem name="/equipstatus" :class="equipstatus?'red':''">
         <span>设备状态</span>
       </MenuItem>
-      <MenuItem name="/warning" :class="warning?'red':''">
+      <MenuItem name="/warning" :class="[warning?'red':'', KEYWARN?'':'nodisplay']">
         <span>设备报警</span>
       </MenuItem>
-      <MenuItem name="/information" :class="information?'red':''">
+      <MenuItem name="/information" :class="[information?'red':'', KEYEQUINFO?'':'nodisplay']">
         <span>设备信息</span>
       </MenuItem>
-      <MenuItem name="/debugging" :class="debugging?'red':''">
+      <MenuItem name="/debugging" :class="[debugging?'red':'', KEYDBG?'':'nodisplay']">
         <span>设备运维</span>
       </MenuItem>
-      <MenuItem name="/management" :class="management?'red':''">
+      <MenuItem name="/management" :class="[management?'red':'', KEYCUST?'':'nodisplay']">
         <span>客户管理</span>
       </MenuItem>
-      <MenuItem name="/history" :class="history?'red':''">
+      <MenuItem name="/history" :class="[history?'red':'', KEYRECHIS?'':'nodisplay']">
         <span>维修记录</span>
       </MenuItem>
-      <MenuItem name="/faraway" :class="faraway?'red':''">
+      <MenuItem name="/faraway" :class="[faraway?'red':'', KEYRMT?'':'nodisplay']">
         <span>远程操作</span>
       </MenuItem>
-      <Submenu name="4">
+      <Submenu name="4"  :class="KEYMES?'':'nodisplay'">
         <template slot="title">
           <span>生产管理</span>
         </template>
         <MenuItem name="/productqualiticate">
           <span>产品质检</span>
+        </MenuItem>
+        <MenuItem name="/organizationMgt">
+          <span>组织机构</span>
         </MenuItem>
       </Submenu>
       <Submenu name="3">
@@ -61,6 +64,7 @@
 </template>
 
 <script>
+import {post} from "@/apis/restUtils";
 export default {
   name: "Homepage",
   data() {
@@ -75,7 +79,22 @@ export default {
       management: false,
       history: false,
       faraway: false,
-      productqualiticate:false
+      productqualiticate:false,
+      organizationMgt:false,
+        EKYMAP	:	false,
+        KEYEQUSTA	:	false,
+        KEYCONF	:	false,
+        KEYPSN	:	false,
+        KEYMEUA	:	false,
+        KEYEQUINFO	:	false,
+        KEYEQUDTL	:	false,
+        KEYDBG	:	false,
+        KEYWARN	:	false,
+        KEYMES	:	false,
+        KEYRMT: false,
+        KEYRECHIS: false,
+        KEYQUALI: false,
+        KEYCUST: false,
     };
   },
   methods: {
@@ -88,46 +107,51 @@ export default {
         (this.management = false),
         (this.history = false),
         (this.faraway = false),
-        (this.productqualiticate = false);
+        (this.productqualiticate = false),
+        (this.organizationMgt = false);
     },
     selectMenu(name) {
-      if (name == "/index") {
+      if (name === "/index") {
         this.allfalse();
         this.index = true;
       }
-      if (name == "/equipstatus") {
+      if (name === "/equipstatus") {
         this.allfalse();
         this.equipstatus = true;
       }
-      if (name == "/warning") {
+      if (name === "/warning") {
         this.allfalse();
         this.warning = true;
       }
-      if (name == "/information") {
+      if (name === "/information") {
         this.allfalse();
         this.information = true;
       }
-      if (name == "/debugging") {
+      if (name === "/debugging") {
         this.allfalse();
         this.debugging = true;
       }
-      if (name == "/management") {
+      if (name === "/management") {
         this.allfalse();
         this.management = true;
       }
-      if (name == "/history") {
+      if (name === "/history") {
         this.allfalse();
         this.history = true;
       }
-      if (name == "/faraway") {
+      if (name === "/faraway") {
         this.allfalse();
         this.faraway = true;
       }
-      if (name == "/productqualiticate") {
+      if (name === "/productqualiticate") {
         this.allfalse();
         this.productqualiticate = true;
       }
-      if (name == "exit") {
+      if (name === "/organizationMgt") {
+        this.allfalse();
+        this.organizationMgt = true;
+      }
+      if (name === "exit") {
         this.allfalse();
         this.$router.push("/login");
         return;
@@ -137,6 +161,70 @@ export default {
   },
   mounted() {
     this.$router.push("/equipstatus");
+    post("/admin/getUserAbilityKey", {}, response=>{
+        let keys = response.data;
+        if(keys.length >0 ){
+            console.log("keys:", keys);
+            for(let key of keys){
+                if(key==='EKYMAP'){
+                    this.EKYMAP=true;
+                    continue;
+                }
+                if(key==='KEYEQUSTA'){
+                    this.KEYEQUSTA=true;
+                    continue;
+                }
+                if(key==='KEYCONF'){
+                    this.KEYCONF=true;
+                    continue;
+                }
+                if(key==='KEYPSN'){
+                    this.KEYPSN=true;
+                    continue;
+                }
+                if(key==='KEYMEUA'){
+                    this.KEYMEUA=true;
+                    continue;
+                }
+                if(key==='KEYEQUINFO'){
+                    this.KEYEQUINFO=true;
+                    continue;
+                }
+                if(key==='KEYEQUDTL'){
+                    this.KEYEQUDTL=true;
+                    continue;
+                }
+                if(key==='KEYDBG'){
+                    this.KEYDBG=true;
+                    continue;
+                }
+                if(key==='KEYWARN'){
+                    this.KEYWARN=true;
+                    continue;
+                }
+                if(key==='KEYMES'){
+                    this.KEYMES=true;
+                    continue;
+                }
+                if(key==='KEYRMT'){
+                    this.KEYRMT=true;
+                    continue;
+                }
+                if(key==='KEYRECHIS'){
+                    this.KEYRECHIS=true;
+                    continue;
+                }
+                if(key==='KEYQUALI'){
+                    this.KEYQUALI=true;
+                    continue;
+                }
+                if(key==='KEYCUST'){
+                    this.KEYCUST=true;
+                    continue;
+                }
+            }
+        }
+    });
   }
 };
 </script>
@@ -181,5 +269,8 @@ span {
   width: auto;
   height: 1em;
   margin-right: 0.5em;
+}
+.nodisplay{
+  display: none;
 }
 </style>

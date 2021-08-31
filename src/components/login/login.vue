@@ -112,6 +112,7 @@ export default {
             if (valid && data.status == "success") {
                  this.canLogin = true;
                  localStorage.setItem("UserName", parameter.username);
+                 localStorage.setItem("UserId", data.userId);
                  localStorage.setItem("Flag", true);
                  if(!this.checkEndDate){
                     var router = this.$router;

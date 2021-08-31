@@ -69,7 +69,7 @@ export default {
         };
     },
     mounted: function () {
-        get("/organization/tree/all", response => {
+        get("/organization/tree/all/web", response => {
             let childrenNodes = response.data;
             console.log(childrenNodes, "loadNodes");
             // for(let i in childrenNodes){

@@ -149,8 +149,12 @@ export default new Router({
             component: resolve => require(['@/components/departs/statusinfo'], resolve)
         }, {
             path: '/productqualiticate',
-            // component: statusinfo
+            // component: 产品质检
             component: resolve => require(['@/components/meualist/componentCheck'], resolve)
+        }, {
+            path: '/organizationMgt',
+            // component: 组织机构管理
+            component: resolve => require(['@/components/meualist/OrganizationEditor'], resolve)
         }]
     }]
 })
