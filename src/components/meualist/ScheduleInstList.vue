@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import {get} from "@/apis/restUtils";
-import editOrganizationModal from "@/components/meualist/editOrganizationModal";
-import {post} from "@/apis/restUtils";
+import {get, post, formatDate} from "@/apis/restUtils";
+import editScheduleInstModal from "@/components/meualist/editScheduleInstModal";
+
 
 export default {
-  name: "OrganizationList",
+  name: "ScheduleInstList",
   data() {
     return {
       tableData: [],
@@ -33,25 +33,46 @@ export default {
           key: 'name',
           resizable: true,
         },
+        // {
+        //   title: '所属组织',
+        //   key: 'organizationId',
+        //   resizable: true,
+        // },
         {
-          title: '类型',
-          key: 'type',
+          title: '所属日期',
+          key: 'scheduleDate',
           resizable: true,
           render: (h, params) => {
             return h('span', (() => {
-              for (let orgType of this.orgTypeList) {
-                if (orgType.id === params.row.type) {
-                  return orgType.typeName;
-                }
-              }
+              return formatDate(params.row.scheduleDate, 'yyyy-MM-dd');
             })());
           }
         },
         {
-          title: '地址（位置）',
-          key: 'location',
+          title: '开始时间',
+          key: 'beginTime',
           resizable: true,
+          render: (h, params) => {
+            return h('span', (() => {
+              return formatDate(params.row.beginTime, 'yyyy-MM-dd hh:mm:ss');
+            })());
+          }
         },
+        {
+          title: '结束时间',
+          key: 'endTime',
+          resizable: true,
+          render: (h, params) => {
+            return h('span', (() => {
+              return formatDate(params.row.endTime, 'yyyy-MM-dd hh:mm:ss');
+            })());
+          }
+        },
+        // {
+        //   title: '休息日标识',
+        //   key: 'weekendFlag',
+        //   resizable: true,
+        // },
         {
           title: '操作',
           slot: 'action',
@@ -59,24 +80,19 @@ export default {
           align: 'center'
         }
       ],
-      orgTypeList: [],
       parentId: '',
     }
   },
   mounted: function () {
-    get("/organization/getAllOrgType", response => {
-      this.orgTypeList = response.data;
-      this.refresh();
-    })
+    this.refresh();
   },
   methods: {
-    edit(row, isModify, tableData) {
+    edit(row, isModify, tableData){
       let that = this;
       this.$Modal.confirm({
-        title: '编辑',
         render: (h) => {
-          return h(editOrganizationModal, {
-            ref: 'editOrganizationModal',
+          return h(editScheduleInstModal, {
+            ref: 'editScheduleInstModal',
             props: {
               row: row,
             },
@@ -94,25 +110,25 @@ export default {
         loading: true,
         onOk() {
           if (isModify) {
-            post("/organization/updateOrganization", row, response => {
+            post("/organization/updateScheduleInst", row, response => {
               if (response.data.status === "fail") {
-                alert("Organization Editor + 保存错误");
+                alert("ScheduleInst Editor + 保存错误");
               }
               that.refresh();
-              that.$emit('refresh');
-            })
-          } else {
-            post("/organization/addOrganization", row, response => {
-              if (response.data.status === "fail") {
-                alert("Organization Editor + 保存错误");
-              } else {
-                console.log("response.data.result: ", response.data.result)
-                tableData[0].id = response.data.result;
-              }
-              that.refresh();
-              that.$emit('refresh');
             })
           }
+          // else {
+          //   // row.organizationId = this.parentId;
+          //   post("/organization/addScheduleInst", row, response => {
+          //     if (response.data.status === "fail") {
+          //       alert("Organization Editor + 保存错误");
+          //     } else {
+          //       console.log("response.data.result: ", response.data.result)
+          //       tableData[0].id = response.data.result;
+          //     }
+          //     that.refresh();
+          //   })
+          // }
           this.$Modal.remove();
         },
         onCancel() {
@@ -120,33 +136,29 @@ export default {
             tableData.shift();
           }
         },
+
       });
     },
     remove(row, index) {
-      post("/organization/deleteOrganization", row, response => {
+      post("/organization/deleteScheduleInst", row, response => {
         console.log("response.status: ", response.status)
         this.tableData.splice(index, 1);
-        this.$emit('refresh');
       })
     },
     add() {
-      this.tableData.unshift({
-        name: '',
-        type: '',
-        location: '',
-        parentId: this.parentId,
+      post("/organization/createScheduleInst", {"organizationId": this.parentId}, ()=>{
+        this.refresh();
       })
-      this.edit(this.tableData[0], false, this.tableData)
     },
     refresh() {
-      if(this.parentId === undefined || this.parentId == null || this.parentId === ''){
+      if (this.parentId === undefined || this.parentId == null || this.parentId === '') {
         return;
       }
       this.tableData = [];
-      get("/organization/getDirectChildrenOrg?parentId=" + this.parentId, resposne => {
+      get("/organization/getOrganizationScheduleInst?parentId=" + this.parentId, resposne => {
         this.tableData = resposne.data;
       });
-    }
+    },
   }
 }
 </script>

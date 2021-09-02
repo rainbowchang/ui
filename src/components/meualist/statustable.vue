@@ -23,17 +23,18 @@
         <Button type="primary" icon="ios-search" class="searchbtn" @click="tostatusInfo">按时间序列查询</Button>
           <Page style="position:absolute;bottom:0em; margin-top: 10%" :total="totalCount" :current="pageNum" :page-size="10" show-elevator show-sizer show-total placement="top" @on-change="handlePage"></Page>
       </div>
-      <Modal v-model="statusinfoshow" class="statusstyle" fullscreen footer-hide>
-        <statusinfo :statusinfo="{selections,statusinfoshow}" @modelshow="modelshow"></statusinfo>
-      </Modal>
+<!--      <Modal v-model="statusinfoshow" class="statusstyle" fullscreen footer-hide>-->
+<!--        <statusinfonew :statusinfonew="{selections,statusinfoshow}" @modelshow="modelshow"></statusinfonew>-->
+<!--      </Modal>-->
     </div>
   </div>
 </template>
 <script>
-import statusinfo from "../departs/statusinfo";
+// import statusinfo from "../departs/statusinfo";
+// import statusinfonew from "../departs/statusinfonew";
 import {post} from "@/apis/restUtils";
 export default {
-  components: { statusinfo },
+  // components: { statusinfonew },
   data() {
     return {
       nodeKey:"",
@@ -211,12 +212,15 @@ export default {
     // 选择要查看详细信息的列
     selectTip(selection) {
       this.selections = selection;
+      this.$emit('onselection', {'selections': this.selections, 'statusinfoshow': this.statusinfoshow});
       // 已选择的当前信息（数组）
       console.log(selection);
     },
     // 列表跳转详细信息页面
     tostatusInfo() {
       this.statusinfoshow = true;
+      this.$emit('onshowstatusinfo', {'selections': this.selections, 'statusinfoshow': this.statusinfoshow});
+      this.statusinfoshow = false;
     }
   }
 };

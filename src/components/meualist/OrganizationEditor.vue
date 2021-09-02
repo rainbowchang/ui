@@ -13,7 +13,16 @@
 
     <!-- 右侧table及各个功能 -->
     <div class="tableinfo">
-      <OrganizationList v-show="OrganizationList" v-on:refresh='refresh' ref="OrganizationList"></OrganizationList>
+      <div class="swiper-button-next" @click="onRightSlide"> fff </div>
+      <transition name="fade">
+        <OrganizationList v-show="OrganizationList && showFlag" v-on:refresh='refresh' ref="OrganizationList"></OrganizationList>
+      </transition>
+      <transition name="fade">
+        <SchedulePlanList v-show="SchedulePlanList && showFlag" ref="SchedulePlanList"></SchedulePlanList>
+      </transition>
+      <transition name="fade">
+        <ScheduleInstList v-show="ScheduleInstList && showFlag" ref="ScheduleInstList"></ScheduleInstList>
+      </transition>
     </div>
   </div>
 </template>
@@ -22,16 +31,24 @@
 import {get} from "@/apis/restUtils";
 import {Tree, TreeNode, VueTreeList} from "vue-tree-list";
 import OrganizationList from "./OrganizationList";
+import SchedulePlanList from "./SchedulePlanList";
+import ScheduleInstList from "./ScheduleInstList";
 export default {
   // name: "OrganizationEditor",
   components: {
     VueTreeList,
-    OrganizationList
+    OrganizationList,
+    SchedulePlanList,
+    ScheduleInstList
   },
   data() {
     return {
       data: new Tree([]),
-      OrganizationList:false,
+      OrganizationList:true,
+      SchedulePlanList:false,
+      ScheduleInstList:false,
+      showFlag: false,
+      index: 0,
     }
   },
 
@@ -70,8 +87,12 @@ export default {
     onClick(nodeInfo) {  //输入一个organization对象
       let nodeId = nodeInfo.id;
       this.$refs.OrganizationList.parentId = nodeId;
-      this.OrganizationList = true;
+      this.$refs.SchedulePlanList.parentId = nodeId;
+      this.$refs.ScheduleInstList.parentId = nodeId;
+      this.showFlag = true;
       this.$refs.OrganizationList.refresh();
+      this.$refs.SchedulePlanList.refresh();
+      this.$refs.ScheduleInstList.refresh();
     },
     refresh(){
       this.data = new Tree([]);
@@ -79,6 +100,26 @@ export default {
         let childrenNodes = response.data;
         this.loadTreeNodes(this.data, childrenNodes);
       });
+    },
+    onRightSlide(){
+      this.index++;
+      if (this.index >= 3) {
+        this.index -= 3;
+      }
+      this.OrganizationList = false;
+      this.SchedulePlanList = false;
+      this.ScheduleInstList = false;
+      switch (this.index) {
+        case 0:
+          this.OrganizationList = true;
+          break;
+        case 1:
+          this.SchedulePlanList = true;
+          break;
+        case 2:
+          this.ScheduleInstList = true;
+          break;
+      }
     }
   }
 }
@@ -105,5 +146,33 @@ export default {
 .tableinfo {
   width: 79%;
   padding: 2em 1em;
+}
+
+.swiper-button-next{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin-top: -1.785714rem;
+  width: 1.714286rem;
+  height: 3.571429rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.fade-enter-active,  .fade-leave-active {
+  transition: all 0.3s linear;
+  transform: translateX(0);
+}
+.fade-enter,  .fade-leave {
+  transform: translateX(100%);
+}
+.fade-leave-to{
+  transform: translateX(100%);
 }
 </style>

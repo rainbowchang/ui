@@ -133,3 +133,66 @@ export const OrgTypeCategory = {
     "ORGANIZATION": "1",
     "MACHINETOOL": "2"
 }
+
+export const timeToString = (input, dayFlag) => {
+    let hour = parseInt(input / 3600);
+    let min = parseInt((input - hour * 3600) / 60);
+    let sec = input - hour * 3600 - min *60;
+    let day = 0;
+    if (hour > 24) {
+        day = parseInt(hour / 24);
+        hour = hour - day * 24;
+    }
+    if (hour < 10) {
+        hour = '0' + hour;
+    }
+    if (min < 10) {
+        min = '0' + min;
+    }
+    if (sec < 10) {
+        sec = '0' + sec;
+    }
+    if(true !== dayFlag){
+        day = 0;
+    }
+    return (hour + ':' + min + ':' + sec) + (day > 0 ? '(+' + day + ')' : '');
+}
+
+export const StringToTime = (input) => {
+    try {
+        let strings = input.split(':');
+        return parseInt(strings[0]) * 3600 + parseInt(strings[1]) * 60 + parseInt(strings[2]);
+    } catch (e) {
+        return 0;
+    }
+}
+
+export const formatDate = (d, fmt) => {
+    let date = new Date(d);
+    if(date == null){
+        return "";
+    }
+    var o = {
+        "M+" : date.getMonth()+1,                 //月份
+        "d+" : date.getDate(),                    //日
+        "h+" : date.getHours(),                   //小时
+        "m+" : date.getMinutes(),                 //分
+        "s+" : date.getSeconds(),                 //秒
+        "q+" : Math.floor((date.getMonth()+3)/3), //季度
+        "S"  : date.getMilliseconds()             //毫秒
+    };
+
+    if(/(y+)/.test(fmt)){
+        fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+    }
+
+    for(var k in o){
+        if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(
+                RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        }
+    }
+    return fmt;
+}
+
+

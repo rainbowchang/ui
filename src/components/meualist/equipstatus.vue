@@ -21,8 +21,9 @@
             <!-- 工厂表单 -->
             <factory v-show="factory"></factory>
             <!-- 客户表单 -->
-            <statustable v-show="statustable" ref="statustable"></statustable>
+            <statustable v-show="statustable" ref="statustable" @onselection="onselection" @onshowstatusinfo="onshowstatusinfo"></statustable>
             <detailChart v-show="showDetail" ref="showDetail" :detailinfo=detailinfo></detailChart>
+            <statusinfonew v-show="statusinfoshow"  ref="statusinfonew" :statusinfonew="{selections,statusinfoshow}" @onstatusinfoshow="onstatusinfoshow" @onstatusinfoback="onstatusinfoback"></statusinfonew>
         </div>
         <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :append-to-body="true">
             <div>
@@ -41,7 +42,7 @@ import statustable from "./statustable";
 import factory from "./factory";
 import detailChart from "./detailChart";
 import {get, post, NodeType} from "@/apis/restUtils";
-
+import statusinfonew from "../departs/statusinfonew";
 const customerModel = () => import("./customerInfoModal.vue");
 
 export default {
@@ -49,7 +50,8 @@ export default {
         VueTreeList,
         statustable,
         detailChart,
-        factory
+        factory,
+      statusinfonew
     },
     data() {
         return {
@@ -65,7 +67,9 @@ export default {
             data: new Tree([]),
             dialogVisible: false,
             dialogTips: "",
-            delegateParam: {}
+            delegateParam: {},
+            selections: [],
+            statusinfoshow: false,
         };
     },
     mounted: function () {
@@ -360,8 +364,28 @@ export default {
             }
 
             vm.newTree = _dfs(vm.data);
+        },
+        onstatusinfoshow(val){
+          console.log(val);
+
+        },
+        onselection(val){
+          this.selections = val.selections;
+          this.statusinfoshow = val.statusinfoshow;
+          console.log('onselection:', val);
+        },
+        onshowstatusinfo(val){
+          this.statustable = false;
+          this.selections = val.selections;
+          this.statusinfoshow = val.statusinfoshow;
+          console.log('onshowstatusinfo:', val);
+        },
+        onstatusinfoback(){
+          this.statusinfoshow = false;
+          this.statustable = true;
         }
     }
+
 };
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
@@ -397,7 +421,7 @@ export default {
 
 .tableinfo {
     width: 79%;
-    padding: 2em 1em;
+    padding: 1em 1em;
 }
 
 .font {
