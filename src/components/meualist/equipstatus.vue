@@ -5,9 +5,6 @@
             <div>
                 <vue-tree-list
                     @click="onClick"
-                    @change-name="onChangeName"
-                    @delete-node="onDel"
-                    @add-node="onAddNode"
                     :model="data"
                     default-tree-node-name="new node"
                     default-leaf-node-name="new leaf"
@@ -18,12 +15,27 @@
         </div>
         <!-- 右侧table及各个功能 -->
         <div class="tableinfo">
+            <div class="swiper-button-next" @click="onRightSlide" v-show="rightSlideShow"> 向右</div>
             <!-- 工厂表单 -->
             <factory v-show="factory"></factory>
             <!-- 客户表单 -->
-            <statustable v-show="statustable" ref="statustable" @onselection="onselection" @onshowstatusinfo="onshowstatusinfo"></statustable>
-            <detailChart v-show="showDetail" ref="showDetail" :detailinfo=detailinfo></detailChart>
-            <statusinfonew v-show="statusinfoshow"  ref="statusinfonew" :statusinfonew="{selections,statusinfoshow}" @onstatusinfoshow="onstatusinfoshow" @onstatusinfoback="onstatusinfoback"></statusinfonew>
+            <transition name="fade">
+                <statustable v-show="statustable" ref="statustable" @onselection="onselection"
+                             @onshowstatusinfo="onshowstatusinfo"></statustable>
+            </transition>
+            <transition name="fade">
+                <detailChart v-show="showDetail" ref="showDetail" :detailinfo=detailinfo></detailChart>
+            </transition>
+            <transition name="fade">
+                <statusinfonew v-show="statusinfoshow" ref="statusinfonew" :statusinfonew="{selections,statusinfoshow}"
+                               @onstatusinfoshow="onstatusinfoshow" @onstatusinfoback="onstatusinfoback">
+                </statusinfonew>
+            </transition>
+            <transition name="fade">
+                <machineStatusInfo v-show="machineStatusInfoShow" ref="machineStatusInfo"
+                                   :onMachineId="{currentMachineId, machineStatusInfoShow}">
+                </machineStatusInfo>
+            </transition>
         </div>
         <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :append-to-body="true">
             <div>
@@ -43,6 +55,8 @@ import factory from "./factory";
 import detailChart from "./detailChart";
 import {get, post, NodeType} from "@/apis/restUtils";
 import statusinfonew from "../departs/statusinfonew";
+import machineStatusInfo from "./machineStatusInfo"
+
 const customerModel = () => import("./customerInfoModal.vue");
 
 export default {
@@ -51,7 +65,8 @@ export default {
         statustable,
         detailChart,
         factory,
-      statusinfonew
+        statusinfonew,
+        machineStatusInfo
     },
     data() {
         return {
@@ -70,6 +85,10 @@ export default {
             delegateParam: {},
             selections: [],
             statusinfoshow: false,
+            machineStatusInfoShow: false,
+            rightSlideShow: false,
+            currentMachineId: null,
+
         };
     },
     mounted: function () {
@@ -112,27 +131,25 @@ export default {
         },
         // 删除节点	树节点
         onDel(node) {
-            console.log(node, "onDel");
             this.delegateParam = {"node": node, "func": this.onConfirmDelete};
             this.dialogTips = '确定删除【' + node.name + '】吗?';
             this.dialogVisible = true;
         },
-        onConfirmDelete(node){
-            console.log("onConfirmDelete", node);
+        onConfirmDelete(node) {
             this.sendNodeContent("/organization/deleteNode", node, response => {
                 console.log(response.data, "deleteResult");
             });
             node.remove();
             this.dialogVisible = false;
         },
-        onConfirmClick(){
+        onConfirmClick() {
             let func = this.delegateParam.func;
             let node = this.delegateParam.node;
             func(node);
             this.clearDelegate();
         },
-        clearDelegate(){
-            this.delegateParam={};
+        clearDelegate() {
+            this.delegateParam = {};
         },
         // 更换名字	{'id'，'oldName'，'newName'}
         onChangeName(nodeInfo) {
@@ -145,6 +162,7 @@ export default {
 
         // tree节点点击事件
         onClick(nodeInfo) {
+            this.clearAllFrame();
             this.sendNodeContentWhenClick(nodeInfo);
             // if(this.getParentCustomerNode(nodeInfo) != null ){
             //     this.sendNodeContentWhenClick(nodeInfo);
@@ -157,7 +175,6 @@ export default {
             return;
         },
         sendNodeContentWhenClick(nodeInfo) {
-            console.log(nodeInfo, "node info");
             if (this.timer) {
                 clearInterval(this.timer);
             }
@@ -174,26 +191,25 @@ export default {
                     this.$refs.statustable.totalCount = replyStatus.total;
                     this.$refs.statustable.nodeKey = nodeInfo.key;
                     this.statustable = true;
-
-                    // console.log(this.$refs.statustable.content);
                 });
                 return;
             }
+            this.rightSlideShow = true;
+            this.currentMachineId = nodeInfo.id;
             this.statustable = false;
             this.showDetail = true;
-            // console.log("detail Info" , this.detailinfo);
             this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
                 let data = response.data;
                 if (data.table != null) {
                     this.detailinfo = response.data;
                 }
             });
-            this.timer = setInterval(() => {
-                this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
-                    console.log("UserName= " + localStorage.getItem("UserName"));
-                    this.detailinfo = response.data;
-                });
-            }, 3000);
+            // this.timer = setInterval(() => {
+            //     this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
+            //         console.log("UserName= " + localStorage.getItem("UserName"));
+            //         this.detailinfo = response.data;
+            //     });
+            // }, 3000);
         },
         buildSubNewTree(customerTreeDatas, condition) {
             for (let i in customerTreeDatas) {
@@ -220,7 +236,6 @@ export default {
                         },
                         on: {
                             showInfo: (key, value, type) => {  // key--id, value--alias
-                                console.log("++++++++++++++++++", key, value, type);
                                 nodeInfo.name = value;
                                 nodeInfo.key = key;
                                 nodeInfo.type = type;
@@ -241,7 +256,6 @@ export default {
                 cancelText: "取消",
                 loading: true,
                 onOk() {
-                    console.log("------------------", nodeInfo);
                     sendNodeContent("/organization/addNode", nodeInfo, response => {
                         console.log(response.data);
                     });
@@ -250,16 +264,6 @@ export default {
             });
         },
         sendNodeContent(path, nodeInfo, consumer) {  // path--url,  name-alias
-            console.log("sendNodeContent", nodeInfo)
-            // let treePath = this.getTreePath(nodeInfo);
-            // let parentPath = null;
-            // if (nodeInfo.parent != null) {
-            //     parentPath = this.getTreePath(nodeInfo.parent);
-            // }
-            // if (treePath == "" || treePath == null) {
-            //     alert("没有找到客户，所以，不能在服务端添加相应的节点");
-            //     return;
-            // }
             let nodeContent = {
                 parentKey: nodeInfo.parent.key,  //parentId
                 // parentPath: parentPath,
@@ -268,25 +272,8 @@ export default {
                 name: nodeInfo.name,
                 type: nodeInfo.type
             };
-            // console.log("send node contents:" + JSON.stringify(nodeContent));
             post(path, nodeContent, consumer);
         },
-        // getTreePath(nodeInfo, path) {
-        //     if (path == null) {
-        //         path = "";
-        //     }
-        //     let key = nodeInfo.key;
-        //     if (key != undefined) {
-        //         path = "/" + key + path;
-        //     }
-        //     if (nodeInfo.type === NodeType.CUSTOMER) {
-        //         return path;
-        //     }
-        //     if (nodeInfo.parent == null) {
-        //         return "";
-        //     }
-        //     return this.getTreePath(nodeInfo.parent, path);
-        // },
         getOneTreeNode(nodeInfo, name) {
             if (nodeInfo == null || nodeInfo == undefined) {
                 return null;
@@ -323,16 +310,12 @@ export default {
             }
             if (nodeInfo.type === NodeType.CUSTOMER) {
                 customerNodes.push(nodeInfo);
-                // console.log(customerNodes, "CUSTOMER nodes");
             }
-            // console.log(nodeInfo, "subNode");
             let children = nodeInfo.children;
             if (children == null) {
                 return;
             }
-            // console.log(customerNodes, "subcustomerNodes");
             for (let i in children) {
-                // console.log(children[i], "children");
                 this.getSubCustomerNodes(children[i], customerNodes)
             }
             return;
@@ -365,24 +348,34 @@ export default {
 
             vm.newTree = _dfs(vm.data);
         },
-        onstatusinfoshow(val){
-          console.log(val);
+        onstatusinfoshow(val) {
+            console.log(val);
 
         },
-        onselection(val){
-          this.selections = val.selections;
-          this.statusinfoshow = val.statusinfoshow;
-          console.log('onselection:', val);
+        onselection(val) {
+            this.selections = val.selections;
+            this.statusinfoshow = val.statusinfoshow;
         },
-        onshowstatusinfo(val){
-          this.statustable = false;
-          this.selections = val.selections;
-          this.statusinfoshow = val.statusinfoshow;
-          console.log('onshowstatusinfo:', val);
+        onshowstatusinfo(val) {
+            this.statustable = false;
+            this.selections = val.selections;
+            this.statusinfoshow = val.statusinfoshow;
         },
-        onstatusinfoback(){
-          this.statusinfoshow = false;
-          this.statustable = true;
+        onstatusinfoback() {
+            this.statusinfoshow = false;
+            this.statustable = true;
+        },
+        onRightSlide() {
+          console.log("onRightSlide...." );
+            this.showDetail = false;
+            this.machineStatusInfoShow = true;
+        },
+        clearAllFrame() {
+            this.statustable = false;
+            this.showDetail = false;
+            this.statusinfoshow = false;
+            this.machineStatusInfoShow = false;
+            this.rightSlideShow=false;
         }
     }
 
@@ -424,10 +417,43 @@ export default {
     padding: 1em 1em;
 }
 
+.swiper-button-next {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -1.785714rem;
+    width: 1.714286rem;
+    height: 3.571429rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
 .font {
     font-size: 16px;
     font-weight: bold;
     margin-right: 1em;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+    opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: all 0.3s linear;
+    transform: translateX(0);
+}
+
+.fade-enter, .fade-leave {
+    transform: translateX(100%);
+}
+
+.fade-leave-to {
+    transform: translateX(100%);
 }
 </style>
 
