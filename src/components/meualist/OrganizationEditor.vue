@@ -13,7 +13,9 @@
 
         <!-- 右侧table及各个功能 -->
         <div class="tableinfo">
-            <div class="swiper-button-next" @click="onRightSlide"> fff</div>
+            <div class="swiper-button-next">
+                <div class="bg" @click="onRightSlide"></div>
+            </div>
             <transition name="fade">
                 <OrganizationList v-show="OrganizationList && showFlag" v-on:refresh='refresh'
                                   ref="OrganizationList"></OrganizationList>
@@ -152,13 +154,28 @@ export default {
 
 .swiper-button-next {
     position: absolute;
+    width:41px;
+    height:69px;
     top: 50%;
     right: 0;
     margin-top: -1.785714rem;
-    width: 1.714286rem;
-    height: 3.571429rem;
     cursor: pointer;
     z-index: 10;
+    filter:alpha(opacity=30);
+    background:#666;
+    opacity:0.3;
+}
+
+.swiper-button-next:hover{
+    filter:alpha(opacity=60);
+    opacity:0.6;
+}
+
+.bg{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background:url(https://i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat -125px 50%;
 }
 
 .fade-enter-active, .fade-leave-active {

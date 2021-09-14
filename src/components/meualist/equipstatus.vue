@@ -15,7 +15,9 @@
         </div>
         <!-- 右侧table及各个功能 -->
         <div class="tableinfo">
-            <div class="swiper-button-next" @click="onRightSlide" v-show="rightSlideShow"> 向右</div>
+            <div class="swiper-button-next">
+                <div class="bg" @click="onRightSlide"></div>
+            </div>
             <!-- 工厂表单 -->
             <factory v-show="factory"></factory>
             <!-- 客户表单 -->
@@ -88,7 +90,7 @@ export default {
             machineStatusInfoShow: false,
             rightSlideShow: false,
             currentMachineId: null,
-
+            index: 0,
         };
     },
     mounted: function () {
@@ -366,9 +368,20 @@ export default {
             this.statustable = true;
         },
         onRightSlide() {
-          console.log("onRightSlide...." );
+            this.index++;
+            if (this.index >= 2) {
+                this.index -= 2;
+            }
             this.showDetail = false;
-            this.machineStatusInfoShow = true;
+            this.machineStatusInfoShow = false;
+            switch (this.index) {
+                case 0:
+                    this.showDetail = true;
+                    break;
+                case 1:
+                    this.machineStatusInfoShow = true;
+                    break;
+            }
         },
         clearAllFrame() {
             this.statustable = false;
@@ -419,13 +432,28 @@ export default {
 
 .swiper-button-next {
     position: absolute;
+    width:41px;
+    height:69px;
     top: 50%;
     right: 0;
     margin-top: -1.785714rem;
-    width: 1.714286rem;
-    height: 3.571429rem;
     cursor: pointer;
     z-index: 10;
+    filter:alpha(opacity=30);
+    background:#666;
+    opacity:0.3;
+}
+
+.swiper-button-next:hover{
+    filter:alpha(opacity=60);
+    opacity:0.6;
+}
+
+.bg{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background:url(https://i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat -125px 50%;
 }
 
 .font {
