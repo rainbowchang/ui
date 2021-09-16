@@ -195,4 +195,165 @@ export const formatDate = (d, fmt) => {
     return fmt;
 }
 
+export const getTimeAxis =(input, chart, that) => {
+    let chartDom = document.getElementById(chart);
+    let myChart = that.$echarts.init(chartDom);
+    let option;
 
+    let dataCount = input.workStatusSegmentList.length;
+    let startTime = input.beginTime;
+    let endTime = input.endTime;
+    let categories = [];
+    let alarmMarkPointList = [];
+    categories.push(input.name);
+    let types = [
+        {name: '加工', color: '#089642'},
+        {name: '停机', color: '#fffc02'},
+        {name: '未连接', color: '#808080'},
+    ];
+    let data = [];
+    let thisEcharts = that.$echarts;
+    categories.forEach(function (category, index) {
+        for (let i = 0; i < dataCount; i++) {
+            let status = input.workStatusSegmentList[i].status;
+            let typeItem;
+            if (status === 'WORKING') {
+                typeItem = types[0];
+            } else if (status === 'IDLE') {
+                typeItem = types[1];
+            } else {
+                typeItem = types[2];
+            }
+
+            let duration = input.workStatusSegmentList[i].endTimeStamp - input.workStatusSegmentList[i].beginTimeStamp;
+            data.push({
+                name: typeItem.name,
+                value: [
+                    index,
+                    input.workStatusSegmentList[i].beginTimeStamp,
+                    input.workStatusSegmentList[i].endTimeStamp,
+                    duration
+                ],
+                itemStyle: {
+                    normal: {
+                        color: typeItem.color
+                    }
+                }
+            });
+        }
+    });
+
+    getAlarmMarkPoint(input.alarmRecordList);
+
+    console.log("data...: ", data);
+    function renderItem(params, api) {
+        console.log("renderItem...: ",params, api);
+        let categoryIndex = api.value(0);
+        let start = api.coord([api.value(1), categoryIndex]);
+        let end = api.coord([api.value(2), categoryIndex]);
+        let height = api.size([0, 1])[1] * 0.6;
+        let rectShape = thisEcharts.graphic.clipRectByRect({
+            x: start[0],
+            y: start[1] - height / 2,
+            width: end[0] - start[0],
+            height: height
+        }, {
+            x: params.coordSys.x,
+            y: params.coordSys.y,
+            width: params.coordSys.width,
+            height: params.coordSys.height
+        });
+        console.log("renderItem end...: ",start, end, height);
+        return rectShape && {
+            type: 'rect',
+            transition: ['shape'],
+            shape: rectShape,
+            style: api.style()
+        };
+    }
+
+    function getDateFromTime(time) {
+        let date = new Date(time * 1000);
+        return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+    }
+
+    function getAlarmMarkPoint(val) {
+        val.forEach(function (item) {
+            let record = {
+                alarmFlag: true,
+                name: "告警",
+                value: '',
+                code: item.codes,
+                xAxis: item.timestamp,
+                yAxis: 0,
+                itemStyle: {color: '#ee0000'},
+                symbol: 'path://M1 9 L1 40 L0 40 L0 0 L8 20 L0 20 Z',
+                symbolSize: [6, 12],
+                symbolOffset: [5, -10]
+            };
+            alarmMarkPointList.push(record);
+        });
+    }
+
+    option = {
+        tooltip: {
+            formatter: function (params) {
+                if (params.data.alarmFlag === true) {
+                    return  '(' + getDateFromTime(params.data.xAxis) + ') ' + params.data.name + ': ' + params.data.code ;
+                } else {
+                    return params.name + ': ' + params.value[3] + ' 秒';  //params.marker +
+                }
+            }
+        },
+        title: {
+            text: null,
+            left: 'center'
+        },
+        dataZoom: [{
+            type: 'slider',
+            filterMode: 'weakFilter',
+            showDataShadow: false,
+            top: 70,
+            height: 14,
+            labelFormatter: ''
+        }, {
+            type: 'inside',
+            filterMode: 'weakFilter'
+        }],
+        grid: {
+            top: 10,
+            height: 30
+        },
+        xAxis: {
+            min: startTime,
+            max: endTime,
+            scale: true,
+            axisLabel: {
+                formatter: function (val) {
+                    let d = getDateFromTime(val);
+                    return d;
+                }
+            }
+        },
+        yAxis: {
+            data: [],
+        },
+        series: [{
+            type: 'custom',
+            renderItem: renderItem,
+            itemStyle: {
+                opacity: 0.8
+            },
+            encode: {
+                x: [1, 2],
+                y: 0
+            },
+            data: data,
+            markPoint:{
+                data:alarmMarkPointList
+            }
+        }]
+    };
+
+    option && myChart.setOption(option);
+}

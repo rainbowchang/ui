@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import {post} from "@/apis/restUtils"
+import {post, getTimeAxis} from "@/apis/restUtils"
 
 export default {
     name: "statusinfonew",
@@ -78,141 +78,7 @@ export default {
         }
     },
     methods: {
-        getTimeAxis(input, chart) {
-            console.log("chart:", chart);
-            let chartDom = document.getElementById(chart);
-            console.log("chartDom:", chartDom);
-            let myChart = this.$echarts.init(chartDom);
-            let option;
 
-            let dataCount = input.workStatusSegmentList.length;
-            let startTime = input.beginTime;
-            let endTime = input.endTime;
-            let categories = [];
-            categories.push(input.name);
-            let types = [
-                {name: '加工', color: '#089642'},
-                {name: '停机', color: '#fffc02'},
-                {name: '未连接', color: '#808080'},
-            ];
-            let data = [];
-            let thisEcharts = this.$echarts;
-            console.log("input: ", input);
-            categories.forEach(function (category, index) {
-                for (let i = 0; i < dataCount; i++) {
-                    let status = input.workStatusSegmentList[i].status;
-                    let typeItem;
-                    if (status === 'WORKING') {
-                        typeItem = types[0];
-                    } else if (status === 'IDLE') {
-                        typeItem = types[1];
-                    } else {
-                        typeItem = types[2];
-                    }
-
-                    let duration = input.workStatusSegmentList[i].endTimeStamp - input.workStatusSegmentList[i].beginTimeStamp;
-                    data.push({
-                        name: typeItem.name,
-                        value: [
-                            index,
-                            input.workStatusSegmentList[i].beginTimeStamp,
-                            input.workStatusSegmentList[i].endTimeStamp,
-                            duration
-                        ],
-                        itemStyle: {
-                            normal: {
-                                color: typeItem.color
-                            }
-                        }
-                    });
-                }
-            });
-
-            function renderItem(params, api) {
-                let categoryIndex = api.value(0);
-                let start = api.coord([api.value(1), categoryIndex]);
-                let end = api.coord([api.value(2), categoryIndex]);
-                let height = api.size([0, 1])[1] * 0.6;
-                let rectShape = thisEcharts.graphic.clipRectByRect({
-                    x: start[0],
-                    y: start[1] - height / 2,
-                    width: end[0] - start[0],
-                    height: height
-                }, {
-                    x: params.coordSys.x,
-                    y: params.coordSys.y,
-                    width: params.coordSys.width,
-                    height: params.coordSys.height
-                });
-
-                return rectShape && {
-                    type: 'rect',
-                    transition: ['shape'],
-                    shape: rectShape,
-                    style: api.style()
-                };
-            }
-
-            function getDateFromTime(time) {
-                let date = new Date(time * 1000);
-                return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
-            }
-
-            option = {
-                tooltip: {
-                    formatter: function (params) {
-                        return params.marker + params.name + ': ' + params.value[3] + ' 秒';
-                    }
-                },
-                title: {
-                    text: null,
-                    left: 'center'
-                },
-                dataZoom: [{
-                    type: 'slider',
-                    filterMode: 'weakFilter',
-                    showDataShadow: false,
-                    top: 70,
-                    height: 14,
-                    labelFormatter: ''
-                }, {
-                    type: 'inside',
-                    filterMode: 'weakFilter'
-                }],
-                grid: {
-                    top: 10,
-                    height: 30
-                },
-                xAxis: {
-                    min: startTime,
-                    max: endTime,
-                    scale: true,
-                    axisLabel: {
-                        formatter: function (val) {
-                            let d = getDateFromTime(val);
-                            return d;
-                        }
-                    }
-                },
-                yAxis: {
-                    data: [],
-                },
-                series: [{
-                    type: 'custom',
-                    renderItem: renderItem,
-                    itemStyle: {
-                        opacity: 0.8
-                    },
-                    encode: {
-                        x: [1, 2],
-                        y: 0
-                    },
-                    data: data
-                }]
-            };
-
-            option && myChart.setOption(option);
-        },
         //返回上一层
         back() {
             this.$emit("onstatusinfoback");
@@ -230,7 +96,7 @@ export default {
                     reponse => {
                         this.timeAxisList[i].status = reponse.data;
                         console.log("timeAxisList: ", this.timeAxisList[i]);
-                        this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
+                        getTimeAxis(reponse.data, this.timeAxisList[i].chart, this);
                     });
             }
         },
@@ -264,7 +130,7 @@ export default {
                         reponse => {
                             this.timeAxisList[i].status = reponse.data;
                             console.log("timeAxisList: ", this.timeAxisList[i]);
-                            this.getTimeAxis(reponse.data, this.timeAxisList[i].chart);
+                            getTimeAxis(reponse.data, this.timeAxisList[i].chart, this);
                         }
                     );
                 }

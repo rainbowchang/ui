@@ -15,7 +15,7 @@
         </div>
         <!-- 右侧table及各个功能 -->
         <div class="tableinfo">
-            <div class="swiper-button-next">
+            <div class="swiper-button-next" v-show="rightSlideShow">
                 <div class="bg" @click="onRightSlide"></div>
             </div>
             <!-- 工厂表单 -->
@@ -181,6 +181,7 @@ export default {
                 clearInterval(this.timer);
             }
             if (!nodeInfo.isLeaf) {
+                this.rightSlideShow = false;
                 this.showDetail = false;
                 nodeInfo.pageNo = 1;
                 nodeInfo.pageSize = 10;
@@ -206,12 +207,12 @@ export default {
                     this.detailinfo = response.data;
                 }
             });
-            // this.timer = setInterval(() => {
-            //     this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
-            //         console.log("UserName= " + localStorage.getItem("UserName"));
-            //         this.detailinfo = response.data;
-            //     });
-            // }, 3000);
+            this.timer = setInterval(() => {
+                this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
+                    console.log("UserName= " + localStorage.getItem("UserName"));
+                    this.detailinfo = response.data;
+                });
+            }, 3000);
         },
         buildSubNewTree(customerTreeDatas, condition) {
             for (let i in customerTreeDatas) {

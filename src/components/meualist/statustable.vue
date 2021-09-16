@@ -115,6 +115,11 @@ export default {
                     sortable: true
                 },
                 {
+                    title: "报警次数",
+                    key: "alarmCount",
+                    sortable: true
+                },
+                {
                     title: "报警标记",
                     key: "warning",
                     sortable: true
@@ -137,51 +142,6 @@ export default {
                 //   workTime: "2小时",
                 //   warning: "..."
                 // },
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "关机",
-                //   warning: "..."
-                // },
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "故障",
-                //   warning: "..."
-                // },
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "加工",
-                //   warning: "..."
-                // },
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "加工",
-                //   warning: "..."
-                // },
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "加工",
-                //   warning: "..."
-                // }
             ],
             selections: [] //操作中选中的所选项数组
         };
