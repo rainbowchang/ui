@@ -471,8 +471,6 @@ export default {
             };
             option && myChart.setOption(option);
         }
-
-
     },
     watch: {
         onMachineId(val) { //需要包含machineId和showFlag

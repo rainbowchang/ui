@@ -91,6 +91,7 @@ export default {
             rightSlideShow: false,
             currentMachineId: null,
             index: 0,
+            currentNodeInfo: null,
         };
     },
     mounted: function () {
@@ -131,19 +132,19 @@ export default {
                 }
             );
         },
-        // 删除节点	树节点
-        onDel(node) {
-            this.delegateParam = {"node": node, "func": this.onConfirmDelete};
-            this.dialogTips = '确定删除【' + node.name + '】吗?';
-            this.dialogVisible = true;
-        },
-        onConfirmDelete(node) {
-            this.sendNodeContent("/organization/deleteNode", node, response => {
-                console.log(response.data, "deleteResult");
-            });
-            node.remove();
-            this.dialogVisible = false;
-        },
+        // // 删除节点	树节点
+        // onDel(node) {
+        //     this.delegateParam = {"node": node, "func": this.onConfirmDelete};
+        //     this.dialogTips = '确定删除【' + node.name + '】吗?';
+        //     this.dialogVisible = true;
+        // },
+        // onConfirmDelete(node) {
+        //     this.sendNodeContent("/organization/deleteNode", node, response => {
+        //         console.log(response.data, "deleteResult");
+        //     });
+        //     node.remove();
+        //     this.dialogVisible = false;
+        // },
         onConfirmClick() {
             let func = this.delegateParam.func;
             let node = this.delegateParam.node;
@@ -153,30 +154,23 @@ export default {
         clearDelegate() {
             this.delegateParam = {};
         },
-        // 更换名字	{'id'，'oldName'，'newName'}
-        onChangeName(nodeInfo) {
-            console.log(nodeInfo, "onChangeName");
-        },
-        // 添加节点	树节点
-        onAddNode(nodeInfo) {
-            this.customerModelView(nodeInfo, this.sendNodeContent);
-        },
+        // // 更换名字	{'id'，'oldName'，'newName'}
+        // onChangeName(nodeInfo) {
+        //     console.log(nodeInfo, "onChangeName");
+        // },
+        // // 添加节点	树节点
+        // onAddNode(nodeInfo) {
+        //     this.customerModelView(nodeInfo, this.sendNodeContent);
+        // },
 
         // tree节点点击事件
         onClick(nodeInfo) {
             this.clearAllFrame();
             this.sendNodeContentWhenClick(nodeInfo);
-            // if(this.getParentCustomerNode(nodeInfo) != null ){
-            //     this.sendNodeContentWhenClick(nodeInfo);
-            //     return
-            // }
-            // var customerNodes = this.getChildrenCustomerNodes(nodeInfo);
-            // for(var i in customerNodes){
-            //   this.sendNodeContentWhenClick(customerNodes[i]);
-            // }
             return;
         },
         sendNodeContentWhenClick(nodeInfo) {
+            this.index = 0;
             if (this.timer) {
                 clearInterval(this.timer);
             }
@@ -207,26 +201,30 @@ export default {
                     this.detailinfo = response.data;
                 }
             });
-            this.timer = setInterval(() => {
-                this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
-                    console.log("UserName= " + localStorage.getItem("UserName"));
-                    this.detailinfo = response.data;
-                });
-            }, 3000);
+            this.timerSetInterval(nodeInfo);
+            this.currentNodeInfo = nodeInfo;
         },
-        buildSubNewTree(customerTreeDatas, condition) {
-            for (let i in customerTreeDatas) {
-                let customerTreeData = customerTreeDatas[i];
-                let customerBean = customerTreeData.customerBean;
-                if (customerBean == null) {
-                    continue;
-                }
-                if (condition(customerBean)) {
-                    return new Tree(customerTreeData);
-                }
-            }
-            return null;
+        timerSetInterval(nodeInfo){
+                this.timer = setInterval(() => {
+                    this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
+                        console.log("UserName= " + localStorage.getItem("UserName"));
+                        this.detailinfo = response.data;
+                    });
+                }, 3000);
         },
+        // buildSubNewTree(customerTreeDatas, condition) {
+        //     for (let i in customerTreeDatas) {
+        //         let customerTreeData = customerTreeDatas[i];
+        //         let customerBean = customerTreeData.customerBean;
+        //         if (customerBean == null) {
+        //             continue;
+        //         }
+        //         if (condition(customerBean)) {
+        //             return new Tree(customerTreeData);
+        //         }
+        //     }
+        //     return null;
+        // },
         customerModelView(nodeInfo, sendNodeContent) {
             this.$Modal.confirm({
                 title: '客户列表',
@@ -277,36 +275,36 @@ export default {
             };
             post(path, nodeContent, consumer);
         },
-        getOneTreeNode(nodeInfo, name) {
-            if (nodeInfo == null || nodeInfo == undefined) {
-                return null;
-            }
-            if (nodeInfo.name === name) {
-                return nodeInfo;
-            }
-            let children = nodeInfo.children;
-            for (let i in children) {
-                let node = this.getOneTreeNode(children[i], name);
-                if (node != null && node.name === name) {
-                    return node;
-                }
-            }
-            return null;
-        },
-        getParentCustomerNode(nodeInfo) {   //TODO 准备删了   --zch
-            if (nodeInfo == null || nodeInfo == undefined) {
-                return null;
-            }
-            if (nodeInfo.type === NodeType.CUSTOMER) {
-                return nodeInfo;
-            }
-            return this.getParentCustomerNode(nodeInfo.parent);
-        },
-        getChildrenCustomerNodes(nodeInfo) {
-            let customerNodes = [];
-            this.getSubCustomerNodes(nodeInfo, customerNodes);
-            return customerNodes;
-        },
+        // getOneTreeNode(nodeInfo, name) {
+        //     if (nodeInfo == null || nodeInfo == undefined) {
+        //         return null;
+        //     }
+        //     if (nodeInfo.name === name) {
+        //         return nodeInfo;
+        //     }
+        //     let children = nodeInfo.children;
+        //     for (let i in children) {
+        //         let node = this.getOneTreeNode(children[i], name);
+        //         if (node != null && node.name === name) {
+        //             return node;
+        //         }
+        //     }
+        //     return null;
+        // },
+        // getParentCustomerNode(nodeInfo) {   //TODO 准备删了   --zch
+        //     if (nodeInfo == null || nodeInfo == undefined) {
+        //         return null;
+        //     }
+        //     if (nodeInfo.type === NodeType.CUSTOMER) {
+        //         return nodeInfo;
+        //     }
+        //     return this.getParentCustomerNode(nodeInfo.parent);
+        // },
+        // getChildrenCustomerNodes(nodeInfo) {
+        //     let customerNodes = [];
+        //     this.getSubCustomerNodes(nodeInfo, customerNodes);
+        //     return customerNodes;
+        // },
         getSubCustomerNodes(nodeInfo, customerNodes) {
             if (nodeInfo == null || nodeInfo == undefined) {
                 return;
@@ -377,9 +375,13 @@ export default {
             this.machineStatusInfoShow = false;
             switch (this.index) {
                 case 0:
+                    this.timerSetInterval(this.currentNodeInfo);
                     this.showDetail = true;
                     break;
                 case 1:
+                    if (this.timer) {
+                        clearInterval(this.timer);
+                    }
                     this.machineStatusInfoShow = true;
                     break;
             }

@@ -23,7 +23,6 @@
       </div>
       <div id="axisContentDiv" class="title unread" style="margin-bottom:6px;">
         <span>{{getAxisContentType()}}</span>
-<!--        id="axisContentTypeSpan" @click="axisContentTypeSpanClicked()"-->
         <div style="margin-bottom:2px;">
           <template>
             <table class="table-b" border="0" cellspacing="0" cellpadding="1" style="width: 100%;">
@@ -220,29 +219,14 @@ export default {
   methods: {
     getAxisContentType(){
           console.log("getAxisContentType: ", this.tableList)
-          // let firstItem = null;
-          // if(this.tableList != null && this.tableList.length > 0){
-          //     firstItem = this.tableList[0];
-          // }
-          // if(temperatureFlag === 1){
-          //     return "温度";
-          // }
           return "负载/温度";
     },
     getAxisContentPercent(item){
         console.log("getAxisContentPercent: ", item)
-        // let temperatureFlag = item.temperatureFlag;
-        // if(temperatureFlag === 1){
-        //     return item.temperaturePercent;
-        // }
         return item.percent;
     },
     getAxisContentValue(item){
         console.log("getAxisContentValue: ", item)
-        // let temperatureFlag = item.temperatureFlag;
-        // if(temperatureFlag === 1){
-        //     return item.temperature;
-        // }
         return item.load + "%"
     },
     getTemperature(item){
@@ -259,7 +243,6 @@ export default {
       } catch(e){
         return 0;
       }
-
     },
     // 倍率:主轴，进给
     getOverrides(charName, overrides, min, max, splitNumber) {
@@ -360,84 +343,84 @@ export default {
       //this.getSpindleSpeedOveral(spindleSpeed,maxSpindleSpeed);
       this.getSpindleSpeedDetail(spindleSpeed, maxSpindleSpeed);
     },
-    getSpindleSpeedOveral(spindleSpeed, maxSpindleSpeed){
-      // 仪表盘所需数据
-      if(maxSpindleSpeed == null){
-        maxSpindleSpeed = 30000;
-      }
-      var data = {
-        value: spindleSpeed
-      };
-      let option = {
-        tooltip: {
-          // 本系列特定的 tooltip 设定。
-          show: true,
-          formatter: "{b}：{c}%",
-          backgroundColor: "rgba(50,50,50,0.7)", // 提示框浮层的背景颜色。注意：series.tooltip 仅在 tooltip.trigger 为 'item' 时有效。
-          borderColor: "#333", // 提示框浮层的边框颜色。...
-          borderWidth: 0, // 提示框浮层的边框宽。...
-          padding: 5, // 提示框浮层内边距，单位px，默认各方向内边距为5，接受数组分别设定上右下左边距。...
-          textStyle: {
-            // 提示框浮层的文本样式。...
-            // color ,fontStyle ,fontWeight ,fontFamily ,fontSize ,lineHeight ,.......
-          }
-        },
-        series: [
-          {
-            max: maxSpindleSpeed,
-            min: 0,
-            splitNumber: 2,
-            color: ["grey", "transparent"],
-            name: "业务指标",
-            type: "gauge",
-            center: ["50%", "50%"], // 仪表盘位置(圆心坐标)
-            // startAngle: 270,
-            //结束角度。
-            // endAngle: 0,
-            //仪表盘轴线相关配置。
-            axisLine: {
-              show: true,
-              lineStyle: {
-                // 属性lineStyle控制线条样式
-                color: [
-                  [data.value / 30000, "#2d8cf0"],
-                  [1, "gray"]
-                ]
-              }
-            },
-            splitLine: {
-              show: true
-            },
-            //刻度样式。
-            axisTick: {
-              show: false
-            },
-            //刻度标签。
-            axisLabel: {
-              show: true,
-              distance: -65
-            },
-            pointer: {
-              // 仪表盘指针。
-              show: false, // 是否显示指针,默认 true。
-              length: "70%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
-              width: 5 // 指针宽度,默认 8。
-            },
-            detail: {
-              formatter: "{value}rpm",
-              offsetCenter: [0, 0],
-              textStyle: {
-                fontSize: 14
-              }
-            },
-            data: [{ value: data.value }]
-          }
-        ]
-      };
-      let myChart = this.$echarts.init(document.getElementById("myChart3"));
-      // // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    },
+    // getSpindleSpeedOveral(spindleSpeed, maxSpindleSpeed){
+    //   // 仪表盘所需数据
+    //   if(maxSpindleSpeed == null){
+    //     maxSpindleSpeed = 30000;
+    //   }
+    //   var data = {
+    //     value: spindleSpeed
+    //   };
+    //   let option = {
+    //     tooltip: {
+    //       // 本系列特定的 tooltip 设定。
+    //       show: true,
+    //       formatter: "{b}：{c}%",
+    //       backgroundColor: "rgba(50,50,50,0.7)", // 提示框浮层的背景颜色。注意：series.tooltip 仅在 tooltip.trigger 为 'item' 时有效。
+    //       borderColor: "#333", // 提示框浮层的边框颜色。...
+    //       borderWidth: 0, // 提示框浮层的边框宽。...
+    //       padding: 5, // 提示框浮层内边距，单位px，默认各方向内边距为5，接受数组分别设定上右下左边距。...
+    //       textStyle: {
+    //         // 提示框浮层的文本样式。...
+    //         // color ,fontStyle ,fontWeight ,fontFamily ,fontSize ,lineHeight ,.......
+    //       }
+    //     },
+    //     series: [
+    //       {
+    //         max: maxSpindleSpeed,
+    //         min: 0,
+    //         splitNumber: 2,
+    //         color: ["grey", "transparent"],
+    //         name: "业务指标",
+    //         type: "gauge",
+    //         center: ["50%", "50%"], // 仪表盘位置(圆心坐标)
+    //         // startAngle: 270,
+    //         //结束角度。
+    //         // endAngle: 0,
+    //         //仪表盘轴线相关配置。
+    //         axisLine: {
+    //           show: true,
+    //           lineStyle: {
+    //             // 属性lineStyle控制线条样式
+    //             color: [
+    //               [data.value / 30000, "#2d8cf0"],
+    //               [1, "gray"]
+    //             ]
+    //           }
+    //         },
+    //         splitLine: {
+    //           show: true
+    //         },
+    //         //刻度样式。
+    //         axisTick: {
+    //           show: false
+    //         },
+    //         //刻度标签。
+    //         axisLabel: {
+    //           show: true,
+    //           distance: -65
+    //         },
+    //         pointer: {
+    //           // 仪表盘指针。
+    //           show: false, // 是否显示指针,默认 true。
+    //           length: "70%", // 指针长度，可以是绝对数值，也可以是相对于半径的百分比,默认 80%。
+    //           width: 5 // 指针宽度,默认 8。
+    //         },
+    //         detail: {
+    //           formatter: "{value}rpm",
+    //           offsetCenter: [0, 0],
+    //           textStyle: {
+    //             fontSize: 14
+    //           }
+    //         },
+    //         data: [{ value: data.value }]
+    //       }
+    //     ]
+    //   };
+    //   let myChart = this.$echarts.init(document.getElementById("myChart3"));
+    //   // // 使用刚指定的配置项和数据显示图表。
+    //   myChart.setOption(option);
+    // },
     getSpindleSpeedDetail(spindleSpeed, maxSpindleSpeed) {
       if(maxSpindleSpeed == null){
         maxSpindleSpeed = 30000;
@@ -491,32 +474,6 @@ export default {
               fontSize: 10,
               padding: 2,
               distance: -65,
-              // formatter: function(value) {  为什么这些数字不显示？？？  代码屏蔽  zch 变更主轴转速显示问题
-              //   switch (value) {
-              //     case 1500:
-              //       return ""; //隐藏
-              //     case 4500:
-              //       return ""; //隐藏
-              //     case 7500:
-              //       return ""; //隐藏
-              //     case 10500:
-              //       return ""; //隐藏
-              //     case 13500:
-              //       return ""; //隐藏
-              //     case 16500:
-              //       return ""; //隐藏
-              //     case 19500:
-              //       return ""; //隐藏
-              //     case 22500:
-              //       return ""; //隐藏
-              //     case 25500:
-              //       return ""; //隐藏
-              //     case 28500:
-              //       return ""; //隐藏
-              //     default:
-              //       return value;
-              //   }
-              // }
             },
             detail: {
               formatter: "",
@@ -643,36 +600,26 @@ export default {
     handleClose() {
       console.log(this.itemParam);
     }
-    // async axisContentTypeSpanClicked(){
-    //   console.log("++++++++++++++++++++++++axisContentTypeSpanClicked()++++++++++++++++++++++++++++++++");
-    //   if(temperatureFlag === 1){
-    //     temperatureFlag = 0;
-    //   } else {
-    //     temperatureFlag = 1;
-    //   }
-    // }
   }
 };
 
 //针对西门子的文件名结构做些特殊处理，但是建议在西门子的agent做适配，如果以后第三种控制器再有调整，这个前端跟着适配是不合适的。
 let fileNameSiemens = function  (input, channelPrefix){
-  // console.log('input = ' + input + 'channelPrefix' + channelPrefix.length);
+    if(input === 'undefined' || input === null){
+        return "";
+    }
   let flag = true;
   let result = input;
   while(flag){
     let i = result.indexOf(channelPrefix);
-    // console.log('i = ' + i);
     if(i>=0){
       result= (result).substring(i+channelPrefix.length).trim();
-      // console.log(result);
     } else {
       flag = false;
     }
   }
   return result;
 }
-
-
 
 </script>
 <style scoped lang="less">
