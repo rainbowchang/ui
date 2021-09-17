@@ -294,7 +294,9 @@ export const getTimeAxis =(input, chart, that) => {
             alarmMarkPointList.push(record);
         });
     }
-
+    myChart.on('datazoom', function(params){
+        that.onDataZoomChange(params);
+    });
     option = {
         tooltip: {
             formatter: function (params) {
@@ -354,6 +356,6 @@ export const getTimeAxis =(input, chart, that) => {
             }
         }]
     };
-
     option && myChart.setOption(option);
+    return myChart;
 }

@@ -38,20 +38,20 @@
                     <div>
                         <div class="process"></div>
                         <span>加工：{{
-                                (timeAxisList.status === 'undefined' || timeAxisList.status == null) ? '0' : timeAxisList.status.workTime
+                                (timeAxisList.status === undefined || timeAxisList.status == null) ? '0' : timeAxisList.status.workTime
                             }}</span>
                     </div>
 
                     <div>
                         <div class="stop"></div>
                         <span>停机：{{
-                                (timeAxisList.status === 'undefined' || timeAxisList.status == null) ? '0' : timeAxisList.status.stopTime
+                                (timeAxisList.status === undefined || timeAxisList.status == null) ? '0' : timeAxisList.status.stopTime
                             }}</span>
                     </div>
                     <div>
                         <div class="none"></div>
                         <span>未连接：{{
-                                (timeAxisList.status === 'undefined' || timeAxisList.status == null) ? '0' : timeAxisList.status.offlineTime
+                                (timeAxisList.status === undefined || timeAxisList.status == null) ? '0' : timeAxisList.status.offlineTime
                             }}</span>
                     </div>
                 </div>
@@ -69,10 +69,10 @@
                 <div>
 <!--                    <span>加工占比</span>-->
 <!--                    <i-circle-->
-<!--                        :percent="(timeAxisList.status === 'undefined' || timeAxisList.status == null || timeAxisList.status.workWeight ==='undefined' || timeAxisList.status.workWeight == null) ? 0: timeAxisList.status.workWeight"-->
+<!--                        :percent="(timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight ===undefined || timeAxisList.status.workWeight == null) ? 0: timeAxisList.status.workWeight"-->
 <!--                        stroke-color="#089642" :size="80">-->
 <!--                        <span class="demo-Circle-inner" style="font-size:16px">{{-->
-<!--                                Math.round((timeAxisList.status === 'undefined' || timeAxisList.status == null || timeAxisList.status.workWeight === 'undefined' || timeAxisList.status.workWeight == null) ? 0 : timeAxisList.status.workWeight)-->
+<!--                                Math.round((timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight === undefined || timeAxisList.status.workWeight == null) ? 0 : timeAxisList.status.workWeight)-->
 <!--                            }}%</span>-->
 <!--                    </i-circle>-->
                     <div id="work-circle" class="PieceChartClass" style=" margin-bottom: -1.4%">
@@ -123,6 +123,8 @@ export default {
             machineId: '',
             serial: '',
             scheduleInstTmp: '',
+            timeAxisChart: null,
+            lineChart: null,
         }
     },
     methods: {
@@ -140,7 +142,6 @@ export default {
             data.workPiecesSegmentList.forEach(function (item) {
                 pieces.push(item.pieces);
             });
-            console.log("getPieceChart, pieces: ", pieces);
             option = {
                 // title: {
                 //     top: 40,
@@ -211,16 +212,18 @@ export default {
             option && myChart.setOption(option);
 
         },
-        getLineChar(input, chart) {
+        getLineChart(input, chart) {
             let chartDom = document.getElementById(chart);
             let myChart = this.$echarts.init(chartDom);
             let option;
-
+            let that = this;
             function getDateFromTime(time) {
                 let date = new Date(time * 1000);
                 return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
             }
-
+            myChart.on('datazoom', function(params){
+                that.onDataZoomChange(params);
+            });
             option = {
                 legend: {
                     data: ['进给', '主轴']
@@ -263,9 +266,9 @@ export default {
                 ]
             };
             option && myChart.setOption(option);
+            return myChart;
         },
         getBottom(dateData, workData, bottom) {
-            console.log("workdata", workData);
             // 基于准备好的dom，初始化echarts实例
             let myChart = this.$echarts.init(
                 document.getElementById(bottom)
@@ -378,7 +381,6 @@ export default {
                 {"machineId": that.machineId, "beginDate":val[0],"endDate":val[1]},
                 response=>{
                     that.scheduleInstList = [];
-                    console.log("response.data.entity:  ", response.data.entity);
                     if (response.data.status === 'fail') {
                         return;
                     }
@@ -395,11 +397,10 @@ export default {
             post("/organization/customer/getOneDayStatus",
                 {"id": that.machineId, "beginDate": val[0], "endDate": val[1]},
                 reponse => {
-                    console.log("getOneDayStatus: ", reponse);
                     // that.timeAxisList.status = reponse.data;
                     that.getWorkCircle(reponse.data, "work-circle");
-                    getTimeAxis(reponse.data, this.timeAxisList.chart, that);
-                    that.getLineChar(reponse.data, this.timeAxisList.lineChart)
+                    that.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, that);
+                    that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart)
                 });
 
 
@@ -413,20 +414,17 @@ export default {
         },
 
         selectChanged(val) {
-            console.log("selectChanged... : ", val);
             post("/organization/customer/getOneDayStatusByScheduleInst",
                 {"id": this.machineId, "scheduleInst": val},
                 reponse => {
-                    console.log("getOneDayStatus: ", reponse);
-                    // this.timeAxisList.status = reponse.data;
                     this.getWorkCircle(reponse.data, "work-circle");
-                    getTimeAxis(reponse.data, this.timeAxisList.chart, this);
-                    this.getLineChar(reponse.data, this.timeAxisList.lineChart);
+                    this.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, this);
+                    this.lineChart = this.getLineChart(reponse.data, this.timeAxisList.lineChart);
                 });
         },
 
         getWorkCircle(input, chart){
-            let workWeight = (input === 'undefined' || input == null || input.workWeight ==='undefined' ||
+            let workWeight = (input === undefined || input == null || input.workWeight ===undefined ||
                 input.workWeight == null) ? 0: input.workWeight;
             let idleWeight = 100 - workWeight;
             let chartDom = document.getElementById(chart);
@@ -467,12 +465,41 @@ export default {
                 ]
             };
             option && myChart.setOption(option);
+        },
+        onDataZoomChange(params){
+            if(params.start === undefined || params.start===null || params.end === undefined || params.end===null){
+                if(params.batch !== undefined && params.batch.length >0){
+                    let batch = params.batch[0];
+                    let start = batch.start;
+                    let end = batch.end;
+                    this.setDataZoomOption(start, end );
+                }
+            } else {
+                let start = params.start;
+                let end = params.end;
+                this.setDataZoomOption(start, end );
+            }
+        },
+        setDataZoomOption(start, end){
+            let option = {
+                dataZoom: [{
+                    type: 'slider',
+                    start: start,
+                    end: end,
+                },
+                    {
+                        type: 'inside',
+                        start: start,
+                        end: end,
+                    }]
+            };
+            this.timeAxisChart.setOption(option);
+            this.lineChart.setOption(option);
         }
     },
     watch: {
         onMachineId(val) { //需要包含machineId和showFlag
             let that = this;
-            console.log("machineStatusInfo, watch onMachineId...", val);
             if (!val.machineStatusInfoShow) {
                 return;
             }
@@ -504,11 +531,10 @@ export default {
             post("/organization/customer/getOneDayStatus",
                 {"id": id, "startDate": "", "endDate": ""},
                 reponse => {
-                    console.log("getOneDayStatus: ", reponse);
-                    // that.timeAxisList.status = reponse.data;
                     that.getWorkCircle(reponse.data, "work-circle");
-                    getTimeAxis(reponse.data, this.timeAxisList.chart, that);
-                    that.getLineChar(reponse.data, this.timeAxisList.lineChart);
+                    that.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, that);
+                    that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart);
+
                 });
 
             post("/organization/customer/getPeriodStatus",
@@ -523,7 +549,6 @@ export default {
             post("/organization/getScheduleInstByMachine",
                 {"machineId": id},
                 response => {
-                    console.log("scheduleInst: ", response.data.entity);
                     if (response.data.status === 'fail') {
                         return;
                     }

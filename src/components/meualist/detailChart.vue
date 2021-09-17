@@ -231,7 +231,7 @@ export default {
     },
     getTemperature(item){
       let temper = item.temperature;
-      if(temper === 'undefined' || temper=== null ||temper === ''){
+      if(temper === undefined || temper=== null ||temper === ''){
         return '';
       } else {
         return item.temperature + "℃";
@@ -605,7 +605,7 @@ export default {
 
 //针对西门子的文件名结构做些特殊处理，但是建议在西门子的agent做适配，如果以后第三种控制器再有调整，这个前端跟着适配是不合适的。
 let fileNameSiemens = function  (input, channelPrefix){
-    if(input === 'undefined' || input === null){
+    if(input === undefined || input === null){
         return "";
     }
   let flag = true;

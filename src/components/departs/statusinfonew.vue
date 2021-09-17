@@ -75,6 +75,7 @@ export default {
             selections: [],
             timeAxisList: [],
             flagOfTimeAxis: true,
+            timeAxisChartList: [],
         }
     },
     methods: {
@@ -91,15 +92,48 @@ export default {
         //确认日期
         suredata() {
             console.log("当前确认的日期", this.currentdate);
+            this.timeAxisChartList = [];
             for (let i = 0; i < this.selections.length; i++) {
                 post("/organization/customer/getOneDayStatus", {"id": this.selections[i].id, "date": this.currentdate},
                     reponse => {
                         this.timeAxisList[i].status = reponse.data;
                         console.log("timeAxisList: ", this.timeAxisList[i]);
-                        getTimeAxis(reponse.data, this.timeAxisList[i].chart, this);
+                        let chart = getTimeAxis(reponse.data, this.timeAxisList[i].chart, this);
+                        this.timeAxisChartList.push(chart)
                     });
             }
         },
+        onDataZoomChange(params){
+            if(params.start === undefined || params.start===null || params.end === undefined || params.end===null){
+                if(params.batch !== undefined && params.batch.length >0){
+                    let batch = params.batch[0];
+                    let start = batch.start;
+                    let end = batch.end;
+                    this.setDataZoomOption(start, end );
+                }
+            } else {
+                let start = params.start;
+                let end = params.end;
+                this.setDataZoomOption(start, end );
+            }
+        },
+        setDataZoomOption(start, end){
+            let option = {
+                dataZoom: [{
+                    type: 'slider',
+                    start: start,
+                    end: end,
+                },
+                    {
+                        type: 'inside',
+                        start: start,
+                        end: end,
+                    }]
+            };
+            this.timeAxisChartList.forEach(function(item){
+                item.setOption(option);
+            });
+        }
     },
     watch: {
         statusinfonew(val) {
@@ -130,7 +164,8 @@ export default {
                         reponse => {
                             this.timeAxisList[i].status = reponse.data;
                             console.log("timeAxisList: ", this.timeAxisList[i]);
-                            getTimeAxis(reponse.data, this.timeAxisList[i].chart, this);
+                            let chart = getTimeAxis(reponse.data, this.timeAxisList[i].chart, this);
+                            this.timeAxisChartList.push(chart)
                         }
                     );
                 }
