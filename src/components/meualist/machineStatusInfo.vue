@@ -205,12 +205,7 @@ export default {
                     }
                 ],
                 grid:{
-                    // top: 80,
-                    // left: "8%",
-                    // right: "4%",
-                    // bottom: "3%",
                     width: "80%",
-                    // containLabel: true
                 }
             };
             option && myChart.setOption(option);
@@ -447,7 +442,8 @@ export default {
                 },
                 legend: {
                     top: '6%',
-                    left: 'center'
+                    left: 'center',
+                    data: ['加工占比', '空闲占比']
                 },
                 series: [
                     {
@@ -465,7 +461,8 @@ export default {
                         data: [
                             {value: workWeight, name: '加工占比'},
                             {value: idleWeight, name: '空闲占比'},
-                        ]
+                        ],
+                        color: ["#089642", "#808080"]
                     }
                 ]
             };
