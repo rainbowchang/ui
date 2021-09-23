@@ -6,10 +6,10 @@
     <FormItem label="所属日期">
       <DatePicker type="date" placeholder="Select time" v-model="formItem.scheduleDate"></DatePicker>
     </FormItem>
-    <FormItem label="开始1时间">
+    <FormItem label="开始时间">
       <DatePicker type="datetime" placeholder="Select time" v-model="formItem.beginTime"></DatePicker>
     </FormItem>
-    <FormItem label="结束2时间">
+    <FormItem label="结束时间">
       <DatePicker type="datetime" placeholder="Select time" v-model="formItem.endTime"></DatePicker>
     </FormItem>
   </Form>

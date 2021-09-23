@@ -18,7 +18,8 @@
                 @on-change="onDateChange"
             ></DatePicker>
 
-            <el-select @change="selectChanged($event)" v-model="scheduleInstTmp" filterable clearable placeholder="..." style="width: 450px">
+            <el-select @change="selectChanged($event)" v-model="scheduleInstTmp" filterable clearable placeholder="..."
+                       style="width: 450px">
                 <el-option v-for="item in scheduleInstList" :key="item.id" :label="item.name" :value="item.id">
                     <span style="float: left">{{ item.name }}</span>
                 </el-option>
@@ -29,6 +30,12 @@
         <div class="content">
 
             <div class="listmid">
+
+                <div class="separator"></div>
+                <div>
+                    <div :id="timeAxisList.lineChart" class="lineChartClass" style=" margin-bottom: -1.4%">
+                    </div>
+                </div>
                 <div class="separator"></div>
                 <div>
                     <div :id="timeAxisList.chart" class="timeAxis" style=" margin-bottom: -1.4%">
@@ -57,24 +64,19 @@
                 </div>
                 <div class="separator"></div>
                 <div>
-                    <div :id="timeAxisList.lineChart" class="lineChartClass" style=" margin-bottom: -1.4%">
-                    </div>
-                </div>
-                <div class="separator"></div>
-                <div>
                     <div :id="metalist.pieceChart" class="PieceChartClass" style=" margin-bottom: -1.4%">
                     </div>
                 </div>
                 <div class="separator"></div>
                 <div>
-<!--                    <span>加工占比</span>-->
-<!--                    <i-circle-->
-<!--                        :percent="(timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight ===undefined || timeAxisList.status.workWeight == null) ? 0: timeAxisList.status.workWeight"-->
-<!--                        stroke-color="#089642" :size="80">-->
-<!--                        <span class="demo-Circle-inner" style="font-size:16px">{{-->
-<!--                                Math.round((timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight === undefined || timeAxisList.status.workWeight == null) ? 0 : timeAxisList.status.workWeight)-->
-<!--                            }}%</span>-->
-<!--                    </i-circle>-->
+                    <!--                    <span>加工占比</span>-->
+                    <!--                    <i-circle-->
+                    <!--                        :percent="(timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight ===undefined || timeAxisList.status.workWeight == null) ? 0: timeAxisList.status.workWeight"-->
+                    <!--                        stroke-color="#089642" :size="80">-->
+                    <!--                        <span class="demo-Circle-inner" style="font-size:16px">{{-->
+                    <!--                                Math.round((timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight === undefined || timeAxisList.status.workWeight == null) ? 0 : timeAxisList.status.workWeight)-->
+                    <!--                            }}%</span>-->
+                    <!--                    </i-circle>-->
                     <div id="work-circle" class="PieceChartClass" style=" margin-bottom: -1.4%">
                     </div>
 
@@ -163,7 +165,7 @@ export default {
                     name: '加工时间',
                     data: data.workDurationList,
                     type: 'line'
-                },{
+                }, {
                     name: '加工件数',
                     data: pieces,
                     type: 'bar',
@@ -191,7 +193,7 @@ export default {
                         type: 'value',
                         name: '加工件数',
                         min: 0,
-                        minInterval:5,
+                        minInterval: 5,
                         // max: 5,
                         position: 'right',
                         axisLine: {
@@ -205,7 +207,7 @@ export default {
                         }
                     }
                 ],
-                grid:{
+                grid: {
                     width: "80%",
                 }
             };
@@ -217,11 +219,13 @@ export default {
             let myChart = this.$echarts.init(chartDom);
             let option;
             let that = this;
+
             function getDateFromTime(time) {
                 let date = new Date(time * 1000);
                 return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
             }
-            myChart.on('datazoom', function(params){
+
+            myChart.on('datazoom', function (params) {
                 that.onDataZoomChange(params);
             });
             option = {
@@ -328,7 +332,7 @@ export default {
                                 color: "#009a44"
                             }
                         },
-                        color: [ "#fffc02", "#808080"]
+                        color: ["#fffc02", "#808080"]
                     }
                 ]
             };
@@ -378,8 +382,8 @@ export default {
             let that = this;
             that.scheduleInstTmp = '';
             post("/organization/getScheduleInstByMachine",
-                {"machineId": that.machineId, "beginDate":val[0],"endDate":val[1]},
-                response=>{
+                {"machineId": that.machineId, "beginDate": val[0], "endDate": val[1]},
+                response => {
                     that.scheduleInstList = [];
                     if (response.data.status === 'fail') {
                         return;
@@ -392,13 +396,14 @@ export default {
                             value: index,
                         });
                     });
-            });
+                });
 
             post("/organization/customer/getOneDayStatus",
                 {"id": that.machineId, "beginDate": val[0], "endDate": val[1]},
                 reponse => {
                     // that.timeAxisList.status = reponse.data;
                     that.getWorkCircle(reponse.data, "work-circle");
+                    that.timeAxisList.status = reponse.data;
                     that.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, that);
                     that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart)
                 });
@@ -418,14 +423,15 @@ export default {
                 {"id": this.machineId, "scheduleInst": val},
                 reponse => {
                     this.getWorkCircle(reponse.data, "work-circle");
+                    this.timeAxisList.status = reponse.data;
                     this.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, this);
                     this.lineChart = this.getLineChart(reponse.data, this.timeAxisList.lineChart);
                 });
         },
 
-        getWorkCircle(input, chart){
-            let workWeight = (input === undefined || input == null || input.workWeight ===undefined ||
-                input.workWeight == null) ? 0: input.workWeight;
+        getWorkCircle(input, chart) {
+            let workWeight = (input === undefined || input == null || input.workWeight === undefined ||
+                input.workWeight == null) ? 0 : input.workWeight;
             let idleWeight = 100 - workWeight;
             let chartDom = document.getElementById(chart);
             let myChart = this.$echarts.init(chartDom);
@@ -434,7 +440,7 @@ export default {
             option = {
                 tooltip: {
                     trigger: 'item',
-                    formatter: function(val){
+                    formatter: function (val) {
                         return val.value + '%'
                     }
                 },
@@ -466,21 +472,21 @@ export default {
             };
             option && myChart.setOption(option);
         },
-        onDataZoomChange(params){
-            if(params.start === undefined || params.start===null || params.end === undefined || params.end===null){
-                if(params.batch !== undefined && params.batch.length >0){
+        onDataZoomChange(params) {
+            if (params.start === undefined || params.start === null || params.end === undefined || params.end === null) {
+                if (params.batch !== undefined && params.batch.length > 0) {
                     let batch = params.batch[0];
                     let start = batch.start;
                     let end = batch.end;
-                    this.setDataZoomOption(start, end );
+                    this.setDataZoomOption(start, end);
                 }
             } else {
                 let start = params.start;
                 let end = params.end;
-                this.setDataZoomOption(start, end );
+                this.setDataZoomOption(start, end);
             }
         },
-        setDataZoomOption(start, end){
+        setDataZoomOption(start, end) {
             let option = {
                 dataZoom: [{
                     type: 'slider',
@@ -532,6 +538,7 @@ export default {
                 {"id": id, "startDate": "", "endDate": ""},
                 reponse => {
                     that.getWorkCircle(reponse.data, "work-circle");
+                    that.timeAxisList.status = reponse.data;
                     that.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, that);
                     that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart);
 
@@ -615,7 +622,7 @@ export default {
     margin: 0;
 }
 
-.PieceChartClass{
+.PieceChartClass {
     width: 100%;
     height: 280px;
     display: flex;
@@ -623,7 +630,7 @@ export default {
     align-items: center;
 }
 
-.PieceChartClass>div{
+.PieceChartClass > div {
     height: -1%;
     border: 0;
     border-radius: 0;
@@ -706,7 +713,7 @@ export default {
 .process,
 .breakdown,
 .stop,
-.none{
+.none {
     width: 50px;
     height: 12px;
     border-radius: 12px;
@@ -726,6 +733,7 @@ export default {
 .none {
     background-color: #808080
 }
+
 .colorline {
     width: 90%;
     display: flex;
@@ -742,7 +750,7 @@ export default {
     justify-content: center;
 }
 
-.separator{
+.separator {
     width: 100%;
     height: 60px;
 }
