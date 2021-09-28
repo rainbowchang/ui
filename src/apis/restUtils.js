@@ -303,7 +303,7 @@ export const getTimeAxis =(input, chart, that) => {
                 if (params.data.alarmFlag === true) {
                     return  '(' + getDateFromTime(params.data.xAxis) + ') ' + params.data.name + ': ' + params.data.code ;
                 } else {
-                    return params.name + ': ' + params.value[3] + ' 秒';  //params.marker +
+                    return params.name + ': ' + timestampToHMS(params.value[3]);  //params.marker +
                 }
             }
         },
@@ -358,4 +358,11 @@ export const getTimeAxis =(input, chart, that) => {
     };
     option && myChart.setOption(option);
     return myChart;
+}
+
+export const timestampToHMS = (input) => {
+    let hour = parseInt(input / 3600);
+    let min = parseInt((input - hour * 3600) / 60);
+    let sec = input - hour * 3600 - min * 60;
+    return hour + '小时' + min + '分' + sec + '秒';
 }

@@ -69,17 +69,8 @@
                 </div>
                 <div class="separator"></div>
                 <div>
-                    <!--                    <span>加工占比</span>-->
-                    <!--                    <i-circle-->
-                    <!--                        :percent="(timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight ===undefined || timeAxisList.status.workWeight == null) ? 0: timeAxisList.status.workWeight"-->
-                    <!--                        stroke-color="#089642" :size="80">-->
-                    <!--                        <span class="demo-Circle-inner" style="font-size:16px">{{-->
-                    <!--                                Math.round((timeAxisList.status === undefined || timeAxisList.status == null || timeAxisList.status.workWeight === undefined || timeAxisList.status.workWeight == null) ? 0 : timeAxisList.status.workWeight)-->
-                    <!--                            }}%</span>-->
-                    <!--                    </i-circle>-->
                     <div id="work-circle" class="PieceChartClass" style=" margin-bottom: -1.4%">
                     </div>
-
                 </div>
                 <div class="separator"></div>
                 <div class="headBottom">
@@ -98,7 +89,7 @@
 </template>
 
 <script>
-import {post, formatDate, getTimeAxis} from "@/apis/restUtils";
+import {post, formatDate, getTimeAxis, timestampToHMS} from "@/apis/restUtils";
 
 export default {
     name: "machineStatusInfo",
@@ -153,6 +144,9 @@ export default {
                 color: colors,
                 legend: {
                     data: ['加工时间', '加工件数']
+                },
+                tooltip: {
+                    trigger: 'axis',
                 },
                 xAxis: {
                     type: 'category',
@@ -212,7 +206,6 @@ export default {
                 }
             };
             option && myChart.setOption(option);
-
         },
         getLineChart(input, chart) {
             let chartDom = document.getElementById(chart);
@@ -220,15 +213,35 @@ export default {
             let option;
             let that = this;
 
-            function getDateFromTime(time) {
+            // function getTimeFromTimestamp(time) {
+            //     let date = new Date(time * 1000);
+            //     return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+            // }
+
+            function getDateTimeFromTimestamp(time) {
                 let date = new Date(time * 1000);
-                return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+                return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
             }
 
             myChart.on('datazoom', function (params) {
                 that.onDataZoomChange(params);
             });
             option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        console.log(params);
+                        let datetime = getDateTimeFromTimestamp(params[0].axisValue);
+                        let value = '';
+                        params.forEach(function (item) {
+                            value += '<br>';
+                            value += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + item.color + '"></span>'
+                            value += item.seriesName + ': ';
+                            value += item.data + '%';
+                        });
+                        return datetime + value;
+                    }
+                },
                 legend: {
                     data: ['进给', '主轴']
                 },
@@ -246,7 +259,7 @@ export default {
                     data: input.timeStampList,
                     axisLabel: {
                         formatter: function (val) {
-                            let d = getDateFromTime(val);
+                            let d = getDateTimeFromTimestamp(val);
                             return d;
                         }
                     }
@@ -260,7 +273,8 @@ export default {
                 series: [{
                     name: '进给',
                     data: input.feedOverridesList,
-                    type: 'line'
+                    type: 'line',
+                    smooth: true
                 },
                     {
                         name: '主轴',
@@ -344,7 +358,10 @@ export default {
             let option = {
                 tooltip: {
                     trigger: "item",
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    // formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    formatter: function (item) {
+                        return item.data.name + ': ' + timestampToHMS(item.data.value) + '(' + item.percent + '%)';
+                    }
                 },
                 legend: {
                     // orient: "vertical",
