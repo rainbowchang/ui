@@ -105,12 +105,7 @@ export default {
         });
     },
     beforeDestroy(){
-        if (this.timer) {
-            clearInterval(this.timer);
-        }
-        if(this.nodeTimer){
-            clearInterval(this.nodeTimer);
-        }
+        this.clearTimers();
     },
     methods: {
         loadTreeNodes(tree, node) {
@@ -159,12 +154,13 @@ export default {
         },
         sendNodeContentWhenClick(nodeInfo) {
             this.index = 0;
-            if (this.timer) {
-                clearInterval(this.timer);
-            }
-            if(this.nodeTimer){
-                clearInterval(this.nodeTimer);
-            }
+            // if (this.timer) {
+            //     clearInterval(this.timer);
+            // }
+            // if(this.nodeTimer){
+            //     clearInterval(this.nodeTimer);
+            // }
+            this.clearTimers();
             if (!nodeInfo.isLeaf) {
                 this.rightSlideShow = false;
                 this.showDetail = false;
@@ -181,6 +177,7 @@ export default {
                     this.statustable = true;
                 });
                 this.timerForNodeTrigger(nodeInfo);
+                this.currentNodeInfo = nodeInfo;
                 return;
             }
             this.rightSlideShow = true;
@@ -204,19 +201,29 @@ export default {
                     });
                 }, 3000);
         },
-        timerForNodeTrigger(nodeInfo){
-            this.nodeTimer = setInterval(()=>{
-                this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-                    let replyStatus = reponse.data;
-                    if (replyStatus == null) {
-                        return;
-                    }
-                    this.$refs.statustable.content = replyStatus.plcInfoBeans;
-                    this.$refs.statustable.totalCount = replyStatus.total;
-                    this.$refs.statustable.nodeKey = nodeInfo.key;
-                    this.statustable = true;
-                });
+        timerForNodeTrigger(nodeInfo) {
+            this.nodeTimer = setInterval(() => {
+                if (this.statustable) {
+                    this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
+                        console.log("timerForNodeTrigger......");
+                        let replyStatus = reponse.data;
+                        if (replyStatus == null) {
+                            return;
+                        }
+                        this.$refs.statustable.content = replyStatus.plcInfoBeans;
+                        this.$refs.statustable.totalCount = replyStatus.total;
+                        this.$refs.statustable.nodeKey = nodeInfo.key;
+                    });
+                }
             }, 18000);
+        },
+        clearTimers(){
+            if (this.timer) {
+                clearInterval(this.timer);
+            }
+            if(this.nodeTimer){
+                clearInterval(this.nodeTimer);
+            }
         },
         customerModelView(nodeInfo, sendNodeContent) {
             this.$Modal.confirm({
@@ -329,6 +336,7 @@ export default {
         onstatusinfoback() {
             this.statusinfoshow = false;
             this.statustable = true;
+            this.timerForNodeTrigger(this.currentNodeInfo);
         },
         onRightSlide() {
             this.index++;
