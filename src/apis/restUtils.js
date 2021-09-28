@@ -272,10 +272,6 @@ export const getTimeAxis =(input, chart, that) => {
         };
     }
 
-    function getDateFromTime(time) {
-        let date = new Date(time * 1000);
-        return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
-    }
 
     function getAlarmMarkPoint(val) {
         val.forEach(function (item) {
@@ -301,7 +297,7 @@ export const getTimeAxis =(input, chart, that) => {
         tooltip: {
             formatter: function (params) {
                 if (params.data.alarmFlag === true) {
-                    return  '(' + getDateFromTime(params.data.xAxis) + ') ' + params.data.name + ': ' + params.data.code ;
+                    return  '(' + getTimeFromTime(params.data.xAxis) + ') ' + params.data.name + ': ' + params.data.code ;
                 } else {
                     return params.name + ': ' + timestampToHMS(params.value[3]);  //params.marker +
                 }
@@ -332,7 +328,7 @@ export const getTimeAxis =(input, chart, that) => {
             scale: true,
             axisLabel: {
                 formatter: function (val) {
-                    let d = getDateFromTime(val);
+                    let d = getTimeFromTime(val);
                     return d;
                 }
             }
@@ -365,4 +361,15 @@ export const timestampToHMS = (input) => {
     let min = parseInt((input - hour * 3600) / 60);
     let sec = input - hour * 3600 - min * 60;
     return hour + '小时' + min + '分' + sec + '秒';
+}
+
+export const getDateTimeFromTimestamp = (time) => {
+    let date = new Date(time * 1000);
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+}
+
+
+export const getTimeFromTime = (time) => {
+    let date = new Date(time * 1000);
+    return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
 }

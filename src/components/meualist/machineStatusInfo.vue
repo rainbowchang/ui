@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import {post, formatDate, getTimeAxis, timestampToHMS} from "@/apis/restUtils";
+import {post, formatDate, getTimeAxis, timestampToHMS, getDateTimeFromTimestamp} from "@/apis/restUtils";
 
 export default {
     name: "machineStatusInfo",
@@ -147,6 +147,23 @@ export default {
                 },
                 tooltip: {
                     trigger: 'axis',
+                    formatter: function(params){
+                        console.log(params);
+                        let datetime = params[0].axisValue;
+                        let value = '';
+                        params.forEach(function (item) {
+                            value += '<br>';
+                            value += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + item.color + '"></span>'
+                            value += item.seriesName + ': ';
+                            if(item.seriesName === '加工时间'){
+                                value += timestampToHMS(item.data);
+                            }
+                            if(item.seriesName === '加工件数'){
+                                value += item.data;
+                            }
+                        });
+                        return datetime + value;
+                    }
                 },
                 xAxis: {
                     type: 'category',
@@ -213,16 +230,6 @@ export default {
             let option;
             let that = this;
 
-            // function getTimeFromTimestamp(time) {
-            //     let date = new Date(time * 1000);
-            //     return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
-            // }
-
-            function getDateTimeFromTimestamp(time) {
-                let date = new Date(time * 1000);
-                return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
-            }
-
             myChart.on('datazoom', function (params) {
                 that.onDataZoomChange(params);
             });
@@ -230,7 +237,6 @@ export default {
                 tooltip: {
                     trigger: 'axis',
                     formatter: function (params) {
-                        console.log(params);
                         let datetime = getDateTimeFromTimestamp(params[0].axisValue);
                         let value = '';
                         params.forEach(function (item) {
@@ -360,7 +366,7 @@ export default {
                     trigger: "item",
                     // formatter: "{a} <br/>{b} : {c} ({d}%)"
                     formatter: function (item) {
-                        return item.data.name + ': ' + timestampToHMS(item.data.value) + '(' + item.percent + '%)';
+                        return item.data.name + ': ' + timestampToHMS(item.data.value) + '(' + Math.round(item.percent) + '%)';
                     }
                 },
                 legend: {
@@ -458,7 +464,7 @@ export default {
                 tooltip: {
                     trigger: 'item',
                     formatter: function (val) {
-                        return val.value + '%'
+                        return Math.round(val.value) + '%'
                     }
                 },
                 legend: {
