@@ -48,6 +48,9 @@
         <FormItem label="主轴最大转速">
             <Input v-model="formItem.maxSpindleSpeed" placeholder="..."/>
         </FormItem>
+        <FormItem label="生产日期">
+            <DatePicker type="date" placeholder="Select date" v-model="formItem.produceDate"></DatePicker>
+        </FormItem>
         <FormItem label="限制码">
             <Input v-model="formItem.lockCode" placeholder="Enter something..."/>
         </FormItem>
