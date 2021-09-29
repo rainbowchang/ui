@@ -307,7 +307,7 @@ export default {
                 tooltip: {
                     trigger: "axis",
                     formatter: function(params){
-                        return Math.round(params[0].value);  //params[0].value
+                        return Math.round(params[0].value) + '%';  //params[0].value
                     },
                     axisPointer: {
                         // 坐标轴指示器，坐标轴触发有效
