@@ -4,7 +4,7 @@
         <div class="baseInfo">
             <Row>
                 <Col span="12">
-                    用户id: {{userData.customerId}}
+                    租户Code: {{userData.corpCode}}
                 </Col>
                 <Col span="12">
                     用户名称: {{userData.name}}

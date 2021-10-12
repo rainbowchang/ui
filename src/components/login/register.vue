@@ -114,7 +114,14 @@ export default {
             message: "密码长度不得低于6",
             trigger: "blur"
           }
-        ]
+        ],
+          company:[
+              {
+                  required: true,
+                  message: "请输入公司名称",
+                  trigger: "blur"
+              }
+          ]
       },
       areas: areas,
     };
