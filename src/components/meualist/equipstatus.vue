@@ -205,7 +205,6 @@ export default {
             this.nodeTimer = setInterval(() => {
                 if (this.statustable) {
                     this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-                        console.log("timerForNodeTrigger......");
                         let replyStatus = reponse.data;
                         if (replyStatus == null) {
                             return;
