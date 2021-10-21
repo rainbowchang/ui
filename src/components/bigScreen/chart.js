@@ -1,4 +1,4 @@
-import * as echarts5 from 'echarts'
+import * as echarts5 from 'echarts5'
 
 const initChart = (DOM, option) => {
     let chart = echarts5.init(DOM);
