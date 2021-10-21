@@ -94,6 +94,10 @@ export default new Router({
         // component: map,
         component: resolve => require(['@/components/homepage/map'], resolve)
     }, {
+        path: '/bigScreen',
+        name:'bigScreen',
+        component: resolve => require(['@/components/bigScreen/bigScreen'], resolve)
+    },{
         path: '/main',
         name: 'main',
         // component: main,

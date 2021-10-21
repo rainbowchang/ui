@@ -44,6 +44,9 @@
         <MenuItem name="/organizationMgt">
           <span>组织机构</span>
         </MenuItem>
+        <MenuItem name="bigScreen">
+          <span>生产大屏</span>
+        </MenuItem>
       </Submenu>
       <Submenu name="3">
         <template slot="title">
@@ -156,6 +159,13 @@ export default {
         this.$router.push("/login");
         return;
       }
+      if (name === "bigScreen") {
+        this.allfalse();
+        this.$router.push("/bigScreen");
+        return;
+      }
+
+
       this.$router.push(name);
     }
   },
