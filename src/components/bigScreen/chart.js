@@ -1,13 +1,18 @@
 import * as echarts5 from 'echarts5'
+const color = ["#4EAD78", "#F6BA58", "#808080", "#EF3E00"];
+const fontSizeFN = (size) => {
+    const width = document.body.clientWidth || window.innerWidth;
+    const rem = width / 192;
+    return size * rem;
+}
 
-const initChart = (DOM, option) => {
-    let chart = echarts5.init(DOM);
+const initChart = (DOM, option, chartObj) => {
+    let chart = chartObj || echarts5.init(DOM);
     chart.setOption(option);
     return chart
 }
 
-const realTimeChart = (ref, info) => {
-    console.log(info);
+const realTimeChart = (ref, info, chartObj) => {
     const {
         work,
         stop,
@@ -23,20 +28,21 @@ const realTimeChart = (ref, info) => {
             bottom: '5%',
             containLabel: true,
         },
+        color: color,
         title: {
             text: titleText,
             x: '50%',
             top: 'middle',
             textAlign: 'center',
             textStyle: {
-                fontSize: 24,
+                fontSize: fontSizeFN(1.5),
                 fontWeight: '900',
                 color: "#ffaa45",
                 textAlign: 'center',
             },
         },
         legend: {
-            bottom: '5%',
+            bottom: '0%',
             left: 'center',
             textStyle: {
                 color: "#ffffff"
@@ -51,7 +57,7 @@ const realTimeChart = (ref, info) => {
                 axisTick: {
                     lineStyle: {
                         color: "#3EB1FF",
-                        width: 3
+                        width: fontSizeFN(0.3)
                     },
                 },
                 z: 2,
@@ -74,62 +80,57 @@ const realTimeChart = (ref, info) => {
                 radius: ['40%', '60%'],
                 avoidLabelOverlap: false,
                 itemStyle: {
-                    borderRadius: 2,
+                    borderRadius: fontSizeFN(0.2),
                     borderColor: "#1B2325",
-                    borderWidth: 4
+                    borderWidth: fontSizeFN(0.4)
                 },
                 label: {
-                    formatter:(v)=>{
+                    formatter: (v) => {
                         const value = v.data.value;
                         const name = v.data.name;
-                        
-                        return  value + "% \n" + name;
+
+                        return value + "% \n" + name;
                     },
-                    textStyle:{
-                        color:"#31ffff",
-                    }
+                    textStyle: {
+                        color: "#31ffff",
+                        fontSize: fontSizeFN(2.4)
+                    },
+                },
+                labelLine: {
+                    length: 30
                 },
                 data: [{
                         value: work,
                         name: '加工',
-                        itemStyle: {
-                            color: "#4EAD78",
-                        }
                     },
                     {
                         value: stop,
                         name: '停机',
-                        itemStyle: {
-                            color: "#808080"
-                        }
-                    },
-                    {
-                        value: alarm,
-                        name: '故障',
-                        itemStyle: {
-                            color: "#EF3E00"
-                        }
+
                     },
                     {
                         value: offLine,
                         name: '未连接',
-                        itemStyle: {
-                            color: "#F6BA58"
-                        }
+
+                    },
+                    {
+                        value: alarm,
+                        name: '故障',
+
                     },
                 ]
             }
         ]
     }
 
-    initChart(ref, option);
+    return initChart(ref, option, chartObj);
 
 }
 
 
 
-const timeChart = function (ref, info) {
-    const yData = ['加工', '停机', '故障', '未连接'];
+const timeChart = function (ref, info, chartObj) {
+    const yData = ["加工", "停机", "未连接", "故障"];
     const seriesData = info;
     const seriesBgData = [100, 100, 100, 100]
     const dataBarItemStyle = {
@@ -147,7 +148,7 @@ const timeChart = function (ref, info) {
     const dataBarBg = {
         name: "",
         type: "bar",
-        barWidth: 10,
+        barWidth: fontSizeFN(1),
         barGap: "-100%",
         data: seriesBgData,
         itemStyle: {
@@ -167,6 +168,7 @@ const timeChart = function (ref, info) {
             show: false,
             type: 'value'
         },
+        color: color,
         yAxis: [{
             type: 'category',
             inverse: true,
@@ -174,21 +176,23 @@ const timeChart = function (ref, info) {
                 margin: 40,
                 color: function (value) {
                     let color = '';
+                    // "#4EAD78", "#F6BA58", "#808080", "#EF3E00"
                     switch (value) {
                         case "加工":
-                            color = "#44b181";
+                            color = "#4EAD78";
                             break;
-                        case "停机":
-                            color = "868686";
+                        case "停机":
+                            color = "#F8AA34";
                             break;
                         case "故障":
-                            color = "#f9490d";
+                            color = "#EF3E00";
                             break;
                         default:
-                            color = "#fcbe6a";
+                            color = "#808080";
                     }
                     return color
                 },
+                fontSize: fontSizeFN(1.8)
 
             },
             axisTick: 'none',
@@ -203,12 +207,12 @@ const timeChart = function (ref, info) {
             axisLabel: {
                 margin: 30,
                 color: '#9aeced',
-                fontSize: '18'
+                fontSize: fontSizeFN(1.8)
             },
             data: seriesData
         }],
         series: [{
-                name: "加工",
+                // name: "加工",
                 type: "bar",
                 zlevel: 1,
                 itemStyle: dataBarItemStyle,
@@ -218,16 +222,15 @@ const timeChart = function (ref, info) {
             dataBarBg,
         ]
     }
-    initChart(ref, option)
+    return initChart(ref, option, chartObj)
 }
 
-const yieldChart = function (ref, info) {
+const yieldChart = function (ref, info, chartObj) {
     const {
         xData,
         data,
     } = info;
-    let sideData = data.map((item) => item <= 0 ? item : ( item + item * 0.03));
-    console.log(data);
+    let sideData = data.map((item) => item <= 0 ? item : (item + 0));
     let option = {
         grid: {
             left: '5%',
@@ -254,17 +257,13 @@ const yieldChart = function (ref, info) {
                 },
             },
             //坐标值标注
-            axisLabel: {
-                show: true,
-                textStyle: {
-                    color: '#50a2c1',
-                    fontSize: "18px",
-                },
+            textStyle: {
+                color: '#50a2c1',
+                fontSize: fontSizeFN(1.8),
             },
-            // axisTick:'none',
         },
         yAxis: {
-            name: "(kwh)",
+            name: "(pcs)",
             nameTextStyle: {
                 color: 'rgba( 101, 198, 231 , 0.5)'
             },
@@ -272,14 +271,11 @@ const yieldChart = function (ref, info) {
             axisLine: {
                 show: false,
             },
-            splitNumber:5,
+            splitNumber: 5,
             //坐标值标注
-            axisLabel: {
-                show: true,
-                textStyle: {
-                    color: 'rgba( 101, 198, 231, 0.5 )',
-                    fontSize: 14
-                },
+            textStyle: {
+                color: 'rgba( 101, 198, 231, 0.5 )',
+                fontSize: fontSizeFN(1.4)
             },
             //分格线
             splitLine: {
@@ -294,7 +290,7 @@ const yieldChart = function (ref, info) {
                     show: false,
                 },
                 type: 'bar',
-                barWidth: 20,
+                barWidth: fontSizeFN(2),
                 itemStyle: {
                     color: new echarts5.graphic.LinearGradient(
                         0,
@@ -318,7 +314,7 @@ const yieldChart = function (ref, info) {
             },
             {
                 type: 'bar',
-                barWidth: 10,
+                barWidth: fontSizeFN(1),
                 itemStyle: {
                     color: new echarts5.graphic.LinearGradient(
                         0,
@@ -339,6 +335,39 @@ const yieldChart = function (ref, info) {
                 },
                 barGap: 0,
                 data: sideData,
+                label: {
+                    show: true,
+                    lineHeight: 30,
+                    width: 80,
+                    height: 30,
+                    backgroundColor: 'rgba(0,160,221,0.1)',
+                    borderRadius: 200,
+                    position: ["-25", '-60'],
+                    distance: 1,
+                    formatter: [
+                        '    {d|●}',
+                        ' {a|{c}}\n',
+                        '    {b|}'
+                    ].join(','),
+                    rich: {
+                        d: {
+                            color: '#3CDDCF',
+                        },
+                        a: {
+                            color: '#fff',
+                            align: 'center',
+                            fontSize: fontSizeFN(1.8),
+                        },
+                        b: {
+                            width: 1,
+                            height: 15,
+                            borderWidth: 1,
+                            borderColor: '#234e6c',
+                            fontSize: fontSizeFN(1),
+                            align: 'left'
+                        },
+                    }
+                }
             },
             {
                 name: 'b',
@@ -375,10 +404,10 @@ const yieldChart = function (ref, info) {
             },
         ],
     };
-    initChart(ref, option);
+    return initChart(ref, option, chartObj);
 }
 
-const mothdChart = function (ref, info) {
+const mothdChart = function (ref, info, chartObj) {
     const {
         xData,
         work,
@@ -393,16 +422,17 @@ const mothdChart = function (ref, info) {
             backgroundColor: "rgba(29, 130, 255, 0.9)",
             textStyle: {
                 color: "#ffffff",
-                fontSize: "1.6rem"
+                fontSize: fontSizeFN(2)
             },
             borderWidth: 0
         },
-        colors: ["#3aad7a", "#808080", "#fcba62", "#f93f00"],
+        color: color,
         legend: {
             data: ['加工', '停机', '未连接', '故障'],
             right: '5%',
             textStyle: {
-                color: "#ffffff"
+                color: "#ffffff",
+                fontSize: fontSizeFN(1.8)
             }
         },
         grid: {
@@ -423,11 +453,9 @@ const mothdChart = function (ref, info) {
             max: 100,
             min: 0,
             interval: 25,
-            axisLabel: {
-                formatter: "{value}%",
-                color: "rgba(255, 255, 255, 0.5)",
-                fontSize: "14px"
-            },
+            formatter: "{value}%",
+            color: "rgba(255, 255, 255, 0.5)",
+            fontSize: fontSizeFN(1.4),
             splitLine: {
                 lineStyle: {
                     color: "rgba(221, 221, 221, 0.3)"
@@ -465,122 +493,11 @@ const mothdChart = function (ref, info) {
 
         ]
     };
-    initChart(ref, option);
+    return initChart(ref, option, chartObj);
 }
 
-const processRateChart = function () {
-    let info = [220, 182, 191, 234, 290, 330, 310];
-    const maxValue = 400,
-        minValue = 50;
-    let option = {
-        grid: {
-            left: '5%',
-            right: '10%',
-            bottom: '5%',
-            top: '10%',
-            containLabel: true
-        },
-        xAxis: {
-            name: "(h)",
-            nameTextStyle: {
-                color: 'rgba( 101, 198, 231 , 0.5)',
-                verticalAlign: "top",
-                align: "right",
-                lineHeight: 40
-            },
-            data: ['4.10', '4.11', '4.12', '4.13', '4.14', '4.15', '4.16'],
-            //坐标轴
-            axisLine: {
-                lineStyle: {
-                    color: 'rgba( 101, 198, 231 , 0.2 )',
 
-                },
-            },
-            //坐标值标注
-            axisLabel: {
-                show: true,
-                textStyle: {
-                    color: '#50a2c1',
-                    fontSize: "18px",
-                },
-            },
-            // axisTick:'none',
-        },
-        yAxis: {
-            name: "(%)",
-            nameTextStyle: {
-                color: 'rgba( 101, 198, 231 , 0.5)',
-                align: "right"
-            },
-            //坐标轴
-            axisLine: {
-                show: false,
-            },
-            max: maxValue,
-            min: minValue,
-            interval: (maxValue - minValue) / 5,
-            //坐标值标注
-            axisLabel: {
-                show: true,
-                textStyle: {
-                    color: 'rgba( 101, 198, 231, 0.5 )',
-                    fontSize: 14
-                },
-            },
-            //分格线
-            splitLine: {
-                lineStyle: {
-                    color: 'rgba( 101, 198, 231 , 0.2 )',
-                },
-            },
-        },
-        series: [{
-                tooltip: {
-                    show: false,
-                },
-                name: 'a',
-                type: 'bar',
-                barWidth: 20,
-                itemStyle: {
-                    color: new echarts5.graphic.LinearGradient(
-                        0,
-                        1,
-                        0,
-                        0,
-                        [{
-                                offset: 0,
-                                color: '#1bdffc', // 0% 处的颜色
-                            },
-                            {
-                                offset: 1,
-                                color: '#1251d2', // 100% 处的颜色
-                            },
-                        ],
-                        false
-                    ),
-                },
-                data: info,
-            },
-            {
-                tooltip: {
-                    show: false,
-                },
-                type: 'pictorialBar',
-                color: "#16bbed",
-                symbolSize: [20, 10],
-                symbolOffset: [0, -5],
-                symbolPosition: 'end',
-                data: info,
-                z: 3,
-            },
-        ],
-    };
-
-    initChart(this.$refs.processingRate, option);
-
-}
-
-const detailChart = function (ref, info) {
+const detailChart = function (ref, info, chartObj) {
     const {
         tickColor,
         sColor,
@@ -597,7 +514,7 @@ const detailChart = function (ref, info) {
             top: 'middle',
             textAlign: 'center',
             textStyle: {
-                fontSize: 18,
+                fontSize: fontSizeFN(1.8),
                 fontWeight: '900',
                 color: tickColor,
                 textAlign: 'center',
@@ -706,7 +623,7 @@ const detailChart = function (ref, info) {
             }
         ]
     }
-    initChart(ref, option)
+    return initChart(ref, option, chartObj)
 
 }
 
@@ -717,5 +634,4 @@ export default {
     timeChart,
     yieldChart,
     mothdChart,
-    processRateChart,
 }

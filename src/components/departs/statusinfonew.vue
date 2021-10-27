@@ -94,7 +94,7 @@ export default {
             console.log("当前确认的日期", this.currentdate);
             this.timeAxisChartList = [];
             for (let i = 0; i < this.selections.length; i++) {
-                post("/organization/customer/getOneDayStatus", {"id": this.selections[i].id, "date": this.currentdate},
+                post("/organization/customer/web/getOneDayStatus", {"id": this.selections[i].id, "date": this.currentdate},
                     reponse => {
                         this.timeAxisList[i].status = reponse.data;
                         console.log("timeAxisList: ", this.timeAxisList[i]);
@@ -159,7 +159,7 @@ export default {
                 }
                 for (let i = 0; i < this.selections.length; i++) {
                     let id = this.selections[i].id;
-                    post("/organization/customer/getOneDayStatus",
+                    post("/organization/customer/web/getOneDayStatus",
                         {"id": id, "date": ""},
                         reponse => {
                             this.timeAxisList[i].status = reponse.data;

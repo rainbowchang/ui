@@ -53,13 +53,30 @@
                         <icon class="icon icon_6"></icon>设备报警
                     </h3>
                     <div class="alarm">
-                        <table id="alarmTable">
+                        <ul class="table-head flex">
+                            <li class="th">序号</li>
+                            <li class="th">报警时间</li>
+                            <li class="th">设备名称</li>
+                            <li class="th">机床型号</li>
+                            <li class="th">报警编号</li>
+                        </ul>
+                        <ul class="table-body" ref="alarmBody">
+                            <li class="tr flex" v-for="(item, index) in alaramList" :key="index">
+                                <div class="index td">{{index + 1}}</div>
+                                <div class="td">{{item.alarmTime}}</div>
+                                <div class="td">{{item.sn}}</div>
+                                <div class="td">{{item.machinetoolModel}}</div>
+                                <div class="td">{{item.alarmCode}}</div>
+
+                            </li>
+                        </ul>
+                        <!-- <table id="alarmTable">
                             <thead>
                                 <tr>
                                     <th>序号</th>
                                     <th>报警时间</th>
-                                    <th>机床型号</th>
                                     <th>设备名称</th>
+                                    <th>机床型号</th>
                                     <th>报警编号</th>
                                 </tr>
                             </thead>
@@ -67,13 +84,12 @@
                                 <tr v-for="(item, index) in alaramList" :key="index">
                                     <td class="index">{{index + 1}}</td>
                                     <td>{{item.alarmTime}}</td>
-                                    <td>{{item.machinetoolModel}}</td>
                                     <td>{{item.sn}}</td>
+                                    <td>{{item.machinetoolModel}}</td>
                                     <td>{{item.alarmCode}}</td>
                                 </tr>
                             </tbody>
-
-                        </table>
+                        </table> -->
                     </div>
                 </section>
             </div>
@@ -84,7 +100,7 @@
 import "echarts/map/js/china.js";
 import chart from "./chart.js";
 import { post } from "@/apis/restUtils";
-
+const intervalTime = 10000;
 export default {
     data() {
         return {
@@ -93,6 +109,15 @@ export default {
             alaramList: [],
             timer: null,
             timer2: null,
+            timer3: null, //表格滚动定时器
+            machineStateChart: null,
+            detailChart: null,
+            realTimeStartRateChart: null,
+            todayYieldChart: null,
+            yieldChart: null,
+            processingTimeChart: null,
+            machineTimeChart: null,
+            monthMachineStateChart: null,
         };
     },
     mounted() {
@@ -103,9 +128,28 @@ export default {
                 width / 192 + "px";
             that.pageSize = width / 192;
         };
+        const chartRise = (charts) => {
+            for (let i = 0; i < charts.length; i++) {
+                if (charts[i]) {
+                    charts[i].resize();
+                    const option = charts[i].getOption();
+                    charts[i].setOption(option);
+                }
+            }
+        };
         rem();
         window.onresize = () => {
             rem();
+            chartRise([
+                this.machineStateChart,
+                this.detailChart,
+                this.realTimeStartRateChart,
+                this.todayYieldChart,
+                this.yieldChart,
+                this.processingTimeChart,
+                this.machineTimeChart,
+                this.monthMachineStateChart,
+            ]);
         };
         this.getRealTimeInfo();
         this.getTodayInfo();
@@ -115,11 +159,26 @@ export default {
             this.timer2 = setInterval(() => {
                 const time = new Date(),
                     year = time.getFullYear(),
-                    month = time.getMonth() + 1 > 9 ? time.getMonth() + 1 : '0' + (time.getMonth() + 1),
-                    day = time.getDate() > 9 ? time.getDate() : '0' + time.getDate(),
-                    hours = time.getHours() > 9 ? time.getHours() : '0' + time.getHours(),
-                    min = time.getMinutes() > 9 ? time.getMinutes(): '0' + time.getMinutes(),
-                    sec = time.getSeconds() > 9 ? time.getSeconds() : '0' + time.getSeconds();
+                    month =
+                        time.getMonth() + 1 > 9
+                            ? time.getMonth() + 1
+                            : "0" + (time.getMonth() + 1),
+                    day =
+                        time.getDate() > 9
+                            ? time.getDate()
+                            : "0" + time.getDate(),
+                    hours =
+                        time.getHours() > 9
+                            ? time.getHours()
+                            : "0" + time.getHours(),
+                    min =
+                        time.getMinutes() > 9
+                            ? time.getMinutes()
+                            : "0" + time.getMinutes(),
+                    sec =
+                        time.getSeconds() > 9
+                            ? time.getSeconds()
+                            : "0" + time.getSeconds();
                 let weekText = "";
                 switch (time.getDay()) {
                     case 1:
@@ -143,14 +202,14 @@ export default {
                     default:
                         weekText = "周日";
                 }
-                this.time = `${year}年${month}月${day}日 ${weekText} ${hours}:${min}:${sec}`
-            },1000);
+                this.time = `${year}年${month}月${day}日 ${weekText} ${hours}:${min}:${sec}`;
+            }, 1000);
         }
         if (!this.timer) {
             this.timer = setInterval(() => {
                 this.getRealTimeInfo();
                 this.getTodayInfo();
-            }, 10000);
+            }, intervalTime);
         }
     },
     methods: {
@@ -158,22 +217,31 @@ export default {
             post("/lssm/realtimeStatus", "", (res) => {
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
-                    console.log(data);
-                    chart.detailChart.call(this, this.$refs.realTimeStartRate, {
-                        tickColor: "#00ffff",
-                        sColor: "#3AB1C2",
-                        eColor: "#55FCFB",
-                        totalData: 100,
-                        data: data.operatingRateOfInt,
-                        titleText: data.operatingRateOfInt + "%",
-                    });
-                    chart.realTimeChart(this.$refs.machineState, {
-                        work: data.rateOfWorkingOfInt,
-                        stop: data.rateOfIdleOfInt,
-                        alarm: data.rateOfAlarmOfInt,
-                        offLine: data.rateOfOfflineOfInt,
-                        titleText: data.operatingRateOfInt + '%',
-                    });
+                    this.realTimeStartRateChart = chart.detailChart.call(
+                        this,
+                        this.$refs.realTimeStartRate,
+                        {
+                            tickColor: "#00ffff",
+                            sColor: "#3AB1C2",
+                            eColor: "#55FCFB",
+                            totalData: 100,
+                            data: data.operatingRateOfInt,
+                            titleText: data.operatingRateOfInt + "%",
+                        },
+                        this.realTimeStartRateChart
+                    );
+                    this.machineStateChart = chart.realTimeChart.call(
+                        this,
+                        this.$refs.machineState,
+                        {
+                            work: data.rateOfWorkingOfInt,
+                            stop: data.rateOfIdleOfInt,
+                            alarm: data.rateOfAlarmOfInt,
+                            offLine: data.rateOfOfflineOfInt,
+                            titleText: data.operatingRate,
+                        },
+                        this.machineStateChart
+                    );
                 }
             });
         },
@@ -181,41 +249,57 @@ export default {
             post("/lssm/dailyStatus", "", (res) => {
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
-                    this.alaramList =
-                        data.lssmAlarmBeanList.length > 5
-                            ? data.lssmAlarmBeanList.slice(0, 4)
-                            : data.lssmAlarmBeanList;
+                    this.alaramList = data.lssmAlarmBeanList.concat(
+                        data.lssmAlarmBeanList
+                    );
+                    this.$nextTick(()=>{
+                        this.setAlarm(0);
+                    })
 
-                    chart.detailChart.call(this, this.$refs.todayYield, {
-                        tickColor: "#06f8a8",
-                        sColor: "#F1BC5A",
-                        eColor: "#52F7A3",
-                        totalData: 100,
-                        data: data.worktimeRateOfInt,
-                        titleText: data.workPieces,
-                    });
+                    this.todayYieldChart = chart.detailChart.call(
+                        this,
+                        this.$refs.todayYield,
+                        {
+                            tickColor: "#06f8a8",
+                            sColor: "#F1BC5A",
+                            eColor: "#52F7A3",
+                            totalData: 100,
+                            data: data.worktimeRateOfInt,
+                            titleText: data.workPieces,
+                        },
+                        this.todayYieldChart
+                    );
 
-                    chart.detailChart.call(this, this.$refs.processingTime, {
-                        tickColor: "#00acff",
-                        sColor: "#3CACFF",
-                        eColor: "#2E67FF",
-                        totalData: 100,
-                        data: data.worktimeRateOfInt,
-                        titleText: data.workTime,
-                    });
+                    this.processingTimeChart = chart.detailChart.call(
+                        this,
+                        this.$refs.processingTime,
+                        {
+                            tickColor: "#00acff",
+                            sColor: "#3CACFF",
+                            eColor: "#2E67FF",
+                            totalData: 100,
+                            data: data.worktimeRateOfInt,
+                            titleText: data.workTime,
+                        },
+                        this.processingTimeChart
+                    );
 
-                    chart.timeChart.call(this, this.$refs.machineTime, [
-                        data.worktimeRateOfInt,
-                        data.idletimeRateOfInt,
-                        data.alarmtimeRateOfInt,
-                        data.offlinetimeRateOfInt,
-                    ]);
+                    this.machineTimeChart = chart.timeChart.call(
+                        this,
+                        this.$refs.machineTime,
+                        [
+                            data.worktimeRateOfInt,
+                            data.idletimeRateOfInt,
+                            data.offlinetimeRateOfInt,
+                            data.alarmtimeRateOfInt,
+                        ],
+                        this.machineTimeChart
+                    );
                 }
             });
         },
         getMonthInfo() {
             post("/lssm/monthlyStatus", "", (res) => {
-                console.log("month", res);
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
                     let work = [],
@@ -231,39 +315,69 @@ export default {
                         noConnected.push(data[i].offlinetimeRateOfInt);
                         fault.push(data[i].alarmtimeRateOfInt);
                     }
-                    chart.mothdChart.call(this, this.$refs.monthMachineState, {
-                        xData,
-                        work,
-                        stop: shutDown,
-                        offLine: noConnected,
-                        alarm: fault,
-                    });
+                    this.monthMachineStateChart = chart.mothdChart.call(
+                        this,
+                        this.$refs.monthMachineState,
+                        {
+                            xData,
+                            work,
+                            stop: shutDown,
+                            offLine: noConnected,
+                            alarm: fault,
+                        },
+                        this.monthMachineStateChart
+                    );
                 }
             });
         },
         getSevenInfo() {
             post("/lssm/sevenDaysStatus", "", (res) => {
-                console.log("seven", res);
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
-                    chart.yieldChart.call(this, this.$refs.yield, {
-                        xData: data.dateList,
-                        data: data.workPieceList,
-                        maxValue: Math.max(...data.workPieceList),
-                        minValue: 0,
-                    });
+                    this.yieldChart = chart.yieldChart.call(
+                        this,
+                        this.$refs.yield,
+                        {
+                            xData: data.dateList,
+                            data: data.workPieceList,
+                            maxValue: Math.max(...data.workPieceList),
+                            minValue: 0,
+                        },
+                        this.yieldChart
+                    );
                 }
             });
         },
+        setAlarm(value){
+            let dom = this.$refs.alarmBody
+            let time = intervalTime / (this.alaramList.length - 4);
+            let h = this.pageSize * 4.8
+            console.log(value,dom.scrollHeight, time)
+            if(value == 0){
+                dom.scrollTop = value;
+            }
+            if(this.timer3){
+                clearInterval(this.timer3)
+                this.timer3 = null;
+            }
+            this.timer3 = setInterval(()=>{
+                dom.scrollTop += h
+                console.log(dom.scrollTop)
+            },time)
+        }
     },
     beforeDestroy() {
         if (this.timer) {
             clearInterval(this.timer);
             this.timer = null;
         }
-         if (this.timer2) {
+        if (this.timer2) {
             clearInterval(this.timer2);
             this.timer2 = null;
+        }
+        if(this.timer3){
+            clearInterval(this.timer3);
+            this.timer3 = null;
         }
     },
 };
@@ -351,10 +465,8 @@ section.ct-layer {
     color: #01acff;
 }
 #machineState {
-    margin-bottom: 3rem;
-}
-#machineState {
     height: 40rem;
+    margin-bottom: 3rem;
 }
 #machineTime {
     height: 27rem;
@@ -395,32 +507,46 @@ section.ct-layer {
 }
 
 .alarm {
-    padding: 4rem;
+    margin-top: 2rem;
+    padding: 0 3rem;
+
 }
-#alarmTable {
-    width: 100%;
-    border-collapse: collapse;
+ul li {
+    list-style: none;
 }
-#alarmTable th {
+.flex {
+    display: flex;
+}
+.alarm .th {
     font-size: 1.6rem;
     color: #12a8f6;
     padding: 0.6rem 0 1rem;
+    flex: 1;
+    text-align: center;
 }
-#alarmTable thead {
+.alarm .table-head {
     box-shadow: 0 -2rem 0.8rem -1rem rgba(29, 126, 115, 0.5) inset;
 }
-#alarmTable td {
+.alarm .table-body{
+    height: 24rem;
+    overflow: hidden;
+}
+.alarm .td {
     font-size: 1.4rem;
     color: #31ffff;
     text-align: center;
     border: 0.1rem solid rgba(221, 221, 221, 0.15);
     padding: 1.5rem 0 1rem 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-#alarmTable td.index {
+.alarm .td.index {
     color: #50a2c1;
     font-style: italic;
 }
-#alarmTable tbody tr:nth-child(2n) {
+.alarm .table-body .tr:nth-child(2n) {
     background: rgba(38, 209, 212, 0.1);
 }
 </style>

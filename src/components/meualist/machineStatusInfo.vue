@@ -423,7 +423,7 @@ export default {
                     });
                 });
 
-            post("/organization/customer/getOneDayStatus",
+            post("/organization/customer/web/getOneDayStatus",
                 {"id": that.machineId, "beginDate": val[0], "endDate": val[1]},
                 reponse => {
                     // that.timeAxisList.status = reponse.data;
@@ -559,7 +559,7 @@ export default {
                 "chart": "metachart-" + id,
                 "pieceChart": "pieceChart-" + id,
             }
-            post("/organization/customer/getOneDayStatus",
+            post("/organization/customer/web/getOneDayStatus",
                 {"id": id, "startDate": "", "endDate": ""},
                 reponse => {
                     that.getWorkCircle(reponse.data, "work-circle");
