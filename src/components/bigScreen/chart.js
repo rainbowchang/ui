@@ -129,9 +129,10 @@ const realTimeChart = (ref, info, chartObj) => {
 
 
 
-const timeChart = function (ref, info, chartObj) {
+const timeChart = function (ref, info, showText, chartObj) {
     const yData = ["加工", "停机", "未连接", "故障"];
     const seriesData = info;
+    const showtext = showText;
     const seriesBgData = [100, 100, 100, 100]
     const dataBarItemStyle = {
         borderRadius: 30,
@@ -209,7 +210,7 @@ const timeChart = function (ref, info, chartObj) {
                 color: '#9aeced',
                 fontSize: fontSizeFN(1.8)
             },
-            data: seriesData
+            data: showtext
         }],
         series: [{
                 // name: "加工",
@@ -424,6 +425,9 @@ const mothdChart = function (ref, info, chartObj) {
                 color: "#ffffff",
                 fontSize: fontSizeFN(2)
             },
+            // formatter: function(params){
+            //     return  params + '%';
+            // },
             borderWidth: 0
         },
         color: color,

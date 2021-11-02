@@ -238,7 +238,7 @@ export default {
                             stop: data.rateOfIdleOfInt,
                             alarm: data.rateOfAlarmOfInt,
                             offLine: data.rateOfOfflineOfInt,
-                            titleText: data.operatingRate,
+                            titleText: data.cntOfTotal,
                         },
                         this.machineStateChart
                     );
@@ -292,6 +292,12 @@ export default {
                             data.idletimeRateOfInt,
                             data.offlinetimeRateOfInt,
                             data.alarmtimeRateOfInt,
+                        ],
+                        [
+                            data.workTime,
+                            data.idleTime,
+                            data.offlineTime,
+                            data.alarmTime,
                         ],
                         this.machineTimeChart
                     );
