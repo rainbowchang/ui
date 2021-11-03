@@ -100,7 +100,7 @@
 import "echarts/map/js/china.js";
 import chart from "./chart.js";
 import { post } from "@/apis/restUtils";
-const intervalTime = 10000;
+const intervalTime = 300000;
 export default {
     data() {
         return {
