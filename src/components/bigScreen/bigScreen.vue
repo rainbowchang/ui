@@ -368,7 +368,7 @@ export default {
             }
             this.timer3 = setInterval(()=>{
                 dom.scrollTop += h
-                console.log(dom.scrollTop)
+                // console.log(dom.scrollTop)
             },time)
         }
     },

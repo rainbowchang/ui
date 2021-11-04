@@ -35,7 +35,7 @@
 <script>
 // import statusinfo from "../departs/statusinfo";
 // import statusinfonew from "../departs/statusinfonew";
-import {post} from "@/apis/restUtils";
+// import {post} from "@/apis/restUtils";
 
 export default {
     // components: { statusinfonew },
@@ -147,16 +147,16 @@ export default {
         };
     },
     methods: {
-        handlePage(value) {
-            post("/organization/node/trigger", {key: this.nodeKey, pageNo: value, pageSize: 10}, reponse => {
-                var replyStatus = reponse.data;
-                if (replyStatus == null) {
-                    return;
-                }
-                this.content = replyStatus.plcInfoBeans;
-                this.totalCount = replyStatus.total;
-            });
-        },
+        // handlePage(value) {
+        //     post("/organization/node/trigger", {key: this.nodeKey, pageNo: value, pageSize: 10}, reponse => {
+        //         var replyStatus = reponse.data;
+        //         if (replyStatus == null) {
+        //             return;
+        //         }
+        //         this.content = replyStatus.plcInfoBeans;
+        //         this.totalCount = replyStatus.total;
+        //     });
+        // },
         // table导出表格
         exportData() {
             this.$refs.table.exportCsv({

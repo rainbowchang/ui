@@ -425,9 +425,17 @@ const mothdChart = function (ref, info, chartObj) {
                 color: "#ffffff",
                 fontSize: fontSizeFN(2)
             },
-            // formatter: function(params){
-            //     return  params + '%';
-            // },
+            formatter: function(params){
+                return  params[0].axisValue + '<br>' +
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[0].color + '"></span>'+
+                    params[0].seriesName + '&nbsp;  <span style="float:right">' + params[0].value + '%</span> <br>' +
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[1].color + '"></span>'+
+                    params[1].seriesName + '&nbsp;  <span style="float:right">' + params[1].value + '%</span> <br>' +
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[2].color + '"></span>'+
+                    params[2].seriesName + '&nbsp;  <span style="float:right">' + params[2].value + '%</span> <br>' +
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[3].color + '"></span>'+
+                    params[3].seriesName + '&nbsp;  <span style="float:right">' + params[3].value + '%</span> <br>';
+            },
             borderWidth: 0
         },
         color: color,
