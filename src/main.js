@@ -12,6 +12,7 @@ import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import china from 'echarts/map/json/china.json'
+import './assets/ccs/mycss.css'
 
 Vue.use(ElementUI)
 echarts.registerMap('china', china)

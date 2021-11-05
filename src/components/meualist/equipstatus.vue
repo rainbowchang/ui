@@ -154,18 +154,13 @@ export default {
         },
         sendNodeContentWhenClick(nodeInfo) {
             this.index = 0;
-            // if (this.timer) {
-            //     clearInterval(this.timer);
-            // }
-            // if(this.nodeTimer){
-            //     clearInterval(this.nodeTimer);
-            // }
             this.clearTimers();
             if (!nodeInfo.isLeaf) {
                 this.rightSlideShow = false;
                 this.showDetail = false;
                 nodeInfo.pageNo = 1;
                 nodeInfo.pageSize = 10;
+                this.$refs.statustable.loading = true;
                 this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
                     let replyStatus = reponse.data;
                     if (replyStatus == null) {
@@ -174,8 +169,9 @@ export default {
                     this.$refs.statustable.content = replyStatus.plcInfoBeans;
                     this.$refs.statustable.totalCount = replyStatus.total;
                     this.$refs.statustable.nodeKey = nodeInfo.key;
-                    this.statustable = true;
+                    this.$refs.statustable.loading = false;
                 });
+                this.statustable = true;
                 this.timerForNodeTrigger(nodeInfo);
                 this.currentNodeInfo = nodeInfo;
                 return;

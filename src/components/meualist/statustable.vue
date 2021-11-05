@@ -13,7 +13,8 @@
                 </Button>
             </div>
             <div class="content">
-                <Table
+                <Table v-loading="loading"
+                       element-loading-text="加载中..."
                     :columns="title"
                     :data="content"
                     size="small"
@@ -143,7 +144,8 @@ export default {
                 //   warning: "..."
                 // },
             ],
-            selections: [] //操作中选中的所选项数组
+            selections: [], //操作中选中的所选项数组
+            loading: true,
         };
     },
     methods: {

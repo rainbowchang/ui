@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <div class="content">
+        <div v-loading="loading" element-loading-text="加载中..." class="content">
             <div class="ct-layer left">
                 <section>
                     <h3>
@@ -118,6 +118,7 @@ export default {
             processingTimeChart: null,
             machineTimeChart: null,
             monthMachineStateChart: null,
+            loading: true,
         };
     },
     mounted() {
@@ -334,6 +335,7 @@ export default {
                         this.monthMachineStateChart
                     );
                 }
+                this.loading = false;
             });
         },
         getSevenInfo() {
