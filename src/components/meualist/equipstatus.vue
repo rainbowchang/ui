@@ -210,7 +210,7 @@ export default {
                         this.$refs.statustable.nodeKey = nodeInfo.key;
                     });
                 }
-            }, 18000);
+            }, 180000);
         },
         clearTimers(){
             if (this.timer) {
