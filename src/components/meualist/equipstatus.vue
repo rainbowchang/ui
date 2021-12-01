@@ -131,7 +131,7 @@ export default {
                     addTreeNodeDisabled: true,
                     dragDisabled: true,
                     editNodeDisabled: true, //编辑节点的事件信息不足，暂停使用
-                    delNodeDisabled: false,
+                    delNodeDisabled: true,
                     type: paraNode.type
                 }
             );

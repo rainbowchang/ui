@@ -181,13 +181,13 @@ export default {
       let router = this.$router;
       let param = this.formuser;
       console.log(name)
-      if(this.verifyPassword != this.formuser.password) {
+      if(this.verifyPassword !== this.formuser.password) {
         this.$Message.error("两次输入的密码不一致!");
         return
       }
       this.$refs[name].validate(valid => {
         post("/user/register",param,reponse => {
-          if (valid && reponse.data.status == "success") {
+          if (valid && reponse.data.status === "success") {
             this.$Message.success("注册成功，请登录!");
             router.push({ path: "/login" })
           } else {

@@ -7,10 +7,16 @@
                 <div class="searchinput">
                     <Input :style="{width:'180px;'}" search enter-button placeholder="请输入查询内容"/>
                 </div>
+                <div>
                 <Button type="primary" size="large" @click="exportData">
                     <Icon type="ios-download-outline"></Icon>
                     导出表格
                 </Button>
+                <Button type="primary" size="large" @click="onLargeScreen">
+                    <Icon type="ios-desktop-outline"></Icon>
+                    查看大屏
+                </Button>
+                </div>
             </div>
             <div class="content">
                 <Table v-loading="loading"
@@ -187,6 +193,10 @@ export default {
             this.statusinfoshow = true;
             this.$emit('onshowstatusinfo', {'selections': this.selections, 'statusinfoshow': this.statusinfoshow});
             this.statusinfoshow = false;
+        },
+        onLargeScreen(){
+
+            this.$router.push({path: '/bigScreen?nodeKey=' + this.nodeKey});
         }
     }
 };

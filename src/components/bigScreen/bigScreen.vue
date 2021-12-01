@@ -101,15 +101,17 @@ import "echarts/map/js/china.js";
 import chart from "./chart.js";
 import { post } from "@/apis/restUtils";
 const intervalTime = 300000;
+const monthWeekTimer4 = 60 * 60 * 1000; //每小时变更一次
 export default {
     data() {
         return {
             time: 1,
             pageSize: 10,
             alaramList: [],
-            timer: null,
-            timer2: null,
+            timer: null,  //实时和当天统计的刷新
+            timer2: null, //显示时间
             timer3: null, //表格滚动定时器
+            timer4: null, //周和月信息刷新
             machineStateChart: null,
             detailChart: null,
             realTimeStartRateChart: null,
@@ -119,9 +121,12 @@ export default {
             machineTimeChart: null,
             monthMachineStateChart: null,
             loading: true,
+            nodeKey: null,
         };
     },
     mounted() {
+        let query=this.$route.query;
+        this.nodeKey = query.nodeKey;
         let that = this;
         const rem = () => {
             var width = document.body.clientWidth || window.innerWidth;
@@ -212,10 +217,22 @@ export default {
                 this.getTodayInfo();
             }, intervalTime);
         }
+        if(!this.timer4) {
+            this.timer4 = setInterval(() => {
+                this.getMonthInfo();
+                this.getSevenInfo();
+            }, monthWeekTimer4);
+        }
     },
     methods: {
         getRealTimeInfo() {
-            post("/lssm/realtimeStatus", "", (res) => {
+            let param;
+            if(this.nodeKey !== undefined && this.nodeKey !== null && this.nodeKey.trim() !== '') {
+                param = {"nodeKey": this.nodeKey}
+            } else {
+                param = {"nodeKey": ""}
+            }
+            post("/lssm/realtimeStatus", param, (res) => {
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
                     this.realTimeStartRateChart = chart.detailChart.call(
@@ -247,7 +264,13 @@ export default {
             });
         },
         getTodayInfo() {
-            post("/lssm/dailyStatus", "", (res) => {
+            let param;
+            if(this.nodeKey !== undefined && this.nodeKey !== null && this.nodeKey.trim() !== '') {
+                param = {"nodeKey": this.nodeKey}
+            } else {
+                param = {"nodeKey": ""}
+            }
+            post("/lssm/dailyStatus", param, (res) => {
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
                     this.alaramList = data.lssmAlarmBeanList.concat(
@@ -306,7 +329,13 @@ export default {
             });
         },
         getMonthInfo() {
-            post("/lssm/monthlyStatus", "", (res) => {
+            let param;
+            if(this.nodeKey !== undefined && this.nodeKey !== null && this.nodeKey.trim() !== '') {
+                param = {"nodeKey": this.nodeKey}
+            } else {
+                param = {"nodeKey": ""}
+            }
+            post("/lssm/monthlyStatus", param, (res) => {
                 if (res.data && res.data.status == "success") {
                     let data = res.data.entity;
                     let work = [],
@@ -339,8 +368,14 @@ export default {
             });
         },
         getSevenInfo() {
-            post("/lssm/sevenDaysStatus", "", (res) => {
-                if (res.data && res.data.status == "success") {
+            let param;
+            if(this.nodeKey !== undefined && this.nodeKey !== null && this.nodeKey.trim() !== '') {
+                param = {"nodeKey": this.nodeKey}
+            } else {
+                param = {"nodeKey": ""}
+            }
+            post("/lssm/sevenDaysStatus", param, (res) => {
+                if (res.data && res.data.status === "success") {
                     let data = res.data.entity;
                     this.yieldChart = chart.yieldChart.call(
                         this,
@@ -361,7 +396,7 @@ export default {
             let time = intervalTime / (this.alaramList.length - 4);
             let h = this.pageSize * 4.8
             console.log(value,dom.scrollHeight, time)
-            if(value == 0){
+            if(value === 0){
                 dom.scrollTop = value;
             }
             if(this.timer3){
@@ -386,6 +421,10 @@ export default {
         if(this.timer3){
             clearInterval(this.timer3);
             this.timer3 = null;
+        }
+        if(this.timer4){
+            clearInterval(this.timer4);
+            this.timer4 = null;
         }
     },
 };

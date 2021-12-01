@@ -26,13 +26,13 @@ export default {
     data() {
         return {
             columns12: [
-                {
-                    title: '设备ID',
-                    slot: 'id',
-                    resizable: true,
-                    visible: false,
-                    // width: 180
-                },
+                // {
+                //     title: '设备ID',
+                //     slot: 'id',
+                //     resizable: true,
+                //     visible: false,
+                //     // width: 180
+                // },
                 {
                     title: '设备SN',
                     key: 'sn',
@@ -63,18 +63,22 @@ export default {
                     resizable: true,
                     // width: 180
                 },
+                // {
+                //     title: '工厂',
+                //     key: 'factory'
+                // },
                 {
-                    title: '工厂',
-                    key: 'factory'
+                    title: '所属',
+                    key: 'orgId'
                 },
-                {
-                    title: '车间',
-                    key: 'workshop'
-                },
-                {
-                    title: '生产线',
-                    key: 'productLine'
-                },
+                // {
+                //     title: '车间',
+                //     key: 'workshop'
+                // },
+                // {
+                //     title: '生产线',
+                //     key: 'productLine'
+                // },
                 {
                     title: 'OEM厂商',
                     key: 'oemCompany'
@@ -138,16 +142,16 @@ export default {
                     console.log("click ok");
                     if (isModify) {
                         post("/organization/deviceInfo/modifyDeviceInfo", row, reponse => {
-                            if (reponse.data.status == "fail") {
-                                alert("ModifyDeviceInfo", reponse.data.status, "该设备不存在");
+                            if (reponse.data.status === "fail") {
+                                alert("ModifyDeviceInfo： " + reponse.data.result);
                             } else {
                                 console.log("ModifyDeviceInfo Reply", reponse.status);
                             }
                         })
                     } else {
                         post("/organization/deviceInfo/addDeviceInfo", row, reponse => {
-                            if (reponse.data.status == "fail") {
-                                alert("ModifyDeviceInfo", reponse.data.status, "该设备不存在");
+                            if (reponse.data.status === "fail") {
+                                alert("AddDeviceInfo： " + reponse.data.result);
                             } else {
                                 console.log("ModifyDeviceInfo Reply", reponse.status);
                             }
