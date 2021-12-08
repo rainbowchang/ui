@@ -252,11 +252,15 @@ export default {
                         this,
                         this.$refs.machineState,
                         {
-                            work: data.rateOfWorkingOfInt,
-                            stop: data.rateOfIdleOfInt,
-                            alarm: data.rateOfAlarmOfInt,
-                            offLine: data.rateOfOfflineOfInt,
+                            rateOfWork: data.rateOfWorkingOfInt,
+                            rateOfStop: data.rateOfIdleOfInt,
+                            rateOfAlarm: data.rateOfAlarmOfInt,
+                            rateOfOffLine: data.rateOfOfflineOfInt,
                             titleText: data.cntOfTotal,
+                            work: data.cntOfWorking,
+                            stop: data.cntOfIdle,
+                            alarm: data.cntOfAlarm,
+                            offline: data.cntOfOffline,
                         },
                         this.machineStateChart
                     );

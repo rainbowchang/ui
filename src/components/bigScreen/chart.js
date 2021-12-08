@@ -14,11 +14,15 @@ const initChart = (DOM, option, chartObj) => {
 
 const realTimeChart = (ref, info, chartObj) => {
     const {
+        rateOfWork,
+        rateOfStop,
+        rateOfAlarm,
+        rateOfOffLine,
+        titleText,
         work,
         stop,
         alarm,
-        offLine,
-        titleText
+        offline,
     } = info;
     const option = {
         grid: {
@@ -46,6 +50,27 @@ const realTimeChart = (ref, info, chartObj) => {
             left: 'center',
             textStyle: {
                 color: "#ffffff"
+            },
+            formatter: (d) => {
+                console.log(d);
+                let name = '';
+                switch (d) {
+                    case "加工":
+                        name = d + work + '台';
+                        break;
+                    case "停机":
+                        name = d + stop + '台';
+                        break;
+                    case "未连接":
+                        name = d + offline + '台';
+                        break;
+                    case "故障":
+                        name = d + alarm + '台';
+                        break;
+                    default:
+                        name = '';
+                }
+                return name
             }
         },
         series: [{
@@ -100,21 +125,21 @@ const realTimeChart = (ref, info, chartObj) => {
                     length: 30
                 },
                 data: [{
-                        value: work,
+                        value: rateOfWork,
                         name: '加工',
                     },
                     {
-                        value: stop,
+                        value: rateOfStop,
                         name: '停机',
 
                     },
                     {
-                        value: offLine,
+                        value: rateOfOffLine,
                         name: '未连接',
 
                     },
                     {
-                        value: alarm,
+                        value: rateOfAlarm,
                         name: '故障',
 
                     },
@@ -425,15 +450,15 @@ const mothdChart = function (ref, info, chartObj) {
                 color: "#ffffff",
                 fontSize: fontSizeFN(2)
             },
-            formatter: function(params){
-                return  params[0].axisValue + '<br>' +
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[0].color + '"></span>'+
+            formatter: function (params) {
+                return params[0].axisValue + '<br>' +
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[0].color + '"></span>' +
                     params[0].seriesName + '&nbsp;  <span style="float:right">' + params[0].value + '%</span> <br>' +
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[1].color + '"></span>'+
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[1].color + '"></span>' +
                     params[1].seriesName + '&nbsp;  <span style="float:right">' + params[1].value + '%</span> <br>' +
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[2].color + '"></span>'+
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[2].color + '"></span>' +
                     params[2].seriesName + '&nbsp;  <span style="float:right">' + params[2].value + '%</span> <br>' +
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[3].color + '"></span>'+
+                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[3].color + '"></span>' +
                     params[3].seriesName + '&nbsp;  <span style="float:right">' + params[3].value + '%</span> <br>';
             },
             borderWidth: 0

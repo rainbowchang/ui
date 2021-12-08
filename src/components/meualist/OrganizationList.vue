@@ -4,6 +4,9 @@
       <Button type="primary" ghost size="small" @click="add">新增</Button>
     </div>
     <div>
+        <h1 align="center">组织结构</h1>
+        <pre>
+        </pre>
       <Table highlight-row height="auto" width="auto" border :columns="columns04" :data="tableData">
         <template slot-scope="{ row }" slot="id">
           <strong>{{ row.id }}</strong>

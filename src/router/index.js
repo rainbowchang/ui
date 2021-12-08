@@ -159,6 +159,10 @@ export default new Router({
             path: '/organizationMgt',
             // component: 组织机构管理
             component: resolve => require(['@/components/meualist/OrganizationEditor'], resolve)
+        }, {
+            path: '/roleMgt',
+            // component: 用户管理
+            component: resolve => require(['@/components/meualist/user'], resolve)
         }]
     }]
 })
