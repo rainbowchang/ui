@@ -29,6 +29,7 @@
                     :max-height="540"
                 ></Table>
                 <Button type="primary" icon="ios-search" class="searchbtn" @click="tostatusInfo">按时间序列查询</Button>
+                <Button type="primary" icon="ios-search" class="searchbtn" @click="toScheduleStatistics">按班组统计</Button>
                 <Page style="position:absolute;bottom:0em; margin-top: 10%" :total="totalCount" :current="pageNum"
                       :page-size="10" show-elevator show-sizer show-total placement="top"
                       @on-change="handlePage"></Page>
@@ -205,8 +206,10 @@ export default {
             this.$emit('onshowstatusinfo', {'selections': this.selections, 'statusinfoshow': this.statusinfoshow});
             this.statusinfoshow = false;
         },
-        onLargeScreen(){
+        toScheduleStatistics(){
 
+        },
+        onLargeScreen(){
             this.$router.push({path: '/bigScreen?nodeKey=' + this.nodeKey});
         }
     }
