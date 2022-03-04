@@ -53,6 +53,7 @@ export default {
             pageNum: 1,
             totalCount: 11,
             statusinfoshow: false, //详情弹窗是否展示
+            scheduleStatisticsShow: false,
             dateChoose: "", //table选择开始结束时间
             currentPage: 1, //分页当前页数,
             title: [
@@ -207,7 +208,9 @@ export default {
             this.statusinfoshow = false;
         },
         toScheduleStatistics(){
-
+            this.scheduleStatisticsShow = true;
+            this.$emit('onscheduleStatistics', {'selections': this.selections, 'scheduleStatisticsShow': this.scheduleStatisticsShow});
+            this.scheduleStatisticsShow = false
         },
         onLargeScreen(){
             this.$router.push({path: '/bigScreen?nodeKey=' + this.nodeKey});

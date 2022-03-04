@@ -23,13 +23,13 @@
             <!-- 客户表单 -->
             <transition name="fade">
                 <statustable v-show="statustable" ref="statustable" @onselection="onselection"
-                             @onshowstatusinfo="onshowstatusinfo"></statustable>
+                             @onshowstatusinfo="onshowstatusinfo" @onscheduleStatistics="onscheduleStatistics"></statustable>
             </transition>
             <transition name="fade">
                 <detailChart v-show="showDetail" ref="showDetail" :detailinfo=detailinfo></detailChart>
             </transition>
             <transition name="fade">
-                <statusinfonew v-show="statusinfoshow" ref="statusinfonew" :statusinfonew="{selections,statusinfoshow}"
+                <statusinfonew v-show="statusinfoshow" ref="statusinfonew" :statusinfonew="{selections, statusinfoshow}"
                                @onstatusinfoshow="onstatusinfoshow" @onstatusinfoback="onstatusinfoback">
                 </statusinfonew>
             </transition>
@@ -37,6 +37,12 @@
                 <machineStatusInfo v-show="machineStatusInfoShow" ref="machineStatusInfo"
                                    :onMachineId="{currentMachineId, machineStatusInfoShow}">
                 </machineStatusInfo>
+            </transition>
+            <transition name="fade">
+                <scheduleStatistics v-show="scheduleStatisticsShow" ref="scheduleStatistics" :scheduleStatistics="{selections, scheduleStatisticsShow}"
+                                    @onstatusinfoback="onstatusinfoback">
+
+                </scheduleStatistics>
             </transition>
         </div>
         <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :append-to-body="true">
@@ -57,7 +63,8 @@ import factory from "./factory";
 import detailChart from "./detailChart";
 import {get, post, NodeType} from "@/apis/restUtils";
 import statusinfonew from "../departs/statusinfonew";
-import machineStatusInfo from "./machineStatusInfo"
+import machineStatusInfo from "./machineStatusInfo";
+import scheduleStatistics from "../departs/scheduleStatistics";
 
 const customerModel = () => import("./customerInfoModal.vue");
 
@@ -68,7 +75,8 @@ export default {
         detailChart,
         factory,
         statusinfonew,
-        machineStatusInfo
+        machineStatusInfo,
+        scheduleStatistics,
     },
     data() {
         return {
@@ -93,6 +101,7 @@ export default {
             index: 0,
             currentNodeInfo: null,
             nodeTimer: null,
+            scheduleStatisticsShow:false,
         };
     },
     mounted: function () {
@@ -328,8 +337,15 @@ export default {
             this.selections = val.selections;
             this.statusinfoshow = val.statusinfoshow;
         },
+        onscheduleStatistics(val){
+            this.statustable = false;
+            this.selections = val.selections;
+            this.scheduleStatisticsShow = val.scheduleStatisticsShow;
+        },
         onstatusinfoback() {
+            console.log("onstatusinfoback");
             this.statusinfoshow = false;
+            this.scheduleStatisticsShow = false;
             this.statustable = true;
             this.timerForNodeTrigger(this.currentNodeInfo);
         },
