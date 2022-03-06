@@ -127,15 +127,17 @@ export default {
         suredata() {
             console.log("当前确认的日期", this.currentdate);
             post("/organization/getScheduleStatistics", {"selections": this.selections, "date": this.currentdate},
-                reponse => {
-                    this.content = reponse.data;
+                response => {
+                    console.log(response);
+                    this.content = response.data;
                 });
 
         },
         exportData() {
-            this.$refs.table.exportCsv({
-                filename: "equipsList"
-            });
+            post("/organization/exportScheduleStatistics", {"selections": this.selections, "date": this.currentdate},
+                response => {
+                    console.log(response);
+                });
         },
     },
 
