@@ -129,7 +129,7 @@ export default {
             post("/organization/getScheduleStatistics", {"selections": this.selections, "date": this.currentdate},
                 response => {
                     console.log(response);
-                    this.content = response.data;
+                    this.content = response.data.entity;
                 });
 
         },
