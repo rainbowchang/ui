@@ -37,6 +37,7 @@
 import {post} from "@/apis/restUtils";
 export default {
     name: "scheduleStatistics",
+    props: ["scheduleStatistics"],
     data() {
         return {
             selections: [],
@@ -110,7 +111,7 @@ export default {
     },
     watch:{
         scheduleStatistics(val){
-            console.log("statusinfonew 表格选中的行信息", val.selections, "   ", val.scheduleStatisticsShow);
+            console.log("scheduleStatistics 表格选中的行信息", val.selections, "   ", val.scheduleStatisticsShow);
             if (val.scheduleStatisticsShow) {
                 this.selections = val.selections;
             }
