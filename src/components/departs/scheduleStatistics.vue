@@ -128,9 +128,8 @@ export default {
         suredata() {
             console.log("当前确认的日期", this.currentdate, "this.selections", this.selections);
             let idList = [];
-            for(let selection in this.selections){
-                console.log("selection ", selection);
-                idList.push(selection.id)
+            for(let i in this.selections){
+                idList.push(this.selections[i].id)
             }
             console.log("idList: ", idList);
             post("/organization/getScheduleStatistics", {"selections": idList, "date": this.currentdate},
