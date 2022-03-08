@@ -126,9 +126,10 @@ export default {
         },
         suredata() {
             console.log("当前确认的日期", this.currentdate);
+            console.log("this.selections: ", this.selections);
             post("/organization/getScheduleStatistics", {"selections": this.selections, "date": this.currentdate},
                 response => {
-                    console.log(response);
+                    console.log("response: ", response);
                     this.content = response.data.entity;
                 });
 
