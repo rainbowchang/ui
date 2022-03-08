@@ -340,7 +340,7 @@ export default {
         onscheduleStatistics(val){
             this.statustable = false;
             this.selections = val.selections;
-            this.scheduleStatisticsShow = val.scheduleStatisticsShow;
+            this.scheduleStatisticsShow = true;
         },
         onstatusinfoback() {
             console.log("onstatusinfoback");
