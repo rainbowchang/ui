@@ -126,9 +126,10 @@ export default {
             this.currentdate = e;
         },
         suredata() {
-            console.log("当前确认的日期", this.currentdate);
+            console.log("当前确认的日期", this.currentdate, "this.selections", this.selections);
             let idList = [];
             for(let selection in this.selections){
+                console.log("selection ", selection);
                 idList.push(selection.id)
             }
             console.log("idList: ", idList);
