@@ -338,9 +338,11 @@ export default {
             this.statusinfoshow = val.statusinfoshow;
         },
         onscheduleStatistics(val){
+            console.log("onscheduleStatistics val: ", val);
             this.statustable = false;
             this.selections = val.selections;
-            this.scheduleStatisticsShow = true;
+            this.scheduleStatisticsShow = val.scheduleStatisticsShow;
+            console.log("this.scheduleStatisticsShow: ", this.scheduleStatisticsShow);
         },
         onstatusinfoback() {
             console.log("onstatusinfoback");
