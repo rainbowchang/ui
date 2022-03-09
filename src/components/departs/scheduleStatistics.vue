@@ -45,61 +45,61 @@ export default {
             title: [
                 {
                     title: "机床序号",   //"客户名称",
-                    key: "model",
+                    key: "alias",
                     sortable: true,
                     width: 150
                 },
                 {
                     title: "加工件数",   //"客户名称",
-                    key: "piece1",
+                    key: "col1",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "加工时间",   //"客户名称",
-                    key: "worktime1",
+                    key: "col2",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "停机时间",   //"客户名称",
-                    key: "idletime1",
+                    key: "col3",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "加工件数",   //"客户名称",
-                    key: "piece2",
+                    key: "col4",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "加工时间",   //"客户名称",
-                    key: "worktime2",
+                    key: "col5",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "停机时间",   //"客户名称",
-                    key: "idletime2",
+                    key: "col6",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "加工件数",   //"客户名称",
-                    key: "piece3",
+                    key: "col7",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "加工时间",   //"客户名称",
-                    key: "worktime3",
+                    key: "col8",
                     sortable: true,
                     width: 120
                 },
                 {
                     title: "停机时间",   //"客户名称",
-                    key: "idletime3",
+                    key: "col9",
                     sortable: true,
                     width: 120
                 },
