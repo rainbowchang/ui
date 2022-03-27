@@ -140,7 +140,11 @@ export default {
 
         },
         exportData() {
-            post("/organization/exportScheduleStatistics", {"selections": this.selections, "date": this.currentdate},
+            let idList = [];
+            for(let i in this.selections){
+                idList.push(this.selections[i].id)
+            }
+            post("/organization/exportScheduleStatistics", {"selections": idList, "date": this.currentdate},
                 response => {
                     console.log(response);
                 });
