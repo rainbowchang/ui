@@ -184,19 +184,20 @@ export default {
                 this.timerForNodeTrigger(nodeInfo);
                 this.currentNodeInfo = nodeInfo;
                 return;
+            }else {
+                this.rightSlideShow = true;
+                this.currentMachineId = nodeInfo.id;
+                this.statustable = false;
+                this.showDetail = true;
+                this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
+                    let data = response.data;
+                    if (data.table != null) {
+                        this.detailinfo = response.data;
+                    }
+                });
+                this.timerSetInterval(nodeInfo);
+                this.currentNodeInfo = nodeInfo;
             }
-            this.rightSlideShow = true;
-            this.currentMachineId = nodeInfo.id;
-            this.statustable = false;
-            this.showDetail = true;
-            this.sendNodeContent("/organization/leafNode/trigger", nodeInfo, response => {
-                let data = response.data;
-                if (data.table != null) {
-                    this.detailinfo = response.data;
-                }
-            });
-            this.timerSetInterval(nodeInfo);
-            this.currentNodeInfo = nodeInfo;
         },
         timerSetInterval(nodeInfo){
                 this.timer = setInterval(() => {
