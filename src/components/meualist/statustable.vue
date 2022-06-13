@@ -123,17 +123,18 @@ export default {
                     key: "workPieces",
                     sortable: true
                 },
-                {
-                    title: "利用率",
-                    key: "utilization",
-                    sortable: true,
-                    render: (h, params) => {
-                        return h('span', (() => {
-                            let utilization = params.row.utilization;
-                            return utilization + '%';
-                        })());
-                    }
-                },
+                // {    //暂时隐藏
+                //     title: "利用率",
+                //     key: "utilization",
+                //     sortable: true,
+                //
+                //     render: (h, params) => {
+                //         return h('span', (() => {
+                //             let utilization = params.row.utilization;
+                //             return utilization + '%';
+                //         })());
+                //     }
+                // },
                 {
                     title: "报警次数",
                     key: "alarmCount",
