@@ -10,6 +10,7 @@
         <br>
         <div class="currentdata">
             <DatePicker
+                v-model="dateValue"
                 @on-change="changedate"
                 @on-ok="suredata"
                 type="date"
@@ -17,6 +18,9 @@
                 placeholder="请选择日期"
                 style="width: 200px"
             ></DatePicker>
+
+            <TimePicker v-model="timeValues" confirm @on-change="changetime" @on-ok="suretime"  format="HH:mm:ss" type="timerange" placement="bottom-end"
+                        placeholder="选择时间" style="width: 268px"></TimePicker>
         </div>
         <div>  <br></div>
         <div class="content">
@@ -42,9 +46,10 @@ export default {
         return {
             selections: [],
             currentdate: "",
+            currenttime: [],
             title: [
                 {
-                    title: "机床序号",   //"客户名称",
+                    title: "机床",   //"客户名称",
                     key: "alias",
                     sortable: true,
                     width: 150
@@ -53,60 +58,33 @@ export default {
                     title: "加工件数",   //"客户名称",
                     key: "col1",
                     sortable: true,
-                    width: 120
+                    width: 200
                 },
                 {
                     title: "加工时间",   //"客户名称",
                     key: "col2",
                     sortable: true,
-                    width: 120
+                    width: 200
                 },
                 {
                     title: "停机时间",   //"客户名称",
                     key: "col3",
                     sortable: true,
-                    width: 120
+                    width: 200
                 },
                 {
-                    title: "加工件数",   //"客户名称",
+                    title: "未连接时间",   //"客户名称",
                     key: "col4",
                     sortable: true,
-                    width: 120
+                    width: 200
                 },
-                {
-                    title: "加工时间",   //"客户名称",
-                    key: "col5",
-                    sortable: true,
-                    width: 120
-                },
-                {
-                    title: "停机时间",   //"客户名称",
-                    key: "col6",
-                    sortable: true,
-                    width: 120
-                },
-                {
-                    title: "加工件数",   //"客户名称",
-                    key: "col7",
-                    sortable: true,
-                    width: 120
-                },
-                {
-                    title: "加工时间",   //"客户名称",
-                    key: "col8",
-                    sortable: true,
-                    width: 120
-                },
-                {
-                    title: "停机时间",   //"客户名称",
-                    key: "col9",
-                    sortable: true,
-                    width: 120
-                },
+
             ],
             content:[
 
-            ]
+            ],
+            timeValues: ['00:00:00', '23:59:59'],
+            dateValue: new Date(),
         }
     },
     watch:{
@@ -122,8 +100,12 @@ export default {
             this.$emit("onstatusinfoback");
         },
         changedate(e) {
-            console.log("时间选择", e);
+            console.log("日期选择", e);
             this.currentdate = e;
+        },
+        changetime(e){
+            console.log("时间选择", e);
+            this.currenttime = e;
         },
         suredata() {
             console.log("当前确认的日期", this.currentdate, "this.selections", this.selections);
@@ -139,6 +121,9 @@ export default {
                 });
 
         },
+        suretime(){
+            console.log("当前确认的时间：", this.currenttime);
+        },
         exportData() {
             let idList = [];
             for(let i in this.selections){
@@ -149,6 +134,8 @@ export default {
                     console.log(response);
                 });
         },
+
+
     },
 
     mounted: function () {
@@ -419,7 +406,7 @@ export default {
 .currentdata {
     display: flex;
     flex-direction: row;
-    width: 240px;
+    width: 340px;
     justify-content: space-between;
     margin: 0 auto;
     position: absolute;
