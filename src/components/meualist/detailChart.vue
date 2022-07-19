@@ -1,7 +1,10 @@
 <template>
     <div class="center-warp">
         <div class="numleft">
-            <h3 style="margin-bottom:2%">当前设备：{{ sn.toUpperCase() }}</h3>
+            <div style="display: flex" >
+               <div style="width: 80%"> <h3 style="margin-bottom:2%">当前设备：{{ sn.toUpperCase() }}</h3> </div>
+                <div class="monitorbox" v-show="hasCamera" @click="streamVisible = true"></div>
+            </div>
             <div class="title unread" style="margin-bottom:6px;">
                 实时数据
                 <span style="margin-right:0.5em;">当前刀位号：{{ toolNumber }}</span>
@@ -53,9 +56,6 @@
                     <!-- <ruleLine :number="1805"/> -->
                 </div>
             </div>
-            <div class="title unread">
-                <el-button v-show="hasCamera" @click="streamVisible = true" >现场视频</el-button>
-            </div>
         </div>
         <div class="numright">
             <div class="title unread" style="display: flex;white-space: nowrap;">
@@ -101,7 +101,7 @@
             >
             </iframe>
             <span slot="footer" class="dialog-footer">
-<!--                <el-button @click="streamVisible = false">关 闭</el-button>-->
+                <el-button @click="streamVisible = false">关 闭</el-button>
             </span>
         </el-dialog>
     </div>
@@ -673,5 +673,21 @@ let fileNameSiemens = function (input, channelPrefix) {
 
 .backopt {
     opacity: 0.3;
+}
+
+.monitorbox {
+    //position: absolute;
+    /*right: 5px;*/
+    bottom: 1px;
+    width: 20px;
+    height: 20px;
+    /*border-radius: 50%;*/
+    left: 100px;
+    top:510px;
+    overflow: hidden;
+    background-color: aliceblue;
+    background-image: url("../../assets/imgs/monitor01.png");
+    background-size: 20px  20px;
+    cursor: pointer;
 }
 </style>
