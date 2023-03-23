@@ -91,11 +91,11 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="现场视频" :visible.sync="streamVisible" width="50%" height="90%" >
+        <el-dialog title="现场视频" :visible.sync="streamVisible" width="640px" height="660px" >
             <iframe
                 :src=cameraUrl
-                width="800"
-                height="600"
+                width="600"
+                height="480"
                 id="ysOpenDevice"
                 allowfullscreen
             >
