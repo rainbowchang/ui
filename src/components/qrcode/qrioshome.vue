@@ -2,7 +2,7 @@
 <template>
   <div class="center">
     <div class="center_text">
-      远控移动APP<br>
+      湖南宁庆移动APP<br>
     </div>
     <div class="url_text">
       <a href="itms-services://?action=download-manifest&url=https://loc.tdlbs.com/release/yk/yk.plist">点击下载</a>
