@@ -1,8 +1,8 @@
 <template>
     <div class="center-warp">
         <div class="numleft">
-            <div style="display: flex" >
-               <div style="width: 80%"> <h3 style="margin-bottom:2%">当前设备：{{ sn.toUpperCase() }}</h3> </div>
+            <div style="display: flex">
+                <div style="width: 80%"><h3 style="margin-bottom:2%">当前设备：{{ sn.toUpperCase() }}</h3></div>
                 <div class="monitorbox" v-show="hasCamera" @click="streamVisible = true"></div>
             </div>
             <div class="title unread" style="margin-bottom:6px;">
@@ -56,6 +56,12 @@
                     <!-- <ruleLine :number="1805"/> -->
                 </div>
             </div>
+            <div class="title unread" :visible.sync="powerVisible">
+                能耗
+                <span style="margin-right:0.5em;">功率：{{ electricityPt }} Kw</span>
+                <span style="margin-right:0.5em;">能耗：{{ electricityImpep }} Kwh</span>
+<!--                <div>         </div>-->
+            </div>
         </div>
         <div class="numright">
             <div class="title unread" style="display: flex;white-space: nowrap;">
@@ -91,11 +97,11 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="现场视频" :visible.sync="streamVisible" width="640px" height="660px" >
+        <el-dialog title="现场视频" :visible.sync="streamVisible" width="50%" height="90%">
             <iframe
                 :src=cameraUrl
-                width="600"
-                height="480"
+                width="800"
+                height="600"
                 id="ysOpenDevice"
                 allowfullscreen
             >
@@ -207,6 +213,12 @@ export default {
             cameraSn: "",
             cameraToken: "",
             hasCamera: false,
+            phase: 0, //1：单相电 3：三相电
+            powerVisible: false, //能耗是否可见
+            electricityMeterInfo: null,
+            electricityPt: 0,
+            electricityImpep: 0,
+
         };
     },
     mounted() {
@@ -233,12 +245,15 @@ export default {
             this.toolNumber = val.toolNumber;
             this.currentProgram = (val.currentProgram).trim();
             this.spindleIndex = val.spindleIndex;
+            this.electricityMeterInfo = val.electricityMeterInfo;
+
             this.getOverrides("myChart1", val.spindleOverrides, 50, 120, 14);
             this.getOverrides("myChart2", val.feedOverrides.toFixed(1), 0, 120, 12);
             this.getOverrides("myChart3", this.getSpindleLoad(), 0, 100, 10);
             this.getSpindleSpeed(val.spindleSpeed, val.maxSpindleSpeed);
             this.getfeedSpeed(val.feedSpeed);
             this.getCameraInfo();
+            this.analysisElectricityMeterInfo();
         },
     },
     methods: {
@@ -568,6 +583,20 @@ export default {
                 }
             });
         },
+        analysisElectricityMeterInfo() {
+            if (this.electricityMeterInfo == null) {
+                this.phase = 0;
+                this.powerVisible = false;
+                return;
+            }
+            if (this.electricityMeterInfo.phase !== 3 && this.electricityMeterInfo.phase !== 1) {
+                this.phase = 0;
+                this.powerVisible = false;
+                return;
+            }
+            this.electricityImpep = this.electricityMeterInfo.impep;
+            this.electricityPt = this.electricityMeterInfo.pt;
+        }
     }
 };
 
@@ -683,11 +712,11 @@ let fileNameSiemens = function (input, channelPrefix) {
     height: 20px;
     /*border-radius: 50%;*/
     left: 100px;
-    top:510px;
+    top: 510px;
     overflow: hidden;
     background-color: aliceblue;
     background-image: url("../../assets/imgs/monitor01.png");
-    background-size: 20px  20px;
+    background-size: 20px 20px;
     cursor: pointer;
 }
 </style>

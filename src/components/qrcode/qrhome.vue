@@ -2,7 +2,7 @@
 <template>
   <div class="center">
     <div class="center_text">
-      宁庆移动APP<br>
+      湖南宁庆移动APP<br>
     </div>
     <div class="url_text">
       <a href="https://yuankongit.cn/release/app/yk.apk">点击下载</a>

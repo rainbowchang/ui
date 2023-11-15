@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="title titletip">
-      <h3 class="cpname">南京宁庆数控机床有限公司</h3>
+      <h3 class="cpname">湖南宁庆</h3>
       <h2>设备监控平台</h2>
       <span @click="back">返回上一级</span>
     </div>
