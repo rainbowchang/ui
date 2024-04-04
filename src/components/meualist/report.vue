@@ -1,7 +1,10 @@
 <template>
-    <Form :model="formItem" :label-width="80">
+    <Form  :label-width="80">
         <FormItem label="日期">
-            <DatePicker type="date" placeholder="选择日期" v-model="formItem.selectDate"></DatePicker>
+            <DatePicker type="date"
+                        placeholder="选择日期"
+                        @on-change="changedate"
+            ></DatePicker>
         </FormItem>
     </Form>
 </template>
@@ -20,6 +23,12 @@ export default {
     mounted: function () {
         this.formItem = this.date;
     },
+    methods: {
+        changedate(e){
+            console.log(e);
+            this.formItem.selectDate = e;
+        }
+    }
 
 }
 </script>

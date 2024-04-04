@@ -159,16 +159,6 @@ export default {
                 }
             ],
             content: [
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "加工",
-                //   workTime: "2小时",
-                //   warning: "..."
-                // },
             ],
             selections: [], //操作中选中的所选项数组
             loading: true,
@@ -244,11 +234,8 @@ export default {
                     });
                 },
                 onOk() {
-                    console.log("this.date", that.paramDate);
-
+                    that.$emit('onDownloadWorkReport', {'nodeKey': that.nodeKey, 'date': that.paramDate.selectDate});
                 }
-
-
             });
         },
     }

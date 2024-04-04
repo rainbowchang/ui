@@ -23,7 +23,8 @@
             <!-- 客户表单 -->
             <transition name="fade">
                 <statustable v-show="statustable" ref="statustable" @onselection="onselection"
-                             @onshowstatusinfo="onshowstatusinfo" @onscheduleStatistics="onscheduleStatistics"></statustable>
+                             @onshowstatusinfo="onshowstatusinfo" @onscheduleStatistics="onscheduleStatistics"
+                             @onDownloadWorkReport="onDownloadWorkReport"></statustable>
             </transition>
             <transition name="fade">
                 <detailChart v-show="showDetail" ref="showDetail" :detailinfo=detailinfo></detailChart>
@@ -61,7 +62,7 @@ import {VueTreeList, Tree, TreeNode} from "vue-tree-list";
 import statustable from "./statustable";
 import factory from "./factory";
 import detailChart from "./detailChart";
-import {get, post, NodeType} from "@/apis/restUtils";
+import {get, post, blobpost, downloadFile, NodeType} from "@/apis/restUtils";
 import statusinfonew from "../departs/statusinfonew";
 import machineStatusInfo from "./machineStatusInfo";
 import scheduleStatistics from "../departs/scheduleStatistics";
@@ -378,6 +379,18 @@ export default {
             this.statusinfoshow = false;
             this.machineStatusInfoShow = false;
             this.rightSlideShow=false;
+        },
+        onDownloadWorkReport(val){
+            console.log('val: ', val);
+            blobpost("/organization/downloadProgramWorkReport", val, response => {
+                console.log(response.data);
+                const blob = new Blob([response.data], {type: 'application/vnd.ms-excel'});
+                const fileName = response.headers["content-disposition"].split("=")[1]; //接口响应头定义的文件名
+                downloadFile(blob, fileName);
+
+
+            });
+
         }
     }
 

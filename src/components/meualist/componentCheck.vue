@@ -188,8 +188,8 @@ export default {
       this.edit(this.tableData[0], false, this.tableData)
     },
     exports(){
-      post("/componentCheck/export", {}, reponse => {
-        console.log(reponse.data);
+      post("/componentCheck/export", {}, response => {
+        console.log(response.data);
       })
     }
     // remove(row, index) {
