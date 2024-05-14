@@ -250,6 +250,7 @@ export default {
             this.currentProgram = (val.currentProgram).trim();
             this.spindleIndex = val.spindleIndex;
             this.electricityMeterInfo = val.electricityMeterInfo;
+            this.workStatus = val.status;
 
             this.getOverrides("myChart1", val.spindleOverrides, 50, 120, 14);
             this.getOverrides("myChart2", val.feedOverrides.toFixed(1), 0, 120, 12);
