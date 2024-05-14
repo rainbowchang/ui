@@ -6,9 +6,12 @@
                 <div class="monitorbox" v-show="hasCamera" @click="streamVisible = true"></div>
             </div>
             <div class="title unread" style="margin-bottom:6px;">
-                实时数据
-                <span style="margin-right:0.5em;">当前刀位号：{{ toolNumber }}</span>
-                <span style="margin-right:0.5em;">当前程序名：{{ currentProgram.trim() }}</span>
+                <span style="margin-right:0.5em;">状态：{{ workStatus }}</span>
+                <br>
+                <span style="margin-right:0.5em;">刀位号：{{ toolNumber }}</span>
+                <br>
+                <span style="margin-right:0.5em;">程序名：{{ currentProgram.trim() }}</span>
+                <br>
                 <span>加工件数：{{ workPieces }}</span>
                 <div>
                     <template>
@@ -56,8 +59,8 @@
                     <!-- <ruleLine :number="1805"/> -->
                 </div>
             </div>
-            <div class="title unread" :visible.sync="powerVisible">
-                能耗
+            <div v-if="powerVisible" class="title unread" >
+                电表
                 <span style="margin-right:0.5em;">功率：{{ electricityPt }} Kw</span>
                 <span style="margin-right:0.5em;">能耗：{{ electricityImpep }} Kwh</span>
 <!--                <div>         </div>-->
@@ -130,6 +133,7 @@ export default {
             toolNumber: 0,
             currentProgram: "",
             workPieces: 0,
+            workStatus: "",
             feedSpeed: 0,
             itemParam: {},
             dialogVisible: false,
@@ -246,6 +250,7 @@ export default {
             this.currentProgram = (val.currentProgram).trim();
             this.spindleIndex = val.spindleIndex;
             this.electricityMeterInfo = val.electricityMeterInfo;
+            this.workStatus = val.status;
 
             this.getOverrides("myChart1", val.spindleOverrides, 50, 120, 14);
             this.getOverrides("myChart2", val.feedOverrides.toFixed(1), 0, 120, 12);

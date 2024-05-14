@@ -8,25 +8,29 @@
                     <Input :style="{width:'180px;'}" search enter-button placeholder="请输入查询内容"/>
                 </div>
                 <div>
-                <Button type="primary" size="large" @click="exportData">
-                    <Icon type="ios-download-outline"></Icon>
-                    导出表格
-                </Button>
-                <Button type="primary" size="large" @click="onLargeScreen">
-                    <Icon type="ios-desktop-outline"></Icon>
-                    查看大屏
-                </Button>
+                    <Button type="primary" size="large" @click="exportData">
+                        <Icon type="ios-download-outline"></Icon>
+                        导出表格
+                    </Button>
+                    <Button type="primary" size="large" @click="onLargeScreen">
+                        <Icon type="ios-desktop-outline"></Icon>
+                        查看大屏
+                    </Button>
+                    <Button type="primary" size="large" @click="onReport(date)">
+                        <Icon type="ios-desktop-outline"></Icon>
+                        查看加工报表
+                    </Button>
                 </div>
             </div>
             <div class="content">
                 <Table v-loading="loading"
                        element-loading-text="加载中..."
-                    :columns="title"
-                    :data="content"
-                    size="small"
-                    ref="table"
-                    @on-selection-change="selectTip"
-                    :max-height="540"
+                       :columns="title"
+                       :data="content"
+                       size="small"
+                       ref="table"
+                       @on-selection-change="selectTip"
+                       :max-height="540"
                 ></Table>
                 <Button type="primary" icon="ios-search" class="searchbtn" @click="tostatusInfo">按时间序列查询</Button>
                 <Button type="primary" icon="ios-search" class="searchbtn" @click="toScheduleStatistics">按班组统计</Button>
@@ -44,11 +48,13 @@
 // import statusinfo from "../departs/statusinfo";
 // import statusinfonew from "../departs/statusinfonew";
 // import {post} from "@/apis/restUtils";
+import report from "./report";
 
 export default {
     // components: { statusinfonew },
     data() {
         return {
+            date: "",
             nodeKey: "",
             pageNum: 1,
             totalCount: 11,
@@ -153,20 +159,15 @@ export default {
                 }
             ],
             content: [
-                // {
-                //   name: "南京宁庆机床数控有限公司",
-                //   model: "VC1480G",
-                //   serial: "VC1480G",
-                //   CNC: "VC1480G",
-                //   productionDate: "2019.7.28",
-                //   status: "加工",
-                //   workTime: "2小时",
-                //   warning: "..."
-                // },
             ],
             selections: [], //操作中选中的所选项数组
             loading: true,
+            paramDate: {'selectDate': ''},
+
         };
+    },
+    mounted: function () {
+        this.date = new Date();
     },
     methods: {
         // handlePage(value) {
@@ -208,14 +209,35 @@ export default {
             this.$emit('onshowstatusinfo', {'selections': this.selections, 'statusinfoshow': this.statusinfoshow});
             this.statusinfoshow = false;
         },
-        toScheduleStatistics(){
+        toScheduleStatistics() {
             this.scheduleStatisticsShow = true;
-            this.$emit('onscheduleStatistics', {'selections': this.selections, 'scheduleStatisticsShow': this.scheduleStatisticsShow});
+            this.$emit('onscheduleStatistics', {
+                'selections': this.selections,
+                'scheduleStatisticsShow': this.scheduleStatisticsShow
+            });
             this.scheduleStatisticsShow = false
         },
-        onLargeScreen(){
+        onLargeScreen() {
             this.$router.push({path: '/bigScreen?nodeKey=' + this.nodeKey});
-        }
+        },
+        onReport(date) {
+            let that = this;
+            this.paramDate.selectDate = date;
+            this.$Modal.confirm({
+                title: '选择日期',
+                render: (h) => {
+                    return h(report, {
+                        ref: 'report',
+                        props: {
+                            date: this.paramDate,
+                        },
+                    });
+                },
+                onOk() {
+                    that.$emit('onDownloadWorkReport', {'nodeKey': that.nodeKey, 'date': that.paramDate.selectDate});
+                }
+            });
+        },
     }
 };
 </script>

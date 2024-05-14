@@ -50,6 +50,9 @@
                 <MenuItem name="bigScreen">
                     <span>生产大屏</span>
                 </MenuItem>
+                <MenuItem name="report">
+                    <span>报表</span>
+                </MenuItem>
             </Submenu>
             <Submenu name="3">
                 <template slot="title">
@@ -173,6 +176,11 @@ export default {
             if (name === "bigScreen") {
                 this.allfalse();
                 this.$router.push("/bigScreen");
+                return;
+            }
+            if (name === "report") {
+                this.allfalse();
+                this.$router.push("/report");
                 return;
             }
             this.$router.push(name);

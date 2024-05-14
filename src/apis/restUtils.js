@@ -20,6 +20,22 @@ export const post = (url, param, consumer) => {
     });
 }
 
+export const blobpost = (url, param, consumer) => {
+    return axios.post(appConfig.restUrl(url), param,
+        {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'UserName' : encodeURIComponent(localStorage.getItem("UserName")),
+                'UserId' : encodeURIComponent(localStorage.getItem("UserId")),
+                'url' : url
+            },
+            responseType: "blob"
+        }).then(response => {
+        console.log(response);
+        consumer(response);
+    });
+}
+
 export const get = (url, consumer) => {
     return axios.get(appConfig.restUrl(url),
     {
@@ -372,4 +388,47 @@ export const getDateTimeFromTimestamp = (time) => {
 export const getTimeFromTime = (time) => {
     let date = new Date(time * 1000);
     return `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`;
+}
+
+/**
+ * 文件下载, 对于下载链接可直接用 window.open(url, "_blank");
+ * @param {*} data 二进制数据或base64编码 Blob、String
+ * @param {*} fileName 下载的文件命名，可带扩展名，跨域下无效
+ */
+export const downloadFile = (data, fileName) => {
+    let url = "";
+    let isBlob = false;
+    const errMsg = "下载出错，文件数据无法识别！";
+
+    if (data instanceof Blob) {
+        isBlob = true;
+        url = window.URL.createObjectURL(data);
+    } else if (typeof data == "string") {
+        // base64编码
+        url = data;
+    } else {
+        console.log(errMsg);
+        return;
+    }
+
+    if ("download" in document.createElement("a")) {
+        // 非IE下载
+        const tmpLink = document.createElement("a");
+        tmpLink.download = fileName || "";
+        tmpLink.style.display = "none";
+        tmpLink.href = url;
+        document.body.appendChild(tmpLink);
+        tmpLink.click();
+        window.URL.revokeObjectURL(tmpLink.href); // 释放URL 对象
+        document.body.removeChild(tmpLink);
+    } else {
+        // IE10+下载
+        if (isBlob) {
+            window.navigator.msSaveBlob(data, fileName);
+        } else {
+            //Message.error(errMsg);
+            console.log(errMsg);
+            // return;
+        }
+    }
 }

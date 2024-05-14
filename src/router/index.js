@@ -98,6 +98,10 @@ export default new Router({
         name:'bigScreen',
         component: resolve => require(['@/components/bigScreen/bigScreen'], resolve)
     },{
+        path: '/report',
+        name:'report',
+        component: resolve => require(['@/components/bigScreen/bigScreen'], resolve)
+    },{
         path: '/main',
         name: 'main',
         // component: main,
