@@ -414,13 +414,17 @@ export default {
                         return;
                     }
                     let scheduleinstList01 = response.data.entity;
-                    scheduleinstList01.forEach(function (item, index) {
-                        that.scheduleInstList.push({
-                            id: item.id,
-                            name: item.name + ' (' + formatDate(item.beginTime, 'yyyy-MM-dd hh:mm:ss') + " - " + formatDate(item.endTime, 'yyyy-MM-dd hh:mm:ss') + ')',
-                            value: index,
+                    if (scheduleinstList01 === undefined || scheduleinstList01 === null) {
+                        return;
+                    } else {
+                        scheduleinstList01.forEach(function (item, index) {
+                            that.scheduleInstList.push({
+                                id: item.id,
+                                name: item.name + ' (' + formatDate(item.beginTime, 'yyyy-MM-dd hh:mm:ss') + " - " + formatDate(item.endTime, 'yyyy-MM-dd hh:mm:ss') + ')',
+                                value: index,
+                            });
                         });
-                    });
+                    }
                 });
 
             post("/organization/customer/web/getOneDayStatus",
@@ -585,13 +589,17 @@ export default {
                         return;
                     }
                     let scheduleinstList01 = response.data.entity;
-                    scheduleinstList01.forEach(function (item, index) {
-                        that.scheduleInstList.push({
-                            id: item.id,
-                            name: item.name + ' (' + formatDate(item.beginTime, 'yyyy-MM-dd hh:mm:ss') + " - " + formatDate(item.endTime, 'yyyy-MM-dd hh:mm:ss') + ')',
-                            value: index,
+                    if (scheduleinstList01 === undefined || scheduleinstList01 === null) {
+                        return;
+                    } else {
+                        scheduleinstList01.forEach(function (item, index) {
+                            that.scheduleInstList.push({
+                                id: item.id,
+                                name: item.name + ' (' + formatDate(item.beginTime, 'yyyy-MM-dd hh:mm:ss') + " - " + formatDate(item.endTime, 'yyyy-MM-dd hh:mm:ss') + ')',
+                                value: index,
+                            });
                         });
-                    });
+                    }
                 });
 
         }
