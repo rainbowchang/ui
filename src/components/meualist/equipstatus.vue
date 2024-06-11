@@ -171,15 +171,28 @@ export default {
                 nodeInfo.pageNo = 1;
                 nodeInfo.pageSize = 10;
                 this.$refs.statustable.loading = true;
-                this.sendNodeContent("/organization/node/trigger", nodeInfo, reponse => {
-                    let replyStatus = reponse.data;
-                    if (replyStatus == null) {
-                        return;
+                this.sendNodeContent("/organization/node/trigger", nodeInfo, response => {
+                    try {
+                        let replyStatus = response.data;
+                        if (replyStatus == null) {
+                            return;
+                        }
+                        this.$refs.statustable.content = replyStatus.plcInfoBeans;
+                        this.$refs.statustable.totalCount = replyStatus.total;
+                        this.$refs.statustable.nodeKey = nodeInfo.key;
+                        replyStatus.plcInfoBeans.forEach(function (item){
+                            post("/organization/node/nodetriggerstatistics", item.serial, response=>{
+                                console.log("reponse ...", response);
+                                item.workTime = response.data.workTime;
+                                item.workPieces = response.data.workPieces;
+                                item.utilization = response.data.utilization;
+                                item.warning = response.data.warning;
+                                item.alarmCount = response.data.alarmCount;
+                            });
+                        });
+                    }finally {
+                        this.$refs.statustable.loading = false;
                     }
-                    this.$refs.statustable.content = replyStatus.plcInfoBeans;
-                    this.$refs.statustable.totalCount = replyStatus.total;
-                    this.$refs.statustable.nodeKey = nodeInfo.key;
-                    this.$refs.statustable.loading = false;
                 });
                 this.statustable = true;
                 this.timerForNodeTrigger(nodeInfo);
