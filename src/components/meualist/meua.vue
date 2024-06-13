@@ -9,7 +9,7 @@
             style="background:#595959;"
         >
             <div class="logo">
-                <span>湖南宁庆</span>
+                <span>{{abbr}}</span>
                 <span style="font-size:4px">®</span>
             </div>
             <MenuItem name="/index" :class="index?'red':''">首页</MenuItem>
@@ -107,6 +107,7 @@ export default {
             KEYQUALI: false,
             KEYCUST: false,
             KEYROLE: false,
+            abbr:'',
         };
     },
     methods: {
@@ -255,6 +256,10 @@ export default {
                     }
                 }
             }
+        });
+        post("/user/getCorpAbbr", {}, response => {
+            console.log("response ...", response);
+            this.abbr = response.data.result;
         });
     }
 };

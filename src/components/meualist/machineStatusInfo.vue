@@ -28,9 +28,7 @@
         </div>
         <div class="separator"></div>
         <div class="content">
-
             <div class="listmid">
-
                 <div class="separator"></div>
                 <div>
                     <div :id="timeAxisList.lineChart" class="lineChartClass" style=" margin-bottom: -1.4%">
@@ -48,7 +46,6 @@
                                 (timeAxisList.status === undefined || timeAxisList.status == null) ? '0' : timeAxisList.status.workTime
                             }}</span>
                     </div>
-
                     <div>
                         <div class="stop"></div>
                         <span>停机：{{
@@ -62,6 +59,11 @@
                             }}</span>
                     </div>
                 </div>
+                <div class="separator"></div>
+<!--                <div>-->
+<!--                    <div :id="metalist.loadChart" class="PieceChartClass" style=" margin-bottom: -1.4%">-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="separator"></div>
                 <div>
                     <div :id="metalist.pieceChart" class="PieceChartClass" style=" margin-bottom: -1.4%">
@@ -124,7 +126,6 @@ export default {
         back() {
 
         },
-
         getPieceChart(data, chart) {
 
             let chartDom = document.getElementById(chart);
@@ -556,12 +557,12 @@ export default {
                     "timeStampList": []
                 }
             };
-            //todo 这两个合并！！！！
             this.metalist = {
                 "name": serial,
                 "bottom": "bottom-" + id,
                 "chart": "metachart-" + id,
-                "pieceChart": "pieceChart-" + id,
+                "pieceChart": "pieceChart-" + id,     //TODO   pieceChart
+                // "loadChart": "loadChar-" + id,
             }
             post("/organization/customer/web/getOneDayStatus",
                 {"id": id, "startDate": "", "endDate": ""},
