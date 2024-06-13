@@ -167,7 +167,7 @@ export default {
         };
     },
     mounted: function () {
-        this.date = new Date();
+        // this.date = new Date();
     },
     methods: {
         // handlePage(value) {
