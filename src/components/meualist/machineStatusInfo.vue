@@ -36,6 +36,11 @@
                 </div>
                 <div class="separator"></div>
                 <div>
+                    <div :id="timeAxisList.loadChart" class="lineChartClass" style=" margin-bottom: -1.4%">
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div>
                     <div :id="timeAxisList.chart" class="timeAxis" style=" margin-bottom: -1.4%">
                     </div>
                 </div>
@@ -59,11 +64,6 @@
                             }}</span>
                     </div>
                 </div>
-                <div class="separator"></div>
-<!--                <div>-->
-<!--                    <div :id="metalist.loadChart" class="PieceChartClass" style=" margin-bottom: -1.4%">-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="separator"></div>
                 <div>
                     <div :id="metalist.pieceChart" class="PieceChartClass" style=" margin-bottom: -1.4%">
@@ -101,6 +101,7 @@ export default {
             timeAxisList: [{
                 "chart": "timeAxis-",
                 "lineChart": "lineChart-",
+                "loadChart": "loadChart-",
                 "name": '',
                 "status": {
                     "workTime": "0",
@@ -120,6 +121,9 @@ export default {
             scheduleInstTmp: '',
             timeAxisChart: null,
             lineChart: null,
+            loadChart:null,
+            loadChartShow: false,
+
         }
     },
     methods: {
@@ -293,6 +297,103 @@ export default {
             option && myChart.setOption(option);
             return myChart;
         },
+
+        getLoadChart(input, chart) {
+            console.log("input: ", input);
+            let chartDom = document.getElementById(chart);
+            let myChart = this.$echarts.init(chartDom);
+            let option;
+            let axisNameArr = [];
+            let serialDataList = [];
+
+            let that = this;
+            myChart.on('datazoom', function (params) {
+                that.onDataZoomChange(params);
+            });
+
+            if(input.axisNameList.length >0){
+                this.loadChartShow = true;
+            } else {
+                this.loadChartShow = false;
+                return;
+            }
+
+            for(let i in input.axisNameList){
+                let  axisName = input.axisNameList[i];
+                if(axisName === undefined || axisName === null|| axisName ===''){
+                    continue;
+                }
+                console.log("this.axisLoadMap: ", this.axisLoadMap);
+                let loadSerial = input.axisLoadMap[input.axisNameList[i]];
+                if(loadSerial === undefined || loadSerial == null || loadSerial.length ===0 ){
+                    continue;
+                }
+                axisNameArr.push(axisName);
+
+                let item = {
+                    name: axisName,
+                        data: loadSerial,
+                    type: 'line'
+                }
+                serialDataList.push(item);
+            }
+
+            option = {
+                title: {
+                    top: 0,
+                    text: "轴负载",
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        let datetime = getDateTimeFromTimestamp(params[0].axisValue);
+                        let value = '';
+                        params.forEach(function (item) {
+                            value += '<br>';
+                            value += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + item.color + '"></span>'
+                            value += item.seriesName + ': ';
+                            value += item.data + '%';
+                        });
+                        return datetime + value;
+                    }
+                },
+                legend: {
+                    top: 30,
+                    data: axisNameArr
+                },
+                dataZoom: [{
+                    type: 'slider',
+
+                    height: 14,
+                    labelFormatter: ''
+                }, {
+                    type: 'inside',
+                    filterMode: 'weakFilter'
+                }],
+                xAxis: {
+                    type: 'category',
+                    data: input.timeStampList,
+                    axisLabel: {
+                        formatter: function (val) {
+                            let d = getDateTimeFromTimestamp(val);
+                            return d;
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} %'
+                    },
+                },
+                series: serialDataList,
+
+            };
+            option && myChart.setOption(option);
+            return myChart;
+
+        },
         getBottom(dateData, workData, bottom) {
             // 基于准备好的dom，初始化echarts实例
             let myChart = this.$echarts.init(
@@ -435,7 +536,8 @@ export default {
                     that.getWorkCircle(reponse.data, "work-circle");
                     that.timeAxisList.status = reponse.data;
                     that.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, that);
-                    that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart)
+                    that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart);
+                    that.loadChart = that.getLoadChart(reponse.data, this.timeAxisList.loadChart);
                 });
 
 
@@ -456,6 +558,7 @@ export default {
                     this.timeAxisList.status = reponse.data;
                     this.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, this);
                     this.lineChart = this.getLineChart(reponse.data, this.timeAxisList.lineChart);
+                    this.loadChart = this.getLoadChart(reponse.data, this.timeAxisList.loadChart);
                 });
         },
 
@@ -531,6 +634,7 @@ export default {
             };
             this.timeAxisChart.setOption(option);
             this.lineChart.setOption(option);
+            this.loadChart.setOption(option);
         }
     },
     watch: {
@@ -546,6 +650,7 @@ export default {
             this.timeAxisList = {
                 "chart": "timeAxis-" + id,
                 "lineChart": "lineChart-" + id,
+                "loadChart": "loadChart-" + id,
                 "name": id,
                 "status": {
                     "workTime": "0",
@@ -561,8 +666,7 @@ export default {
                 "name": serial,
                 "bottom": "bottom-" + id,
                 "chart": "metachart-" + id,
-                "pieceChart": "pieceChart-" + id,     //TODO   pieceChart
-                // "loadChart": "loadChar-" + id,
+                "pieceChart": "pieceChart-" + id,
             }
             post("/organization/customer/web/getOneDayStatus",
                 {"id": id, "startDate": "", "endDate": ""},
@@ -571,7 +675,7 @@ export default {
                     that.timeAxisList.status = reponse.data;
                     that.timeAxisChart = getTimeAxis(reponse.data, this.timeAxisList.chart, that);
                     that.lineChart = that.getLineChart(reponse.data, this.timeAxisList.lineChart);
-
+                    that.loadChart = that.getLoadChart(reponse.data, this.timeAxisList.loadChart);
                 });
 
             post("/organization/customer/getPeriodStatus",
