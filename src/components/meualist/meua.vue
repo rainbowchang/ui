@@ -10,7 +10,7 @@
         >
             <div class="logo">
                 <span>{{abbr}}</span>
-                <span style="font-size:4px">®</span>
+<!--                <span style="font-size:4px">®</span>-->
             </div>
             <MenuItem name="/index" :class="index?'red':''">首页</MenuItem>
             <MenuItem name="/equipstatus" :class="equipstatus?'red':''">
