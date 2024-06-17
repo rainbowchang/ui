@@ -232,6 +232,16 @@ export default {
                         this.$refs.statustable.content = replyStatus.plcInfoBeans;
                         this.$refs.statustable.totalCount = replyStatus.total;
                         this.$refs.statustable.nodeKey = nodeInfo.key;
+                        replyStatus.plcInfoBeans.forEach(function (item){
+                            post("/organization/node/nodetriggerstatistics", item.serial, response=>{
+                                console.log("reponse ...", response);
+                                item.workTime = response.data.workTime;
+                                item.workPieces = response.data.workPieces;
+                                item.utilization = response.data.utilization;
+                                item.warning = response.data.warning;
+                                item.alarmCount = response.data.alarmCount;
+                            });
+                        });
                     });
                 }
             }, 180000);
