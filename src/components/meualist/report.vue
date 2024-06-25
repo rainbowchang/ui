@@ -1,8 +1,8 @@
 <template>
     <Form  :label-width="80">
         <FormItem label="日期">
-            <DatePicker type="date"
-                        placeholder="选择日期"
+            <DatePicker type="daterange"
+                        placeholder="请选择开始日期——结束日期"
                         @on-change="changedate"
             ></DatePicker>
         </FormItem>
@@ -25,7 +25,6 @@ export default {
     },
     methods: {
         changedate(e){
-            console.log(e);
             this.formItem.selectDate = e;
         }
     }

@@ -16,7 +16,7 @@
                         <Icon type="ios-desktop-outline"></Icon>
                         查看大屏
                     </Button>
-                    <Button type="primary" size="large" @click="onReport(date)">
+                    <Button type="primary" size="large" @click="onReport()">
                         <Icon type="ios-desktop-outline"></Icon>
                         查看加工报表
                     </Button>
@@ -45,13 +45,8 @@
     </div>
 </template>
 <script>
-// import statusinfo from "../departs/statusinfo";
-// import statusinfonew from "../departs/statusinfonew";
-// import {post} from "@/apis/restUtils";
 import report from "./report";
-
 export default {
-    // components: { statusinfonew },
     data() {
         return {
             date: "",
@@ -170,22 +165,31 @@ export default {
         // this.date = new Date();
     },
     methods: {
-        // handlePage(value) {
-        //     post("/organization/node/trigger", {key: this.nodeKey, pageNo: value, pageSize: 10}, reponse => {
-        //         var replyStatus = reponse.data;
-        //         if (replyStatus == null) {
-        //             return;
-        //         }
-        //         this.content = replyStatus.plcInfoBeans;
-        //         this.totalCount = replyStatus.total;
+        // table导出表格
+        // exportData() {  //老的实现方式
+        //     this.$refs.table.exportCsv({
+        //         filename: "equipsList"
         //     });
         // },
-        // table导出表格
-        exportData() {
-            this.$refs.table.exportCsv({
-                filename: "equipsList"
+        exportData() {  //新的实现方式
+            let that = this;
+            this.$Modal.confirm({
+                title: '选择日期',
+                render: (h) => {
+                    return h(report, {
+                        ref: 'report',
+                        props: {
+                            date: this.paramDate,
+                        },
+                    });
+                },
+                onOk() {
+                    that.$emit('onDownloadReportData', {'nodeKey': that.nodeKey, 'beginDate': that.paramDate.selectDate[0], 'endDate': that.paramDate.selectDate[1]});
+                }
             });
+
         },
+
         modelshow(val) {
             this.statusinfoshow = val;
         },
@@ -220,9 +224,8 @@ export default {
         onLargeScreen() {
             this.$router.push({path: '/bigScreen?nodeKey=' + this.nodeKey});
         },
-        onReport(date) {
+        onReport() {
             let that = this;
-            this.paramDate.selectDate = date;
             this.$Modal.confirm({
                 title: '选择日期',
                 render: (h) => {
@@ -234,7 +237,7 @@ export default {
                     });
                 },
                 onOk() {
-                    that.$emit('onDownloadWorkReport', {'nodeKey': that.nodeKey, 'date': that.paramDate.selectDate});
+                    that.$emit('onDownloadProgramWorkReport', {'nodeKey': that.nodeKey, 'beginDate': that.paramDate.selectDate[0], 'endDate': that.paramDate.selectDate[1]});
                 }
             });
         },
