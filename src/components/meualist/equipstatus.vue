@@ -24,7 +24,8 @@
             <transition name="fade">
                 <statustable v-show="statustable" ref="statustable" @onselection="onselection"
                              @onshowstatusinfo="onshowstatusinfo" @onscheduleStatistics="onscheduleStatistics"
-                             @onDownloadWorkReport="onDownloadWorkReport"></statustable>
+                             @onDownloadProgramWorkReport="onDownloadProgramWorkReport"
+                             @onDownloadReportData="onDownloadReportData"></statustable>
             </transition>
             <transition name="fade">
                 <detailChart v-show="showDetail" ref="showDetail" :detailinfo=detailinfo></detailChart>
@@ -403,18 +404,22 @@ export default {
             this.machineStatusInfoShow = false;
             this.rightSlideShow=false;
         },
-        onDownloadWorkReport(val){
-            console.log('val: ', val);
+        onDownloadProgramWorkReport(val){
             blobpost("/organization/downloadProgramWorkReport", val, response => {
-                console.log(response.data);
                 const blob = new Blob([response.data], {type: 'application/vnd.ms-excel'});
                 const fileName = response.headers["content-disposition"].split("=")[1]; //接口响应头定义的文件名
                 downloadFile(blob, fileName);
-
-
             });
-
+        },
+        onDownloadReportData(val){
+            console.log('val: ', val);
+            blobpost("/organization/downloadReportData", val, response => {
+                const blob = new Blob([response.data], {type: 'application/vnd.ms-excel'});
+                const fileName = response.headers["content-disposition"].split("=")[1]; //接口响应头定义的文件名
+                downloadFile(blob, fileName);
+            });
         }
+
     }
 
 };

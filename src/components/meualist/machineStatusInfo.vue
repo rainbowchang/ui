@@ -36,11 +36,6 @@
                 </div>
                 <div class="separator"></div>
                 <div>
-                    <div :id="timeAxisList.loadChart" class="lineChartClass" style=" margin-bottom: -1.4%">
-                    </div>
-                </div>
-                <div class="separator"></div>
-                <div>
                     <div :id="timeAxisList.chart" class="timeAxis" style=" margin-bottom: -1.4%">
                     </div>
                 </div>
@@ -62,6 +57,11 @@
                         <span>未连接：{{
                                 (timeAxisList.status === undefined || timeAxisList.status == null) ? '0' : timeAxisList.status.offlineTime
                             }}</span>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div>
+                    <div :id="timeAxisList.loadChart" class="lineChartClass" style=" margin-bottom: -1.4%">
                     </div>
                 </div>
                 <div class="separator"></div>
