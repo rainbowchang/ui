@@ -62,7 +62,7 @@ export default {
                     title: "机床名称",   //"客户名称",
                     key: "alias",
                     sortable: true,
-                    width: 200
+                    width: 150
                 },
                 {
                     title: "机床型号",
@@ -72,18 +72,19 @@ export default {
                 {
                     title: "机床序列号",
                     key: "serial",
-                    sortable: true
+                    sortable: true,
+                    width: 150
                 },
                 {
                     title: "系统型号",
                     key: "CNC",
                     sortable: true
                 },
-                {
-                    title: "出厂日期",
-                    key: "productionDate",
-                    sortable: true
-                },
+                // {
+                //     title: "出厂日期",
+                //     key: "productionDate",
+                //     sortable: true
+                // },
                 {
                     title: "当前状态",
                     key: "status",
@@ -117,7 +118,8 @@ export default {
                 {
                     title: "加工时间",
                     key: "workTime",
-                    sortable: true
+                    sortable: true,
+                    width: 130
                 },
                 {
                     title: "加工件数",

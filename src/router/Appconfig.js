@@ -8,7 +8,7 @@ if(ss.length === 1){
     backEndUrl = `${window.location.protocol}//`.concat(ss[0]).concat(':8000')
 }
 
-if(process.env.VUE_APP_BACK_END_URL != undefined){
+if(process.env.VUE_APP_BACK_END_URL !== undefined){
     backEndUrl = process.env.VUE_APP_BACK_END_URL;
 }
 
