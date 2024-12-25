@@ -8,28 +8,24 @@ export default {
   data() {
     return {
       formInline: {
+        code: "",
         phoneNumber: "",
         password: ""
       },
-      appid: "",
-
-
     }
-
   },
   mounted() {
     const code = (new URLSearchParams(window.location.search)).get('code');
     console.log("code: ", code);
-    this.appid = code
+    this.formInline.code = code
   },
   methods: {
-
     handleSubmit(name) {
       let Base64 = require('js-base64').Base64;
       let parameter = this.formInline;
       this.$refs[name].validate(valid => {
         parameter.password = Base64.encode(parameter.password);
-        post("/user/login", parameter, reponse => {
+        post("/wx/login", parameter, reponse => {
           let data = reponse.data
           if (data != null) {
             this.userInfo.registerDate = new Date(data.registerDate);
@@ -66,7 +62,6 @@ export default {
       <div class="loginbox">
 <!--        <div class="imgbox"></div>-->
         <Form ref="formInline" class="formlogin" :model="formInline" :rules="ruleInline" inline>
-          <div>appid: {{appid}}</div>
           <FormItem prop="username">
             <i-input type="text" v-model="formInline.phoneNumber" placeholder="手机号码">
               <Icon type="ios-call-outline" slot="prepend"></Icon>
