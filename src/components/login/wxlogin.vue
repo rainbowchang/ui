@@ -9,15 +9,13 @@ export default {
     return {
       formInline: {
         code: "",
-        phoneNumber: "",
+        username: "",
         password: ""
       },
     }
   },
   mounted() {
-    const code = (new URLSearchParams(window.location.search)).get('code');
-    console.log("code: ", code);
-    this.formInline.code = code
+    this.formInline.code = (new URLSearchParams(window.location.search)).get('code');
   },
   methods: {
     handleSubmit(name) {
@@ -25,13 +23,14 @@ export default {
       let parameter = this.formInline;
       this.$refs[name].validate(valid => {
         parameter.password = Base64.encode(parameter.password);
-        post("/wx/login", parameter, reponse => {
+        post("/wx/signup", parameter, reponse => {
           let data = reponse.data
           if (data != null) {
             this.userInfo.registerDate = new Date(data.registerDate);
             this.userInfo.endDate = new Date(data.endDate);
             let validResult = this.checkValidDate(this.userInfo);
             if (!validResult) {
+              this.$Message.error("账户失效！");
               return;
             }
           }
@@ -63,12 +62,12 @@ export default {
 <!--        <div class="imgbox"></div>-->
         <Form ref="formInline" class="formlogin" :model="formInline" :rules="ruleInline" inline>
           <FormItem prop="username">
-            <i-input type="text" v-model="formInline.phoneNumber" placeholder="手机号码">
+            <i-input type="text" v-model="formInline.username" placeholder="用户名">
               <Icon type="ios-call-outline" slot="prepend"></Icon>
             </i-input>
           </FormItem>
           <FormItem prop="password">
-            <i-input type="password" v-model="formInline.password" placeholder="密码11">
+            <i-input type="password" v-model="formInline.password" placeholder="密码">
               <Icon type="ios-lock-outline" slot="prepend"></Icon>
             </i-input>
           </FormItem>
@@ -144,8 +143,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 32px;
-  width: 48%;
+  margin-top: 140px;
+  width: 80%;
 }
 
 .formlogin > div {
