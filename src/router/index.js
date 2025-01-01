@@ -55,6 +55,11 @@ export default new Router({
         // component: login,
         component: resolve => require(['@/components/login/wxlogin'], resolve)
     }, {
+        path: '/wxlogoff',
+        name: 'wxlogoff',
+        // component: login,
+        component: resolve => require(['@/components/login/wxlogoff'], resolve)
+    },{
         path: '/qrhome',
         name: 'qrhome',
         // component: login,
