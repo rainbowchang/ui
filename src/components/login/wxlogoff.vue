@@ -74,4 +74,105 @@ export default {
 
 <style scoped>
 
+
+.loginbox {
+  width: 75%;
+  height: auto;
+  margin: 10% auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgbox {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: aliceblue;
+  background-image: url("../../assets/imgs/icon001.png");
+  background-position: -18px 0;
+}
+
+.linkPage {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 210px;
+  height: 30px;
+}
+
+.link1 {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  font-size: 1rem;
+}
+
+.link2 {
+  position: absolute;
+  left: 100px;
+  top: 5px;
+  font-size: 1rem;
+}
+
+.qrbox {
+  position: absolute;
+  left: 1px;
+  top: 30px;
+  width: 90px;
+  height: 90px;
+  /*border-radius: 50%;*/
+  overflow: hidden;
+  background-color: aliceblue;
+  background-image: url("../../assets/imgs/QRGZH.jpg");
+  background-size: 90px 90px;
+}
+
+.formlogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 140px;
+  width: 80%;
+}
+
+.formlogin > div {
+  width: 100%;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.formlogin > .choose {
+  height: auto;
+}
+
+.loginbtn {
+  width: 60%;
+}
+
+.loginbtn > div > button {
+  width: 100%;
+  height: 80px;
+  font-size: 1.5rem;
+  background-color: #ffffff;
+  color: #313131;
+  border: 0;
+  /* letter-spacing: 3rem; */
+}
+
+.choose {
+  width: 48%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: white;
+}
+
+.choose > span {
+  font-size: 0.9rem;
+  cursor: pointer;
+}
 </style>
