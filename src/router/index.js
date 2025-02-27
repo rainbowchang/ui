@@ -33,7 +33,7 @@ export default new Router({
         path: '/',
         name: 'home',
         redirect: '/login',
-       
+
     }, {
         path: '/register',
         name: 'register',
@@ -44,10 +44,10 @@ export default new Router({
         name: 'deviceHome',
         // component: register,
         component: resolve => require(['@/components/test/deviceHome'], resolve)
-    },{
+    }, {
         path: '/login',
         name: 'login',
-       // component: login,
+        // component: login,
         component: resolve => require(['@/components/login/login'], resolve)
     }, {
         path: '/wxlogin',
@@ -59,12 +59,20 @@ export default new Router({
         name: 'wxlogoff',
         // component: login,
         component: resolve => require(['@/components/login/wxlogoff'], resolve)
-    },{
+    }, {
+        path: '/wxcrmindex',
+        name: 'wxcrmindex',
+        component: resolve => require(['@/components/wx/wxcrmindex'], resolve)
+    }, {
+        path: '/wxEnterprises',
+        name: 'wxEnterprises',
+        component: resolve => require(['@/components/wx/wxEnterprises'], resolve)
+    }, {
         path: '/qrhome',
         name: 'qrhome',
         // component: login,
         component: resolve => require(['@/components/qrcode/qrhome'], resolve)
-    },{
+    }, {
         path: '/qrioshome',
         name: 'qrioshome',
         // component: login,
@@ -74,26 +82,26 @@ export default new Router({
         name: 'qrdownload',
         // component: login,
         component: resolve => require(['@/components/qrcode/qrdownload'], resolve)
-    },{
+    }, {
         path: '/download_form',
         name: 'download_form',
         // component: login,
         component: resolve => require(['@/components/qrcode/download_form'], resolve)
-    },{
+    }, {
         path: '/download_home',
         name: 'download_home',
         component: resolve => require(['@/components/qrcode/download_home'], resolve)
-    },{
+    }, {
         path: '/configCenter',
         name: 'configCenter',
         // component: configCenter,
         component: resolve => require(['@/components/user/configCenter'], resolve)
-    },{
+    }, {
         path: '/personalUser',
         name: 'personalUser',
         // component: personalUser,
         component: resolve => require(['@/components/user/personalUser'], resolve)
-    },{
+    }, {
         path: '/index',
         name: 'index',
         // component: index,
@@ -105,13 +113,13 @@ export default new Router({
         component: resolve => require(['@/components/homepage/map'], resolve)
     }, {
         path: '/bigScreen',
-        name:'bigScreen',
+        name: 'bigScreen',
         component: resolve => require(['@/components/bigScreen/bigScreen'], resolve)
-    },{
+    }, {
         path: '/report',
-        name:'report',
+        name: 'report',
         component: resolve => require(['@/components/bigScreen/bigScreen'], resolve)
-    },{
+    }, {
         path: '/main',
         name: 'main',
         // component: main,
@@ -153,7 +161,7 @@ export default new Router({
             path: '/addCustomer',
             // component: addCustomer
             component: resolve => require(['@/components/customer/addcustomer'], resolve)
-        },{
+        }, {
             path: '/history',
             // component: history
             component: resolve => require(['@/components/meualist/history'], resolve)
