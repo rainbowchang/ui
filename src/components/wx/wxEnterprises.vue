@@ -50,11 +50,12 @@ export default {
     // 根据企业ID获取子公司和关联企业（回调方式）
     fetchSubEnterprises(enterpriseId) {
       this.history.push(enterpriseId); // 记录历史
-      post(`/api/enterprises/${enterpriseId}/sub`, this.fetchSubEnterprisesConsumer);
+      post(`/wx/enterprise/getSub`,{'parentId': enterpriseId} , this.fetchSubEnterprisesConsumer);
     },
     fetchSubEnterprisesConsumer(response) {
       if (response && response.data && response.data.entity) {
-        this.enterprises = response.data;
+        this.enterprises = [];
+        this.enterprises = response.data.entity;
       } else {
         console.error('获取企业数据失败: 响应数据格式错误');
       }
