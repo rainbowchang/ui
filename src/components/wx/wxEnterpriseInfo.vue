@@ -4,17 +4,17 @@
 
     <!-- 查看模式 -->
     <div v-if="!isEditing">
-      <div v-for="(value, key) in enterpriseAttrs" :key="key" class="attr-row">
-        <span>{{ key }}: {{ value }}</span>
+      <div v-for="(value, index) in enterpriseAttrs" :key="index" class="attr-row">
+        <span>{{ value.attrName }}: {{ value.attrValue }}</span>
       </div>
       <button @click="startEditing">编辑</button>
     </div>
 
     <!-- 编辑模式 -->
     <div v-else>
-      <div v-for="(value, key) in enterpriseAttrs" :key="key" class="attr-row">
-        <span>{{ key }}: </span>
-        <input v-model="enterpriseAttrs[key]" placeholder="请输入" />
+      <div v-for="(value, index) in enterpriseAttrs" :key="index" class="attr-row">
+        <span>{{ index }} {{ value.attrName }} </span>
+        <input v-model="enterpriseAttrs[index].attrValue" placeholder="请输入"/>
       </div>
 
       <!-- 增加属性按钮 -->
@@ -22,8 +22,8 @@
 
       <!-- 属性选择对话框 -->
       <div v-if="showAttrDialog" class="dialog">
-        <div v-for="attr in availableAttrs" :key="attr" @click="addAttr(attr)" class="dialog-item">
-          {{ attr }}
+        <div v-for="attr in availableAttrs" :key="attr.id" @click="addAttr(attr)" class="dialog-item">
+          {{ attr.name }}
         </div>
       </div>
 
@@ -31,16 +31,18 @@
       <button @click="submitAttrs">提交</button>
       <button @click="cancelEditing">取消</button>
     </div>
+    <button @click="$emit('go-back')">返回</button>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import {post} from "@/apis/restUtils";
 
 export default {
+  props: ['enterpriseId'],
   data() {
     return {
-      enterpriseAttrs: {}, // 企业属性
+      enterpriseAttrs: [], // 企业属性
       isEditing: false, // 是否编辑模式
       showAttrDialog: false, // 是否显示属性对话框
       availableAttrs: [], // 可用的属性列表
@@ -48,18 +50,21 @@ export default {
     };
   },
   mounted() {
-    const enterpriseId = this.$route.query.enterpriseId; // 从路由获取企业ID
-    this.fetchEnterpriseAttrs(enterpriseId);
+    // const enterpriseId = this.$route.query.enterpriseId; // 从路由获取企业ID
+    this.fetchEnterpriseInfo(this.enterpriseId);
   },
   methods: {
     // 获取企业属性
-    async fetchEnterpriseAttrs(enterpriseId) {
-      try {
-        const response = await axios.get(`/api/enterprises/${enterpriseId}/attrs`);
-        this.enterpriseAttrs = response.data;
-        this.originalAttrs = { ...response.data }; // 保存原始数据
-      } catch (error) {
-        console.error('获取企业属性失败:', error);
+    fetchEnterpriseInfo(id) {
+      // 根据企业ID请求数据
+      post(`/wx/enterprise/info`, {'id': id}, this.fetchEnterpriseInfoConsumer);
+    },
+    fetchEnterpriseInfoConsumer(response) {
+      // 处理返回的企业信息
+      console.log(response.data);
+      if (response && response.data && response.data.entity) {
+        this.enterpriseAttrs = response.data.entity.enterpriseAttrs;
+        this.availableAttrs = response.data.entity.attrs;
       }
     },
 
@@ -72,7 +77,7 @@ export default {
     async openAttrDialog() {
       if (!this.availableAttrs.length) {
         try {
-          const response = await axios.get('/api/attrs'); // 请求可用属性
+          const response = await post('/api/attrs'); // 请求可用属性
           this.availableAttrs = response.data;
         } catch (error) {
           console.error('获取可用属性失败:', error);
@@ -83,27 +88,52 @@ export default {
 
     // 增加新属性
     addAttr(attr) {
-      if (!this.enterpriseAttrs[attr]) {
-        this.enterpriseAttrs[attr] = ''; // 新增属性，值为空
+      if (!this.hasAttr(attr)) {
+        let item = {};
+        item.attrName = attr.name;
+        item.attrType = attr.type;
+        item.attrId = attr.id;
+        item.attrValue = '';
+        this.enterpriseAttrs.push(item); // 新增属性，值为空
       }
+      console.log(this.enterpriseAttrs);
       this.showAttrDialog = false;
     },
 
+    hasAttr(attr) {
+      let found = false;
+      this.enterpriseAttrs.forEach((item) => {
+        if (item.attrId === attr.id) {
+          found = true;
+        }
+      });
+      return found;
+    },
+
     // 提交属性更新
-    async submitAttrs() {
+    submitAttrs() {
       try {
-        const enterpriseId = this.$route.query.enterpriseId;
-        await axios.put(`/api/enterprises/${enterpriseId}/attrs`, this.enterpriseAttrs);
+        post(`/wx/enterprises/saveAttrs`, {
+          'enterpriseId': this.enterpriseId,
+          'attrs': this.enterpriseAttrs
+        }, this.submitAttrsConsumer);
         this.isEditing = false;
-        this.originalAttrs = { ...this.enterpriseAttrs }; // 更新原始数据
+        this.originalAttrs = {...this.enterpriseAttrs}; // 更新原始数据
       } catch (error) {
         console.error('更新企业属性失败:', error);
+      }
+    },
+    submitAttrsConsumer(response) {
+      if (response && response.data && response.data.status === 'success') {
+        console.log('更新企业属性成功');
+      } else {
+        console.error('更新企业属性失败');
       }
     },
 
     // 取消编辑
     cancelEditing() {
-      this.enterpriseAttrs = { ...this.originalAttrs }; // 恢复原始数据
+      this.enterpriseAttrs = {...this.originalAttrs}; // 恢复原始数据
       this.isEditing = false;
     },
   },

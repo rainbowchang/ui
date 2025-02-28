@@ -4,7 +4,9 @@
         :is="currentComponent"
         :provinces="provinces"
         :province="selectedProvince"
+        :enterpriseId="selectedEnterpriseId"
         @select-province="handleSelectProvince"
+        @select-enterprise="handleSelectEnterprise"
         @go-back="handleGoBack"
     />
   </div>
@@ -13,18 +15,21 @@
 <script>
 import wxProvinceList from './wxProvinceList.vue';
 import wxEnterprises from './wxEnterprises.vue';
+import wxEnterpriseInfo from "./wxEnterpriseInfo.vue";
 import {get} from "@/apis/restUtils";
 
 export default {
   components: {
     wxProvinceList,
-    wxEnterprises
+    wxEnterprises,
+    wxEnterpriseInfo
   },
   data() {
     return {
       currentComponent: 'wxProvinceList', // 默认显示页面A
       provinces: [], // 存储省份数据
-      selectedProvince: '' // 选中的省份
+      selectedProvince: '', // 选中的省份
+      selectedEnterpriseId: '',
     };
   },
   mounted() {
@@ -46,8 +51,17 @@ export default {
       this.selectedProvince = provinceId;
       this.currentComponent = 'wxEnterprises'; // 切换到页面B
     },
+    handleSelectEnterprise(enterpriseId){
+      this.selectedEnterpriseId = enterpriseId;
+      this.currentComponent = 'wxEnterpriseInfo';
+    },
     handleGoBack() {
-      this.currentComponent = 'wxProvinceList'; // 返回页面A
+      // this.currentComponent = 'wxProvinceList'; // 返回页面A
+      if (this.currentComponent === 'wxEnterpriseInfo') {
+        this.currentComponent = 'wxEnterprises'; // 从页面C返回页面B
+      } else if (this.currentComponent === 'wxEnterprises') {
+        this.currentComponent = 'wxProvinceList'; // 从页面B返回页面A
+      }
     }
   }
 };

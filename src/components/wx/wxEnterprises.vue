@@ -77,10 +77,11 @@ export default {
 
     // 跳转到页面C
     goToPageC(enterpriseId) {
-      this.$router.push({
-        path: '/page-c',
-        query: {enterpriseId}
-      });
+      // this.$router.push({
+      //   path: '/page-c',
+      //   query: {enterpriseId}
+      // });
+      this.$emit('select-enterprise', enterpriseId);
     },
 
     // 根据企业类型返回背景颜色
