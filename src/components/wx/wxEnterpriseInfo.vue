@@ -32,6 +32,13 @@
       <button @click="cancelEditing">取消</button>
     </div>
     <button @click="$emit('go-back')">返回</button>
+    <h3>企业负责人</h3>
+    <ul>
+      <li v-for="staff in staffList" :key="staff.id">
+        {{ staff.name }} - {{ staff.department }}
+        <span class="arrow" @click="goToStaffDetail(staff.id)">→</span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -47,11 +54,13 @@ export default {
       showAttrDialog: false, // 是否显示属性对话框
       availableAttrs: [], // 可用的属性列表
       originalAttrs: {}, // 保存编辑前的属性
+      staffList: [] // 负责人列表数据
     };
   },
   mounted() {
     // const enterpriseId = this.$route.query.enterpriseId; // 从路由获取企业ID
     this.fetchEnterpriseInfo(this.enterpriseId);
+    this.fetchStaffList(this.enterpriseId); // 页面加载时获取负责人列表
   },
   methods: {
     // 获取企业属性
@@ -136,6 +145,23 @@ export default {
       this.enterpriseAttrs = {...this.originalAttrs}; // 恢复原始数据
       this.isEditing = false;
     },
+    fetchStaffList(enterpriseId) {
+      // 通过 API 获取负责人列表
+      post(`/wx/enterprises/staff`,{"enterpriseId": enterpriseId}, this.fetchStaffListConsumer);
+    },
+    fetchStaffListConsumer(response) {
+      if (response && response.data && response.data.entity) {
+        this.staffList = response.data.entity; // 更新负责人列表
+        console.log("this.staffList...", this.staffList);
+
+      } else {
+        console.error('获取负责人列表失败');
+      }
+    },
+    goToStaffDetail(staffId) {
+      // 触发事件通知主页面切换到页面D
+      this.$emit('select-staff', staffId);
+    }
   },
 };
 </script>
@@ -192,5 +218,21 @@ button {
   border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.arrow {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 16px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
